@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>sbe - Scrapbox in Electron</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div class="search-box">
+        <input type="text" class="search-input">
+        <span class="search-count"></span>
+    </div>
+    <div id="main" class="webview-container">
+        <webview id="webview" class="webview-content" src="https://scrapbox.io/" autosize="on" />
+    </div>
+    <script src="renderer.js"></script>
+</body>
+
+</html>

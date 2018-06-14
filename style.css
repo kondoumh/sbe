@@ -1,0 +1,58 @@
+.webview-content {
+    width: 100%;
+}
+
+.webview-container-search {
+    display: inline-flex;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    top: 37px;
+}
+
+.webview-container {
+    display: inline-flex;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    top: 0px;
+}
+
+.search-box {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 35px;
+    box-sizing: border-box;
+    height: 35px;
+    padding: 5px;
+    background-color: #fff;
+    border-left: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 1px 1px 0px rgba(0,0,0,0.3);
+  }
+
+.search-input {
+    box-sizing: border-box;
+    width: 220px;
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 2px;
+    border: 1px solid rgba(0,0,0,.1);
+    outline-width: 2px;
+    padding-right: 30px;
+}
+
+.search-count {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    line-height: 40px;  
+}
+
+.state-visible {
+    display: block;
+}
