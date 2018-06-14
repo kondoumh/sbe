@@ -1,4 +1,4 @@
-# Mobile Twitter in Electron
+# sbe - Scrapbox in Electron
 Desktop Scrapbox App by Electron WebView.
 
 ## Features
