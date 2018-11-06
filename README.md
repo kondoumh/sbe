@@ -1,5 +1,5 @@
 # sbe - Scrapbox in Electron
-Desktop Scrapbox App by Electron WebView.
+A unofficial Scrapbox Desktop App by Electron.
 
 ## Features
 
