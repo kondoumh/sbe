@@ -1,7 +1,9 @@
 # sbe - Scrapbox in Electron
-A unofficial Scrapbox Desktop App by Electron.
+A unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 
 ## Features
+- It can be Launch as an application independent from the browser.
+- You can search within the page.
 
 ## How to run
 ### Versions
