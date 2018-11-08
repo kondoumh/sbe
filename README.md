@@ -4,6 +4,8 @@ A unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 ## Features
 - It can be Launch as an application independent from the browser.
 - You can search within the page.
+- You can cut, copy and paste using the shortcut key defined for each OS.
+- You can go back to the previous screen or proceed to the next screen.
 
 ## How to run
 ### Versions
