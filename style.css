@@ -2,7 +2,7 @@
     width: 100%;
 }
 
-.webview-container-search {
+.webview-container {
     display: inline-flex;
     position: absolute;
     bottom: 0;
@@ -12,21 +12,11 @@
     top: 37px;
 }
 
-.webview-container {
-    display: inline-flex;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    top: 0px;
-}
-
 .search-box {
     display: none;
     position: absolute;
     top: 0;
-    right: 35px;
+    right: 3px;
     box-sizing: border-box;
     height: 35px;
     padding: 5px;

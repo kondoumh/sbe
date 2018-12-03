@@ -19,14 +19,6 @@ const searcher = new ElectronSearchText({
 
 const container = document.getElementById("main");
 
-searcher.on("did-finish-hide", () => {
-  container.className = "webview-container";
-});
-
-searcher.on("did-finish-show", () => {
-  container.className = "webview-container-search";
-});
-
 ipcRenderer.on("toggleSearch", () => {
   searcher.emit("toggle");
 });
