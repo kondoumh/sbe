@@ -14,6 +14,9 @@ onload = () => {
       webview.goForward();
     }
   });
+  document.querySelector("#btn_reload").addEventListener('click', (event) => {
+    webview.reload();
+  });
 };
 
 const { ipcRenderer } = require("electron");
