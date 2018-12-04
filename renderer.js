@@ -1,6 +1,10 @@
 const electron = require("electron");
+
+let webview
+
 onload = () => {
-  const webview = document.getElementById("webview");
+  webview = document.getElementById("webview");
+
   webview.addEventListener("new-window", e => {
     electron.shell.openExternal(e.url);
   });
@@ -30,13 +34,9 @@ const searcher = new ElectronSearchText({
   visibleClass: ".state-visible"
 });
 
-const container = document.getElementById("main");
-
 ipcRenderer.on("toggleSearch", () => {
   searcher.emit("toggle");
 });
-
-const webview = document.getElementById("webview");
 
 ipcRenderer.on("goBack", () => {
   if (webview.canGoBack()) {
@@ -49,4 +49,3 @@ ipcRenderer.on("goForward", () => {
     webview.goForward();
   }
 });
-
