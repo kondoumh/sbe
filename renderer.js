@@ -4,6 +4,16 @@ onload = () => {
   webview.addEventListener("new-window", e => {
     electron.shell.openExternal(e.url);
   });
+  document.querySelector("#btn_back").addEventListener('click', (event) => {
+    if (webview.canGoBack()) {
+      webview.goBack();
+    }
+  });
+  document.querySelector("#btn_forward").addEventListener('click', (event) => {
+    if (webview.canGoForward()) {
+      webview.goForward();
+    }
+  });
 };
 
 const { ipcRenderer } = require("electron");
@@ -36,3 +46,4 @@ ipcRenderer.on("goForward", () => {
     webview.goForward();
   }
 });
+
