@@ -2,6 +2,18 @@ const electron = require("electron");
 
 let webview
 
+const goBack = () => {
+  if (webview && webview.canGoBack()) {
+    webview.goBack();
+  }
+}
+
+const goForward = () => {
+  if (webview && webview.canGoForward()) {
+    webview.goForward();
+  }
+}
+
 onload = () => {
   webview = document.getElementById("webview");
 
@@ -9,14 +21,10 @@ onload = () => {
     electron.shell.openExternal(e.url);
   });
   document.querySelector("#btn_back").addEventListener('click', (event) => {
-    if (webview.canGoBack()) {
-      webview.goBack();
-    }
+    goBack();
   });
   document.querySelector("#btn_forward").addEventListener('click', (event) => {
-    if (webview.canGoForward()) {
-      webview.goForward();
-    }
+    goForward();
   });
   document.querySelector("#btn_reload").addEventListener('click', (event) => {
     webview.reload();
@@ -39,13 +47,9 @@ ipcRenderer.on("toggleSearch", () => {
 });
 
 ipcRenderer.on("goBack", () => {
-  if (webview.canGoBack()) {
-    webview.goBack();
-  }
+  goBack();
 });
 
 ipcRenderer.on("goForward", () => {
-  if (webview.canGoForward()) {
-    webview.goForward();
-  }
+  goForward();
 });
