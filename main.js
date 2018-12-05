@@ -107,3 +107,11 @@ function initWindowMenu() {
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 }
+
+require('electron-context-menu')({
+//	prepend: (params, mainWindow) => [{
+		// label: 'Rainbow',
+		// Only show it when right-clicking images
+		// visible: params.mediaType === 'image'
+//	}]
+});
