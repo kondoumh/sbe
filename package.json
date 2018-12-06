@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "electron-context-menu": "^0.10.1",
-    "electron-search-text": "^0.3.0"
+    "electron-search-text": "^0.3.0",
+    "electron-tabs": "^0.9.5"
   }
 }
