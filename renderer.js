@@ -2,6 +2,8 @@ const electron = require("electron");
 
 let webview
 
+//const TabGroup = require("electron-tabs");
+
 onload = () => {
   webview = document.getElementById("webview");
 
@@ -21,6 +23,13 @@ onload = () => {
   document.querySelector("#btn_reload").addEventListener('click', (event) => {
     webview.reload();
   });
+
+  // let tabGroup = new TabGroup();
+  // let tab = tabGroup.addTab({
+  //     title: "Electron",
+  //     src: "http://electron.atom.io",
+  //     visible: true
+  // });
 };
 
 const { ipcRenderer } = require("electron");
