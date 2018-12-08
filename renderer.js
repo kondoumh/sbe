@@ -27,8 +27,16 @@ const addTab = () => {
         tab.webview.addEventListener("new-window", e => {
           electron.shell.openExternal(e.url);
         });
+        tab.webview.addEventListener("dom-ready", e => {
+          tab.webview.addEventListener("did-start-loading", e => {
+            console.log("start-loding: " + tab.webview.getURL());
+          });
+        });
         tab.webview.addEventListener("page-title-updated", e => {
           tab.setTitle(e.title);
+        });
+        tab.on("active", (tab) => {
+          console.log(tab.title);
         });
       }
   });
