@@ -3,7 +3,6 @@ const TabGroup = require("electron-tabs");
 
 const goBack = () => {
   const webview = tabGroup.getActiveTab().webview;
-  console.log(webview);
   if (webview && webview.canGoBack()) {
     webview.goBack();
   }
