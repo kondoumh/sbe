@@ -48,7 +48,7 @@ onload = () => {
     addTab();
   });
   document.querySelector("#btn_reload").addEventListener('click', (event) => {
-    webview.reload();
+    tabGroup.getActiveTab().webview.reload();
   });
 };
 
