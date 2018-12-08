@@ -17,25 +17,36 @@ const goForward = () => {
 }
 
 let tabGroup = new TabGroup();
-let tab = tabGroup.addTab({
-    title: "Scrapbox",
-    src: "https://scrapbox.io/",
-    visible: true,
-    active: true,
-    ready: tab => {
-      tab.webview.addEventListener("new-window", e => {
-        electron.shell.openExternal(e.url);
-      });
-    }
-});
+
+const addTab = (title) => {
+  let tab = tabGroup.addTab({
+      title: title,
+      src: "https://scrapbox.io/",
+      visible: true,
+      active: true,
+      ready: tab => {
+        tab.webview.addEventListener("new-window", e => {
+          electron.shell.openExternal(e.url);
+        });
+        tab.webview.addEventListener("dom-ready", e => {
+          console.log(e);
+        });
+      }
+  });
+  return tab;
+}
+
+addTab("Scrapbox1")
 
 onload = () => {
-  
   document.querySelector("#btn_back").addEventListener('click', (event) => {
     goBack();
   });
   document.querySelector("#btn_forward").addEventListener('click', (event) => {
     goForward();
+  });
+  document.querySelector("#btn_newtab").addEventListener('click', (event) => {
+    addTab("Scrapbox2")
   });
   document.querySelector("#btn_reload").addEventListener('click', (event) => {
     webview.reload();
