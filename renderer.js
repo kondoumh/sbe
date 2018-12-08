@@ -34,6 +34,18 @@ const addTab = (url, closable) => {
         tab.webview.addEventListener("page-title-updated", e => {
           tab.setTitle(e.title);
         });
+        tab.webview.addEventListener("dom-ready", e => {
+          tab.webview.addEventListener("did-start-loading", e => {
+              const targetUrl = tab.webview.getURL();
+              console.log("start-loding: " + targetUrl);
+              const check = document.querySelector("#chk_open_in_newtab");
+              if (check.checked) {
+                tab.webview.stop();
+                addTab(targetUrl);
+              }
+          });
+        });
+
         tab.on("active", (tab) => {
           console.log(tab.title);
         });
