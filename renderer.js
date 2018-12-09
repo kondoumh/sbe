@@ -57,19 +57,19 @@ const addTab = (url, closable) => {
 addTab("https://scrapbox.io/", false);
 
 onload = () => {
-  document.querySelector("#btn_back").addEventListener('click', (event) => {
+  document.querySelector("#btn_back").addEventListener('click', e => {
     goBack();
   });
-  document.querySelector("#btn_forward").addEventListener('click', (event) => {
+  document.querySelector("#btn_forward").addEventListener('click', e => {
     goForward();
   });
-  document.querySelector("#btn_newtab").addEventListener('click', (event) => {
+  document.querySelector("#btn_newtab").addEventListener('click', e => {
     addTab();
   });
-  document.querySelector("#btn_duplicate").addEventListener('click', (event) => {
+  document.querySelector("#btn_duplicate").addEventListener('click', e => {
     addTab(tabGroup.getActiveTab().webview.getURL(), true);
   })
-  document.querySelector("#btn_reload").addEventListener('click', (event) => {
+  document.querySelector("#btn_reload").addEventListener('click', e => {
     tabGroup.getActiveTab().webview.reload();
   });
 };
