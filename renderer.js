@@ -1,5 +1,6 @@
-const {electron, clipboard} = require("electron");
+const {electron, ipcRenderer, clipboard} = require("electron");
 const TabGroup = require("electron-tabs");
+const ElectronSearchText = require("electron-search-text");
 
 const goBack = () => {
   const webview = tabGroup.getActiveTab().webview;
@@ -70,9 +71,6 @@ onload = () => {
   });
 };
 
-const { ipcRenderer } = require("electron");
-
-const ElectronSearchText = require("electron-search-text");
 const searcher = new ElectronSearchText({
   target: ".etabs-view.visible",
   input: ".search-input",
