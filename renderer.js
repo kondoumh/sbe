@@ -16,6 +16,8 @@ const goForward = () => {
   }
 }
 
+let searcher
+
 const tabGroup = new TabGroup();
 
 const addTab = (url, closable) => {
@@ -39,8 +41,14 @@ const addTab = (url, closable) => {
         tab.webview.addEventListener("page-title-updated", e => {
           tab.setTitle(e.title);
         });
-        tab.on("active", (tab) => {
-          console.log(tab.title);
+        tab.on("active", tab => {
+          searcher = new ElectronSearchText({
+            target: ".etabs-view.visible",
+            input: ".search-input",
+            count: ".search-count",
+            box: ".search-box",
+            visibleClass: ".state-visible"
+          });
         });
       }
   });
@@ -70,14 +78,6 @@ onload = () => {
     tabGroup.getActiveTab().webview.reload();
   });
 };
-
-const searcher = new ElectronSearchText({
-  target: ".etabs-view.visible",
-  input: ".search-input",
-  count: ".search-count",
-  box: ".search-box",
-  visibleClass: ".state-visible"
-});
 
 ipcRenderer.on("toggleSearch", () => {
   searcher.emit("toggle");
