@@ -1,4 +1,4 @@
-const electron = require("electron");
+const {electron, clipboard} = require("electron");
 const TabGroup = require("electron-tabs");
 
 const goBack = () => {
@@ -61,6 +61,10 @@ onload = () => {
   document.querySelector("#btn_duplicate").addEventListener('click', e => {
     addTab(tabGroup.getActiveTab().webview.getURL(), true);
   })
+  document.querySelector("#btn_copyurl").addEventListener('click', e => {
+    const url = tabGroup.getActiveTab().webview.getURL();
+    clipboard.writeText(url);
+  });
   document.querySelector("#btn_reload").addEventListener('click', e => {
     tabGroup.getActiveTab().webview.reload();
   });
