@@ -29,23 +29,15 @@ const addTab = (url, closable) => {
       closable: closable,
       ready: tab => {
         tab.webview.addEventListener("new-window", e => {
-          electron.shell.openExternal(e.url);
+          if (e.url.indexOf("https://scrapbox.io/") !== -1) {
+            addTab(e.url);
+          } else {
+            electron.shell.openExternal(e.url);
+          }
         });
         tab.webview.addEventListener("page-title-updated", e => {
           tab.setTitle(e.title);
         });
-        tab.webview.addEventListener("dom-ready", e => {
-          tab.webview.addEventListener("did-start-loading", e => {
-              const targetUrl = tab.webview.getURL();
-              console.log("start-loding: " + targetUrl);
-              const check = document.querySelector("#chk_open_in_newtab");
-              if (check.checked) {
-                tab.webview.stop();
-                addTab(targetUrl);
-              }
-          });
-        });
-
         tab.on("active", (tab) => {
           console.log(tab.title);
         });
