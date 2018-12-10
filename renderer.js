@@ -41,6 +41,9 @@ const addTab = (url, closable) => {
         tab.webview.addEventListener("page-title-updated", e => {
           tab.setTitle(e.title);
         });
+        tab.webview.addEventListener("update-target-url", e => {
+          console.log(e.url);
+        });
         tab.on("active", tab => {
           searcher = new ElectronSearchText({
             target: ".etabs-view.visible",
