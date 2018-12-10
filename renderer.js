@@ -42,7 +42,8 @@ const addTab = (url, closable) => {
           tab.setTitle(e.title);
         });
         tab.webview.addEventListener("update-target-url", e => {
-          console.log(e.url);
+          const message = e.url !== "" ? decodeURI(e.url) : "lady";
+          document.querySelector("#statusbar").innerHTML = message;
         });
         tab.on("active", tab => {
           searcher = new ElectronSearchText({
