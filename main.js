@@ -1,16 +1,14 @@
 const electron = require("electron");
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
+const Menu = electron.Menu;
 
 const path = require("path");
 const url = require("url");
-const Menu = electron.Menu;
-
 const fs = require("fs");
+const info_path = path.join(app.getPath("userData"), "bounds-info.json");
 
 let mainWindow;
-
-const info_path = path.join(app.getPath("userData"), "bounds-info.json");
 
 const createWindow = () => {
   let bounds_info;
