@@ -1,4 +1,4 @@
-const {electron, ipcRenderer, clipboard} = require("electron");
+const {electron, shell, ipcRenderer, clipboard} = require("electron");
 const TabGroup = require("electron-tabs");
 const ElectronSearchText = require("electron-search-text");
 
@@ -35,7 +35,7 @@ const addTab = (url, closable) => {
           if (e.url.indexOf("https://scrapbox.io/") !== -1) {
             addTab(e.url);
           } else {
-            electron.shell.openExternal(e.url);
+            shell.openExternal(e.url);
           }
         });
         tab.webview.addEventListener("page-title-updated", e => {
