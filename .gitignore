@@ -69,3 +69,6 @@ jspm_packages
 
 # Directories for packages
 sbe-*
+
+# idea
+.idea

@@ -6,10 +6,22 @@ const path = require("path");
 const url = require("url");
 const Menu = electron.Menu;
 
+const fs = require("fs");
+
 let mainWindow;
 
+const info_path = path.join(app.getPath("userData"), "bounds-info.json");
+
 const createWindow = () => {
-  mainWindow = new BrowserWindow({ width: 1024, height: 800 });
+  let bounds_info;
+
+  try {
+    bounds_info = JSON.parse(fs.readFileSync(info_path, 'utf-8'))
+  } catch (e) {
+    bounds_info = {width:800, height:1000}
+  }
+
+  mainWindow = new BrowserWindow(bounds_info);
 
   mainWindow.loadURL(
     url.format({
@@ -20,6 +32,10 @@ const createWindow = () => {
   );
 
   initWindowMenu();
+
+  mainWindow.on("close", () => {
+    fs.writeFileSync(info_path, JSON.stringify(mainWindow.getBounds()))
+  })
 
   mainWindow.on("closed", () => {
     mainWindow = null;
