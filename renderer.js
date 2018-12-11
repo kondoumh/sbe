@@ -1,6 +1,7 @@
 const {electron, shell, ipcRenderer, clipboard} = require("electron");
 const TabGroup = require("electron-tabs");
 const ElectronSearchText = require("electron-search-text");
+const baseUrl = "https://scrapbox.io/";
 
 const goBack = () => {
   const webview = tabGroup.getActiveTab().webview;
@@ -22,7 +23,7 @@ const tabGroup = new TabGroup();
 
 const addTab = (url, closable) => {
   if (!url) {
-    url = "https://scrapbox.io/";
+    url = baseUrl;
   }
   const tab = tabGroup.addTab({
       title: "new tab",
@@ -32,7 +33,7 @@ const addTab = (url, closable) => {
       closable: closable,
       ready: tab => {
         tab.webview.addEventListener("new-window", e => {
-          if (e.url.indexOf("https://scrapbox.io/") !== -1) {
+          if (e.url.indexOf(baseUrl) !== -1) {
             addTab(e.url);
           } else {
             shell.openExternal(e.url);
@@ -59,7 +60,7 @@ const addTab = (url, closable) => {
   return tab;
 }
 
-addTab("https://scrapbox.io/", false);
+addTab(baseUrl, false);
 
 onload = () => {
   document.querySelector("#btn_back").addEventListener('click', e => {
