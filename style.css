@@ -50,7 +50,7 @@
 .statusbar {
     position: fixed;
     bottom: 0;
-    width: 50%;
+    width: 100%;
     font-size: small;
     color: #494b4c;
 }
