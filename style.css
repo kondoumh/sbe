@@ -46,3 +46,11 @@
 .state-visible {
     display: block;
 }
+
+.statusbar {
+    position: fixed;
+    bottom: 0;
+    width: 50%;
+    font-size: small;
+    color: #494b4c;
+}
