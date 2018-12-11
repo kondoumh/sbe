@@ -43,7 +43,10 @@ const addTab = (url, closable) => {
           tab.setTitle(e.title);
         });
         tab.webview.addEventListener("update-target-url", e => {
-          const message = e.url !== "" ? decodeURI(e.url) : "lady";
+          let message = e.url !== "" ? decodeURI(e.url) : "lady";
+          if (message.indexOf(baseUrl) !== -1) {
+            message = message.substring(baseUrl.length);
+          }
           document.querySelector("#statusbar").innerHTML = message;
         });
         tab.on("active", tab => {
