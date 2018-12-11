@@ -43,7 +43,7 @@ const addTab = (url, closable) => {
           tab.setTitle(e.title);
         });
         tab.webview.addEventListener("update-target-url", e => {
-          let message = e.url !== "" ? decodeURI(e.url) : "lady";
+          let message = e.url !== "" ? decodeURI(e.url) : "ready";
           if (message.indexOf(baseUrl) !== -1) {
             message = message.substring(baseUrl.length);
           }
