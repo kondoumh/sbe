@@ -1,6 +1,6 @@
 header {
     position: absolute;
-    height: 50px;
+    height: 25px;
     top: 0;
     right: 0;
     left: 0;
@@ -9,9 +9,9 @@ header {
 
 main {
     position: absolute;
-    top: 50px;
+    top: 25px;
     right: 0;
-    bottom: 20px;
+    bottom: 23px;
     left: 0;
     overflow: hidden;
 }
@@ -21,7 +21,8 @@ footer {
     right: 0;
     bottom: 0;
     left: 0;
-    height: 20px;
+    height: 23px;
+    padding-left: 3px;
     border-top: 1px solid #999;
   }
   
@@ -72,12 +73,4 @@ footer {
 
 .state-visible {
     display: block;
-}
-
-.statusbar {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    font-size: small;
-    color: #494b4c;
 }
