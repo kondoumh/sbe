@@ -9,24 +9,26 @@
 </head>
 
 <body>
-    <div>
+    <header>
         <input type="button" id="btn_back" value="back" />
         <input type="button" id="btn_forward" value="forward" />
         <input type="button" id="btn_newtab" value="new tab" />
         <input type="button" id="btn_duplicate" value="duplicate tab" />
         <input type="button" id="btn_copyurl" value="copy url" />
         <input type="button" id="btn_reload" value="reload" />
-    </div>
-    <div><p id="statusbar" class="statusbar">status</p></div>
+    </header>
     <div class="search-box">
         <input type="text" class="search-input" />
         <span class="search-count"></span>
     </div>
-    <div class="etabs-tabgroup">
-        <div class="etabs-tabs"></div>
-        <div class="etabs-buttons"></div>
-    </div>
-    <div id="main" class="etabs-views"></div>
+    <main>
+        <div class="etabs-tabgroup">
+            <div class="etabs-tabs"></div>
+            <div class="etabs-buttons"></div>
+        </div>
+        <div id="main" class="etabs-views"></div>
+    </main>
+    <footer><p id="statusbar" class="statusbar">status</p></footer>
     <script src="renderer.js"></script>
 </body>
 

@@ -1,3 +1,30 @@
+header {
+    position: absolute;
+    height: 50px;
+    top: 0;
+    right: 0;
+    left: 0;
+    border-bottom: 1px solid #999;
+}
+
+main {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    bottom: 20px;
+    left: 0;
+    overflow: hidden;
+}
+
+footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 20px;
+    border-top: 1px solid #999;
+  }
+  
 .webview-content {
     width: 100%;
 }
