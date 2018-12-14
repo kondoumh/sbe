@@ -31,6 +31,10 @@ footer {
     margin-left: 3px;
 }
 
+.toolbutton {
+    font-size: 1.2em;
+}
+
 .statusbar {
     margin-top: 3px;
     vertical-align: bottom;
