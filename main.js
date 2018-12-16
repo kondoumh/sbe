@@ -112,12 +112,20 @@ function initWindowMenu() {
           click() {
             mainWindow.webContents.send("reload");
           }
-        },
-        { type: "separator" },
-        { role: "toggledevtools" }
+        }
       ]
     }
   ];
+
+  if (!app.isPackaged) {
+    template.unshift({
+      label: "Debug",
+      submenu: [
+        { role: "forceReload"},
+        { role: "toggledevtools" }
+      ]
+    });
+  }
 
   if (process.platform === "darwin") {
     template.unshift({
