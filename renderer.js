@@ -17,6 +17,15 @@ const goForward = () => {
   }
 }
 
+const duplicateTab = () => {
+  addTab(tabGroup.getActiveTab().webview.getURL(), true);
+}
+
+const copyUrl = () => {
+  const url = tabGroup.getActiveTab().webview.getURL();
+  clipboard.writeText(url);
+}
+
 let searcher
 
 const tabGroup = new TabGroup();
@@ -76,11 +85,10 @@ onload = () => {
     addTab();
   });
   document.querySelector("#btn_duplicate").addEventListener('click', e => {
-    addTab(tabGroup.getActiveTab().webview.getURL(), true);
+    duplicateTab();
   })
   document.querySelector("#btn_copyurl").addEventListener('click', e => {
-    const url = tabGroup.getActiveTab().webview.getURL();
-    clipboard.writeText(url);
+    copyUrl();
   });
   document.querySelector("#btn_reload").addEventListener('click', e => {
     tabGroup.getActiveTab().webview.reload();
@@ -97,4 +105,20 @@ ipcRenderer.on("goBack", () => {
 
 ipcRenderer.on("goForward", () => {
   goForward();
+});
+
+ipcRenderer.on("newTab", () => {
+  addTab();
+});
+
+ipcRenderer.on("duplicateTab", () => {
+  duplicateTab();
+});
+
+ipcRenderer.on("copyUrl", () => {
+  copyUrl();
+});
+
+ipcRenderer.on("reload", () => {
+  tabGroup.getActiveTab().webview.reload();
 });

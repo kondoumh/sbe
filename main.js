@@ -80,8 +80,33 @@ function initWindowMenu() {
             mainWindow.webContents.send("goForward");
           }
         },
+        {
+          label: "new tab",
+          accelerator: "CmdOrCtrl+T",
+          click() {
+            mainWindow.webContents.send("newTab");
+          }
+        },
+        {
+          label: "duplicate tab",
+          click() {
+            mainWindow.webContents.send("duplicateTab");
+          }
+        },
+        {
+          label: "copy url",
+          click() {
+            mainWindow.webContents.send("copyUrl");
+          }
+        },
+        {
+          label: "reload",
+          accelerator: "CmdOrCtrl+R",
+          click() {
+            mainWindow.webContents.send("reload");
+          }
+        },
         { type: "separator" },
-        { role: "reload" },
         { role: "toggledevtools" }
       ]
     }
