@@ -115,6 +115,10 @@ ipcRenderer.on("duplicateTab", () => {
   duplicateTab();
 });
 
+ipcRenderer.on("closeTab", () => {
+  tabGroup.getActiveTab().close();
+});
+
 ipcRenderer.on("copyUrl", () => {
   copyUrl();
 });

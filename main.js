@@ -94,6 +94,13 @@ function initWindowMenu() {
           }
         },
         {
+          label: "close tab",
+          accelerator: "CmdOrCtrl+W",
+          click() {
+            mainWindow.webContents.send("closeTab");
+          }
+        },
+        {
           label: "copy url",
           click() {
             mainWindow.webContents.send("copyUrl");
