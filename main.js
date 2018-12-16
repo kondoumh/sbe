@@ -53,14 +53,6 @@ function initWindowMenu() {
         { role: "paste" },
         { role: "delete" },
         { role: "selectall" },
-        { type: "separator" },
-        {
-          label: "Search in window",
-          accelerator: "CmdOrCtrl+F",
-          click() {
-            mainWindow.webContents.send("toggleSearch");
-          }
-        }
       ]
     },
     {
@@ -111,6 +103,14 @@ function initWindowMenu() {
           accelerator: "CmdOrCtrl+R",
           click() {
             mainWindow.webContents.send("reload");
+          }
+        },
+        { type: "separator" },
+        {
+          label: "Search in window",
+          accelerator: "CmdOrCtrl+F",
+          click() {
+            mainWindow.webContents.send("toggleSearch");
           }
         }
       ]
