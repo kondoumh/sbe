@@ -39,3 +39,11 @@ $ npm run package-win32
 ```
 
 binary will be generated in ./mtwe-win32-x64
+
+## Screenshot
+![Screenshot](https://user-images.githubusercontent.com/2092183/50055478-f348d380-0192-11e9-8b15-bcaa676fe62e.gif)
+
+## Release Notes
+
+### 0.0.1
+First release
