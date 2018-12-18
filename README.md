@@ -24,6 +24,14 @@ $ npm install
 $ npm start
 ```
 
+if you run in proxy, edit npm script as below.
+
+```json
+  "scripts": {
+    "start": "electron . --proxy-server=your.proxy.host:port",
+  }
+```
+
 ## How to build binary
 
 ### for macOS
@@ -39,6 +47,12 @@ $ npm run package-win32
 ```
 
 binary will be generated in ./mtwe-win32-x64
+
+if you run binary in proxy. you have to add argument (via shortcut link) as below
+
+```
+sbe.exe --proxy-server=your.proxy.host:port
+```
 
 ## Screenshot
 ![Screenshot](https://user-images.githubusercontent.com/2092183/50055478-f348d380-0192-11e9-8b15-bcaa676fe62e.gif)
