@@ -59,5 +59,5 @@ sbe.exe --proxy-server=your.proxy.host:port
 
 ## Release Notes
 
-### 0.0.1
+### v0.1.0
 First release
