@@ -24,12 +24,10 @@ $ npm install
 $ npm start
 ```
 
-if you run in proxy, edit npm script as below.
+if you are in proxy environment,
 
-```json
-  "scripts": {
-    "start": "electron . --proxy-server=your.proxy.host:port",
-  }
+```
+$ npm run proxy --sbe:proxy=your.proxy.host:port
 ```
 
 ## How to build binary

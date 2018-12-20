@@ -3,8 +3,12 @@
   "version": "0.1.0",
   "description": "An unofficial Scrapbox desktop app by Electron",
   "main": "main.js",
+  "config": {
+    "proxy": "your.proxy.host:port"
+  },
   "scripts": {
     "start": "electron .",
+    "proxy": "electron . --proxy-server=%npm_package_config_proxy%",
     "package-macos": "electron-packager . sbe --platform=darwin --arch=x64 --overwrite --icon=icons/mac/sbe.icns",
     "package-win32": "electron-packager . sbe --platform=win32 --arch=x64 --overwrite --icon=icons/win/sbe.ico"
   },
