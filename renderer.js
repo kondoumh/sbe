@@ -26,6 +26,11 @@ const copyUrl = () => {
   clipboard.writeText(url);
 }
 
+const updateNavButtons = tab => {
+  document.querySelector("#btn_back").disabled = !tab.webview.canGoBack();
+  document.querySelector("#btn_forward").disabled = !tab.webview.canGoForward();
+}
+
 let searcher;
 
 const tabGroup = new TabGroup();
@@ -59,16 +64,14 @@ const addTab = (url, closable) => {
           document.querySelector("#statusbar").innerHTML = message;
         });
         tab.webview.addEventListener("load-commit", e => {
-          document.querySelector("#btn_back").disabled = !tab.webview.canGoBack();
-          document.querySelector("#btn_forward").disabled = !tab.webview.canGoForward();
+          updateNavButtons(tab);
         });
         tab.on("webview-ready", tab => {
           tab.ready = true;
         });
         tab.on("active", tab => {
           if (tab.ready) {
-            document.querySelector("#btn_back").disabled = !tab.webview.canGoBack();
-            document.querySelector("#btn_forward").disabled = !tab.webview.canGoForward();
+            updateNavButtons(tab);
           }
           searcher = new ElectronSearchText({
             target: ".etabs-view.visible",
