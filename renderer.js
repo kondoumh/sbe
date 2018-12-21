@@ -26,7 +26,7 @@ const copyUrl = () => {
   clipboard.writeText(url);
 }
 
-let searcher
+let searcher;
 
 const tabGroup = new TabGroup();
 
