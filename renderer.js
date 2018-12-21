@@ -62,7 +62,14 @@ const addTab = (url, closable) => {
           document.querySelector("#btn_back").disabled = !tab.webview.canGoBack();
           document.querySelector("#btn_forward").disabled = !tab.webview.canGoForward();
         });
+        tab.on("webview-ready", tab => {
+          tab.ready = true;
+        });
         tab.on("active", tab => {
+          if (tab.ready) {
+            document.querySelector("#btn_back").disabled = !tab.webview.canGoBack();
+            document.querySelector("#btn_forward").disabled = !tab.webview.canGoForward();
+          }
           searcher = new ElectronSearchText({
             target: ".etabs-view.visible",
             input: ".search-input",
@@ -70,14 +77,6 @@ const addTab = (url, closable) => {
             box: ".search-box",
             visibleClass: ".state-visible"
           });
-        });
-        tab.on("webview-ready", tab => {
-          console.log("webview-ready");
-          document.querySelector("#btn_back").disabled = !tab.webview.canGoBack();
-          document.querySelector("#btn_forward").disabled = !tab.webview.canGoForward();
-        });
-        tabGroup.on("tab-active", (tab, tabGroup) => {
-          console.log("tab-active");
         });
       }
   });
