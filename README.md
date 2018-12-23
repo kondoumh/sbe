@@ -57,5 +57,8 @@ sbe.exe --proxy-server=your.proxy.host:port
 
 ## Release Notes
 
+### v0.2.0 (WIP)
+- [x] Apply style of back/foroward button according to the status of WebView.
+
 ### v0.1.0
 First release
