@@ -33,6 +33,13 @@ footer {
 
 .toolbutton {
     font-size: 1.2em;
+    color:black;
+}
+
+.toolbutton:disabled,
+.toolbutton[disabled] {
+    font-size: 1.2em;
+    color: gray;
 }
 
 .statusbar {
