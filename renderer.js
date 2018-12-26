@@ -1,6 +1,7 @@
 const {electron, shell, ipcRenderer, clipboard} = require("electron");
 const TabGroup = require("electron-tabs");
 const ElectronSearchText = require("electron-search-text");
+const dragula = require("dragula");
 const baseUrl = "https://scrapbox.io/";
 
 const goBack = () => {
@@ -33,7 +34,16 @@ const updateNavButtons = tab => {
 
 let searcher;
 
-const tabGroup = new TabGroup();
+const tabGroup = new TabGroup({
+  ready: tabGroup => {
+    dragula([tabGroup.tabContainer], {
+      direction: "horizontal"
+    })
+    .on("drop", (el, container) => {
+      console.log(el);
+    })
+  }
+});
 
 const addTab = (url, closable) => {
   if (!url) {
