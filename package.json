@@ -24,6 +24,7 @@
     "electron-packager": "^12.0.2"
   },
   "dependencies": {
+    "dragula": "^3.7.2",
     "electron-search-text": "^0.3.0",
     "electron-tabs": "^0.9.5"
   }
