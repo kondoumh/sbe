@@ -69,7 +69,3 @@ jspm_packages
 
 # Directories for packages
 sbe-*
-scrapbox-darwin-x64
-
-# idea
-.idea
