@@ -16,7 +16,7 @@ const createWindow = () => {
   try {
     bounds_info = JSON.parse(fs.readFileSync(info_path, 'utf-8'))
   } catch (e) {
-    bounds_info = {width:800, height:1000}
+    bounds_info = {width: 1024, height: 800}
   }
 
   mainWindow = new BrowserWindow(bounds_info);
