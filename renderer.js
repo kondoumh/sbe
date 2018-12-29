@@ -3,6 +3,7 @@ const TabGroup = require("electron-tabs");
 const ElectronSearchText = require("electron-search-text");
 const dragula = require("dragula");
 const baseUrl = "https://scrapbox.io/";
+const defaultIconUrl = baseUrl + "assets/img/favicon/favicon.ico";
 
 const goBack = () => {
   const webview = tabGroup.getActiveTab().webview;
@@ -51,7 +52,7 @@ const addTab = (url, closable) => {
       src: url,
       visible: true,
       active: true,
-      iconURL: baseUrl + "assets/img/favicon/favicon.ico",
+      iconURL: defaultIconUrl,
       closable: closable,
       ready: tab => {
         tab.webview.addEventListener("new-window", e => {
@@ -75,7 +76,20 @@ const addTab = (url, closable) => {
           updateNavButtons(tab);
           const path = e.url.substring(baseUrl.length).split("/");
           if (path.length > 1 && path[1].length > 0) {
-            tab.setIcon(baseUrl + "api/pages/" + path[0] + "/" + path[1] + "/icon")
+            tab.setTitle(decodeURI(path[1]) + " - " + path[0]);
+            const iconUrl = baseUrl + "api/pages/" + path[0] + "/" + path[1] + "/icon";
+            fetch(iconUrl, {
+              credentials: "include"
+            }).then(res => {
+              if (res.status === 200) {
+                tab.setIcon(iconUrl);
+              } else {
+                tab.setIcon(defaultIconUrl);
+              }
+            });
+          } else {
+            tab.setTitle(path[0]);
+            tab.setIcon(defaultIconUrl);
           }
         });
         tab.on("webview-ready", tab => {
