@@ -39,9 +39,6 @@ const tabGroup = new TabGroup({
     dragula([tabGroup.tabContainer], {
       direction: "horizontal"
     })
-    .on("drop", (el, container) => {
-      console.log(el);
-    })
   }
 });
 
