@@ -51,6 +51,7 @@ const addTab = (url, closable) => {
       src: url,
       visible: true,
       active: true,
+      iconURL: baseUrl + "assets/img/favicon/favicon.ico",
       closable: closable,
       ready: tab => {
         tab.webview.addEventListener("new-window", e => {
@@ -72,6 +73,10 @@ const addTab = (url, closable) => {
         });
         tab.webview.addEventListener("load-commit", e => {
           updateNavButtons(tab);
+          const path = e.url.substring(baseUrl.length).split("/");
+          if (path.length > 1 && path[1].length > 0) {
+            tab.setIcon(baseUrl + "api/pages/" + path[0] + "/" + path[1] + "/icon")
+          }
         });
         tab.on("webview-ready", tab => {
           tab.ready = true;
