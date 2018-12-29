@@ -59,7 +59,8 @@ sbe.exe --proxy-server=your.proxy.host:port
 ### v0.2.0 (WIP)
 - [x] Apply style of back/foroward button according to the status of WebView.
 - [x] Enable to arrange order of tabs with drag & drop.
-- [x] duplicates tab on double clicking in tab area.
+- [x] Duplicates tab on double clicking in tab area.
+- [x] Shows icon of page as tab favicon.
 
 ### v0.1.0
 First release
