@@ -15,7 +15,7 @@ const tabGroup = new TabGroup({
   }
 });
 
-const addTab = (url, closable) => {
+const addTab = (url, closable = true) => {
   if (!url) {
     url = baseUrl;
   }
@@ -132,7 +132,7 @@ function goForward() {
 }
 
 function duplicateTab() {
-  addTab(tabGroup.getActiveTab().webview.getURL(), true);
+  addTab(tabGroup.getActiveTab().webview.getURL());
 }
 
 function copyUrl() {
