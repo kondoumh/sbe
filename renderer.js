@@ -5,34 +5,6 @@ const dragula = require("dragula");
 const baseUrl = "https://scrapbox.io/";
 const defaultIconUrl = baseUrl + "assets/img/favicon/favicon.ico";
 
-const goBack = () => {
-  const webview = tabGroup.getActiveTab().webview;
-  if (webview && webview.canGoBack()) {
-    webview.goBack();
-  }
-}
-
-const goForward = () => {
-  const webview = tabGroup.getActiveTab().webview;
-  if (webview && webview.canGoForward()) {
-    webview.goForward();
-  }
-}
-
-const duplicateTab = () => {
-  addTab(tabGroup.getActiveTab().webview.getURL(), true);
-}
-
-const copyUrl = () => {
-  const url = tabGroup.getActiveTab().webview.getURL();
-  clipboard.writeText(url);
-}
-
-const updateNavButtons = tab => {
-  document.querySelector("#btn_back").disabled = !tab.webview.canGoBack();
-  document.querySelector("#btn_forward").disabled = !tab.webview.canGoForward();
-}
-
 let searcher;
 
 const tabGroup = new TabGroup({
@@ -56,41 +28,16 @@ const addTab = (url, closable) => {
       closable: closable,
       ready: tab => {
         tab.webview.addEventListener("new-window", e => {
-          if (e.url.indexOf(baseUrl) !== -1) {
-            addTab(e.url);
-          } else {
-            shell.openExternal(e.url);
-          }
+          openUrl(e.url);
         });
         tab.webview.addEventListener("page-title-updated", e => {
           tab.setTitle(e.title);
         });
         tab.webview.addEventListener("update-target-url", e => {
-          let message = e.url !== "" ? decodeURI(e.url) : "ready";
-          if (message.indexOf(baseUrl) !== -1) {
-            message = message.substring(baseUrl.length);
-          }
-          document.querySelector("#statusbar").innerHTML = message;
+          showTargetPageTitle(e.url);
         });
         tab.webview.addEventListener("load-commit", e => {
-          updateNavButtons(tab);
-          const path = e.url.substring(baseUrl.length).split("/");
-          if (path.length > 1 && path[1].length > 0) {
-            tab.setTitle(decodeURI(path[1]) + " - " + path[0]);
-            const iconUrl = baseUrl + "api/pages/" + path[0] + "/" + path[1] + "/icon";
-            fetch(iconUrl, {
-              credentials: "include"
-            }).then(res => {
-              if (res.status === 200) {
-                tab.setIcon(iconUrl);
-              } else {
-                tab.setIcon(defaultIconUrl);
-              }
-            });
-          } else {
-            tab.setTitle(path[0]);
-            tab.setIcon(defaultIconUrl);
-          }
+          updateTab(tab, e);
         });
         tab.on("webview-ready", tab => {
           tab.ready = true;
@@ -169,3 +116,71 @@ ipcRenderer.on("copyUrl", () => {
 ipcRenderer.on("reload", () => {
   tabGroup.getActiveTab().webview.reload();
 });
+
+function goBack() {
+  const webview = tabGroup.getActiveTab().webview;
+  if (webview && webview.canGoBack()) {
+    webview.goBack();
+  }
+}
+
+function goForward() {
+  const webview = tabGroup.getActiveTab().webview;
+  if (webview && webview.canGoForward()) {
+    webview.goForward();
+  }
+}
+
+function duplicateTab() {
+  addTab(tabGroup.getActiveTab().webview.getURL(), true);
+}
+
+function copyUrl() {
+  const url = tabGroup.getActiveTab().webview.getURL();
+  clipboard.writeText(url);
+}
+
+function updateNavButtons(tab) {
+  document.querySelector("#btn_back").disabled = !tab.webview.canGoBack();
+  document.querySelector("#btn_forward").disabled = !tab.webview.canGoForward();
+}
+
+function updateTab(tab, e) {
+  updateNavButtons(tab);
+  const path = e.url.substring(baseUrl.length).split("/");
+  if (path.length > 1 && path[1].length > 0) {
+    tab.setTitle(decodeURI(path[1]) + " - " + path[0]);
+    const iconUrl = baseUrl + "api/pages/" + path[0] + "/" + path[1] + "/icon";
+    fetch(iconUrl, {
+      credentials: "include"
+    }).then(res => {
+      if (res.status === 200) {
+        tab.setIcon(iconUrl);
+      }
+      else {
+        tab.setIcon(defaultIconUrl);
+      }
+    });
+  }
+  else {
+    tab.setTitle(path[0]);
+    tab.setIcon(defaultIconUrl);
+  }
+}
+
+function showTargetPageTitle(url) {
+  let message = url !== "" ? decodeURI(url) : "ready";
+  if (message.indexOf(baseUrl) !== -1) {
+    message = message.substring(baseUrl.length);
+  }
+  document.querySelector("#statusbar").innerHTML = message;
+}
+
+function openUrl(url) {
+  if (url.indexOf(baseUrl) !== -1) {
+    addTab(url);
+  }
+  else {
+    shell.openExternal(url);
+  }
+}
