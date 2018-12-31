@@ -5,8 +5,6 @@ const dragula = require("dragula");
 const baseUrl = "https://scrapbox.io/";
 const defaultIconUrl = baseUrl + "assets/img/favicon/favicon.ico";
 
-let searcher;
-
 const tabGroup = new TabGroup({
   ready: tabGroup => {
     dragula([tabGroup.tabContainer], {
@@ -40,21 +38,22 @@ const addTab = (url, closable = true) => {
           updateTab(tab, e);
         });
         tab.on("webview-ready", tab => {
-          tab.ready = true;
-        });
-        tab.on("active", tab => {
-          if (tab.ready) {
-            updateNavButtons(tab);
-          }
-          searcher = new ElectronSearchText({
+          tab.searcher = new ElectronSearchText({
             target: ".etabs-view.visible",
             input: ".search-input",
             count: ".search-count",
             box: ".search-box",
             visibleClass: ".state-visible"
           });
+          tab.ready = true;
         });
-      }
+        tab.on("active", tab => {
+          if (tab.ready) {
+            updateNavButtons(tab);
+            document.querySelector("#search-count").innerHTML = "";
+          }
+        });
+    }
   });
   return tab;
 }
@@ -86,7 +85,10 @@ onload = () => {
 };
 
 ipcRenderer.on("toggleSearch", () => {
-  searcher.emit("toggle");
+  const tab = tabGroup.getActiveTab();
+  if (tab.searcher) {
+    tab.searcher.emit("toggle");
+  }
 });
 
 ipcRenderer.on("goBack", () => {
