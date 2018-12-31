@@ -61,6 +61,7 @@ sbe.exe --proxy-server=your.proxy.host:port
 - [x] Enable to arrange order of tabs with drag & drop.
 - [x] Duplicates tab on double clicking in tab area.
 - [x] Shows icon of page as tab favicon.
+- [x] Implove search box behavior.
 
 ### v0.1.0
 First release
