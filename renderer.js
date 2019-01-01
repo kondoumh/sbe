@@ -48,7 +48,7 @@ const addTab = (url, closable = true) => {
         tab.on("active", tab => {
           if (tab.ready) {
             updateNavButtons(tab.webview);
-            document.querySelector("#search-count").innerHTML = "";
+            resetSearchBoxCount();
           }
         });
     }
@@ -186,4 +186,8 @@ function openUrl(url) {
   else {
     shell.openExternal(url);
   }
+}
+
+function resetSearchBoxCount() {
+  document.querySelector("#search-count").innerHTML = "";
 }
