@@ -29,7 +29,7 @@ const addTab = (url, closable = true) => {
           openUrl(e.url);
         });
         tab.webview.addEventListener("page-title-updated", e => {
-          tab.setTitle(e.title);
+          //tab.setTitle(e.title);
         });
         tab.webview.addEventListener("update-target-url", e => {
           showTargetPageTitle(e.url);
