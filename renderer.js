@@ -28,13 +28,11 @@ const addTab = (url, closable = true) => {
         tab.webview.addEventListener("new-window", e => {
           openUrl(e.url);
         });
-        tab.webview.addEventListener("page-title-updated", e => {
-          //tab.setTitle(e.title);
-        });
         tab.webview.addEventListener("update-target-url", e => {
           showTargetPageTitle(e.url);
         });
         tab.webview.addEventListener("load-commit", e => {
+          updateNavButtons(tab);
           updateTab(tab, e);
         });
         tab.on("webview-ready", tab => {
@@ -148,10 +146,10 @@ function updateNavButtons(tab) {
 }
 
 function updateTab(tab, e) {
-  updateNavButtons(tab);
   const path = e.url.substring(baseUrl.length).split("/");
+
   if (path.length > 1 && path[1].length > 0) {
-    tab.setTitle(decodeURI(path[1]) + " - " + path[0]);
+    tab.setTitle(toTitle(path[1]) + " - " + toTitle(path[0]));
     const iconUrl = baseUrl + "api/pages/" + path[0] + "/" + path[1] + "/icon";
     fetch(iconUrl, {
       credentials: "include"
@@ -164,10 +162,14 @@ function updateTab(tab, e) {
       }
     });
   }
-  else {
-    tab.setTitle(path[0]);
+  else if (path.length > 1 && path[1].length === 0) {
+    tab.setTitle(toTitle(path[0]));
     tab.setIcon(defaultIconUrl);
   }
+}
+
+function toTitle(path) {
+  return decodeURI(path).replace(/_/g, " ");
 }
 
 function showTargetPageTitle(url) {
