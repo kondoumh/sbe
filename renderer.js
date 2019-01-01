@@ -32,8 +32,8 @@ const addTab = (url, closable = true) => {
           showTargetPageTitle(e.url);
         });
         tab.webview.addEventListener("load-commit", e => {
-          updateNavButtons(tab);
-          updateTab(tab, e);
+          updateNavButtons(tab.webview);
+          updateTab(tab, e.url);
         });
         tab.on("webview-ready", tab => {
           tab.searcher = new ElectronSearchText({
@@ -47,7 +47,7 @@ const addTab = (url, closable = true) => {
         });
         tab.on("active", tab => {
           if (tab.ready) {
-            updateNavButtons(tab);
+            updateNavButtons(tab.webview);
             document.querySelector("#search-count").innerHTML = "";
           }
         });
@@ -140,14 +140,13 @@ function copyUrl() {
   clipboard.writeText(url);
 }
 
-function updateNavButtons(tab) {
-  document.querySelector("#btn_back").disabled = !tab.webview.canGoBack();
-  document.querySelector("#btn_forward").disabled = !tab.webview.canGoForward();
+function updateNavButtons(webview) {
+  document.querySelector("#btn_back").disabled = !webview.canGoBack();
+  document.querySelector("#btn_forward").disabled = !webview.canGoForward();
 }
 
-function updateTab(tab, e) {
-  const path = e.url.substring(baseUrl.length).split("/");
-
+function updateTab(tab, url) {
+  const path = url.substring(baseUrl.length).split("/");
   if (path.length > 1 && path[1].length > 0) {
     tab.setTitle(toTitle(path[1]) + " - " + toTitle(path[0]));
     const iconUrl = baseUrl + "api/pages/" + path[0] + "/" + path[1] + "/icon";
