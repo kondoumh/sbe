@@ -148,7 +148,6 @@ function updateNavButtons(webview) {
 function updateTab(tab, url) {
   const path = url.substring(baseUrl.length).split("/");
   if (path.length > 1 && path[1].length > 0) {
-    tab.setTitle(toTitle(path[1]) + " - " + toTitle(path[0]));
     const iconUrl = baseUrl + "api/pages/" + path[0] + "/" + path[1] + "/icon";
     fetch(iconUrl, {
       credentials: "include"
@@ -159,11 +158,12 @@ function updateTab(tab, url) {
       else {
         tab.setIcon(defaultIconUrl);
       }
+      tab.setTitle(toTitle(path[1]) + " - " + toTitle(path[0]));
     });
   }
   else if (path.length > 1 && path[1].length === 0) {
-    tab.setTitle(toTitle(path[0]));
     tab.setIcon(defaultIconUrl);
+    tab.setTitle(toTitle(path[0]));
   }
 }
 
