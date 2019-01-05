@@ -53,7 +53,7 @@ sbe.exe --proxy-server=your.proxy.host:port
 ```
 
 ## Screenshot
-![Screenshot](https://user-images.githubusercontent.com/2092183/50722490-5800a980-1113-11e9-8512-0f5d4f470cab.gif)
+![Screenshot](https://user-images.githubusercontent.com/2092183/50725987-ceb89980-1149-11e9-9017-fb7186ce00b1.gif)
 
 ## Release Notes
 ### v0.2.0
