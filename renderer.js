@@ -176,20 +176,24 @@ function toTitle(path) {
 }
 
 function showTargetPageTitle(url) {
-  let message = url !== "" ? decodeURI(url) : "ready";
-  if (message.indexOf(baseUrl) !== -1) {
-    message = message.substring(baseUrl.length);
+  let title = url !== "" ? decodeURI(url) : "ready";
+  if (inScrapbox(title)) {
+    title = title.substring(baseUrl.length);
   }
-  document.querySelector("#statusbar").innerHTML = message;
+  document.querySelector("#statusbar").innerHTML = title;
 }
 
 function openUrl(url) {
-  if (url.indexOf(baseUrl) !== -1) {
+  if (inScrapbox(url)) {
     addTab(url);
   }
   else {
     shell.openExternal(url);
   }
+}
+
+function inScrapbox(url) {
+  return url.indexOf(baseUrl) === 0;
 }
 
 function resetSearchBoxCount() {
