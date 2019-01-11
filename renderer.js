@@ -2,8 +2,8 @@ const {electron, shell, ipcRenderer, clipboard} = require("electron");
 const TabGroup = require("electron-tabs");
 const ElectronSearchText = require("electron-search-text");
 const dragula = require("dragula");
-const baseUrl = "https://scrapbox.io/";
-const defaultIconUrl = baseUrl + "assets/img/favicon/favicon.ico";
+const BASE_URL = "https://scrapbox.io/";
+const DEFAULT_ICON_URL = BASE_URL + "assets/img/favicon/favicon.ico";
 
 const tabGroup = new TabGroup({
   ready: tabGroup => {
@@ -15,14 +15,14 @@ const tabGroup = new TabGroup({
 
 const addTab = (url, closable = true) => {
   if (!url) {
-    url = baseUrl;
+    url = BASE_URL;
   }
   const tab = tabGroup.addTab({
       title: "new tab",
       src: url,
       visible: true,
       active: true,
-      iconURL: defaultIconUrl,
+      iconURL: DEFAULT_ICON_URL,
       closable: closable,
       ready: tab => {
         tab.webview.addEventListener("new-window", e => {
@@ -56,7 +56,7 @@ const addTab = (url, closable = true) => {
   return tab;
 }
 
-addTab(baseUrl, false);
+addTab(BASE_URL, false);
 
 onload = () => {
   document.querySelector("#btn_back").addEventListener('click', e => {
@@ -150,9 +150,9 @@ function updateNavButtons(webview) {
 }
 
 function updateTab(tab, url) {
-  const path = url.substring(baseUrl.length).split("/");
+  const path = url.substring(BASE_URL.length).split("/");
   if (path.length > 1 && path[1].length > 0) {
-    const iconUrl = baseUrl + "api/pages/" + path[0] + "/" + path[1] + "/icon";
+    const iconUrl = BASE_URL + "api/pages/" + path[0] + "/" + path[1] + "/icon";
     fetch(iconUrl, {
       credentials: "include"
     }).then(res => {
@@ -160,13 +160,13 @@ function updateTab(tab, url) {
         tab.setIcon(iconUrl);
       }
       else {
-        tab.setIcon(defaultIconUrl);
+        tab.setIcon(DEFAULT_ICON_URL);
       }
       tab.setTitle(toTitle(path[1]) + " - " + toTitle(path[0]));
     });
   }
   else if (path.length > 1 && path[1].length === 0) {
-    tab.setIcon(defaultIconUrl);
+    tab.setIcon(DEFAULT_ICON_URL);
     tab.setTitle(toTitle(path[0]));
   }
 }
@@ -178,7 +178,7 @@ function toTitle(path) {
 function showTargetPageTitle(url) {
   let title = url !== "" ? decodeURI(url) : "ready";
   if (inScrapbox(title)) {
-    title = title.substring(baseUrl.length);
+    title = title.substring(BASE_URL.length);
   }
   document.querySelector("#statusbar").innerHTML = title;
 }
@@ -193,7 +193,7 @@ function openUrl(url) {
 }
 
 function inScrapbox(url) {
-  return url.indexOf(baseUrl) === 0;
+  return url.indexOf(BASE_URL) === 0;
 }
 
 function resetSearchBoxCount() {
