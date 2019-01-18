@@ -77,6 +77,9 @@ onload = () => {
   document.querySelector("#btn_reload").addEventListener('click', e => {
     tabGroup.getActiveTab().webview.reload();
   });
+  document.querySelector("#btn_titles").addEventListener('click', e => {
+    
+  });
   document.querySelector("#tabgroup").addEventListener('dblclick', e => {
     duplicateTab();
   });
