@@ -182,6 +182,9 @@ function getPageTitles() {
     credentials: "include"
   }).then(res => {
     if (res.status === 200) {
+      res.json().then(data => {
+        console.log(data.pages);
+      });
     }
   });
 }
