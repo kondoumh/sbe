@@ -78,7 +78,7 @@ onload = () => {
     tabGroup.getActiveTab().webview.reload();
   });
   document.querySelector("#btn_titles").addEventListener('click', e => {
-    
+    getPageTitles();
   });
   document.querySelector("#tabgroup").addEventListener('dblclick', e => {
     duplicateTab();
@@ -172,6 +172,18 @@ function updateTab(tab, url) {
     tab.setIcon(DEFAULT_ICON_URL);
     tab.setTitle(toTitle(path[0]));
   }
+}
+
+function getPageTitles() {
+  const url = tabGroup.getActiveTab().webview.getURL();
+  const path = url.substring(BASE_URL.length).split(/\/|#/);
+  const pagesUrl = BASE_URL + "api/pages/" + path[0];
+  fetch(pagesUrl, {
+    credentials: "include"
+  }).then(res => {
+    if (res.status === 200) {
+    }
+  });
 }
 
 function toTitle(path) {
