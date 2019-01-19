@@ -79,6 +79,7 @@ onload = () => {
   });
   document.querySelector("#btn_titles").addEventListener('click', e => {
     getPageTitles();
+    addTab("list.html");
   });
   document.querySelector("#tabgroup").addEventListener('dblclick', e => {
     duplicateTab();
@@ -184,6 +185,7 @@ function getPageTitles() {
     if (res.status === 200) {
       res.json().then(data => {
         console.log(data.pages);
+        return data.pages;
       });
     }
   });
