@@ -154,7 +154,7 @@ function updateNavButtons(webview) {
 }
 
 function updateTab(tab, url) {
-  const path = url.substring(BASE_URL.length).split(/\/|#/);
+  const path = getPath(url);
   if (path.length > 1 && path[1].length > 0) {
     const iconUrl = BASE_URL + "api/pages/" + path[0] + "/" + path[1] + "/icon";
     fetch(iconUrl, {
@@ -177,7 +177,7 @@ function updateTab(tab, url) {
 
 function getPageTitles() {
   const url = tabGroup.getActiveTab().webview.getURL();
-  const path = url.substring(BASE_URL.length).split(/\/|#/);
+  const path = getPath(url);
   const pagesUrl = BASE_URL + "api/pages/" + path[0];
   fetch(pagesUrl, {
     credentials: "include"
@@ -210,13 +210,21 @@ function openUrl(url) {
   else if (url.match(/^http(s)?:\/\/.+/)) {
       shell.openExternal(url);
   } else {
-    const cururl = tabGroup.getActiveTab().webview.getURL();
-    const path = cururl.substring(BASE_URL.length).split(/\/|#/);
+    const path = getPath();
     const searchUrl = BASE_URL + path[0] + "/search/page?q=" + decodeURI(url);
     console.log(searchUrl)
     addTab(searchUrl);
   }
 }
+
+function getPath(url) {
+  let cururl = url;
+  if (!cururl) {
+    cururl = tabGroup.getActiveTab().webview.getURL();
+  }
+  return cururl.substring(BASE_URL.length).split(/\/|#/);
+}
+
 
 function inScrapbox(url) {
   return url.indexOf(BASE_URL) === 0;
