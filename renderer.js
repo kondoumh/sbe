@@ -207,8 +207,14 @@ function openUrl(url) {
   if (inScrapbox(url)) {
     addTab(url);
   }
-  else {
-    shell.openExternal(url);
+  else if (url.match(/^http(s)?:\/\/.+/)) {
+      shell.openExternal(url);
+  } else {
+    const cururl = tabGroup.getActiveTab().webview.getURL();
+    const path = cururl.substring(BASE_URL.length).split(/\/|#/);
+    const searchUrl = BASE_URL + path[0] + "/search/page?q=" + decodeURI(url);
+    console.log(searchUrl)
+    addTab(searchUrl);
   }
 }
 
