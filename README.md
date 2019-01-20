@@ -56,6 +56,11 @@ sbe.exe --proxy-server=your.proxy.host:port
 ![Screenshot](https://user-images.githubusercontent.com/2092183/50725987-ceb89980-1149-11e9-9017-fb7186ce00b1.gif)
 
 ## Release Notes
+### v0.3.0 (WIP)
+- [x] Add tab for text-base page list with pagenation.
+- [x] Add another textbox to open page directory from url.
+- [x] Search with in the project from textbox above.
+
 ### v0.2.0
 - [x] Change the style of back/foroward button according to the state of webview.
 - [x] Enable to arrange order of tabs with drag & drop.
