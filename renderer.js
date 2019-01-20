@@ -206,6 +206,13 @@ function getPath(url) {
   let cururl = url;
   if (!cururl) {
     cururl = tabGroup.getActiveTab().webview.getURL();
+    if (!inScrapbox(cururl)) {
+      tabGroup.getTabs().forEach(tab => {
+        if (inScrapbox(tab.webview.getURL())) {
+          cururl = tab.webview.getURL();
+        }
+      })
+    }
   }
   return cururl.substring(BASE_URL.length).split(/\/|#/);
 }
