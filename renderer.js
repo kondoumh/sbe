@@ -78,6 +78,9 @@ onload = () => {
     tabGroup.getActiveTab().webview.reload();
   });
   document.querySelector("#btn_titles").addEventListener('click', e => {
+    const path = getPath();
+    localStorage.setItem("projectName", path[0]);
+    console.log(localStorage.getItem("projectName"));
     addTab("list.html");
   });
   document.querySelector("#tabgroup").addEventListener('dblclick', e => {

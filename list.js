@@ -1,22 +1,26 @@
 const BASE_URL = "https://scrapbox.io/";
 
 function getPageTitles() {
-  const target = document.getElementById("output");
-  const pagesUrl = BASE_URL + "api/pages/" + "mamezou-knowhow"; // path[0];
+  const titles = document.getElementById("titles");
+  const status = document.getElementById("sbe_paging");
+  const projectName = localStorage.getItem("projectName");
+  const pagesUrl = BASE_URL + "api/pages/" + projectName; // path[0];
   fetch(pagesUrl, {
-    credentials: "include",
-    mode: "cors"
+    credentials: "include"
   })
     .then(res => {
-      if (res.status === 200) {
+      if (res.status === 200) {    
         res.json().then(data => {
-          target.innerHTML = JSON.stringify(data.pages);
+          status.innerHTML = data.skip + " - " + data.limit + " total:" + data.count + "<br>";
+          Object.keys(data.pages).forEach(key => {
+            titles.innerHTML += "<a href=" + BASE_URL + projectName + "/" + encodeURI(data.pages[key].title) + ">"+ data.pages[key].title + "</a><br>";
+          })
         });
       } else {
-        target.innerHTML = "ng";
+          titles.innerHTML = "ng - " + projectName;
       }
     })
     .catch(error => {
-      target.innerHTML = error;
+        titles.innerHTML = error;
     });
 }
