@@ -78,7 +78,6 @@ onload = () => {
     tabGroup.getActiveTab().webview.reload();
   });
   document.querySelector("#btn_titles").addEventListener('click', e => {
-    getPageTitles();
     addTab("list.html");
   });
   document.querySelector("#tabgroup").addEventListener('dblclick', e => {
@@ -175,22 +174,6 @@ function updateTab(tab, url) {
   }
 }
 
-function getPageTitles() {
-  const url = tabGroup.getActiveTab().webview.getURL();
-  const path = getPath(url);
-  const pagesUrl = BASE_URL + "api/pages/" + path[0];
-  fetch(pagesUrl, {
-    credentials: "include"
-  }).then(res => {
-    if (res.status === 200) {
-      res.json().then(data => {
-        console.log(data.pages);
-        return data.pages;
-      });
-    }
-  });
-}
-
 function toTitle(path) {
   return decodeURI(path).replace(/_/g, " ");
 }
@@ -212,7 +195,6 @@ function openUrl(url) {
   } else {
     const path = getPath();
     const searchUrl = BASE_URL + path[0] + "/search/page?q=" + decodeURI(url);
-    console.log(searchUrl)
     addTab(searchUrl);
   }
 }
@@ -224,7 +206,6 @@ function getPath(url) {
   }
   return cururl.substring(BASE_URL.length).split(/\/|#/);
 }
-
 
 function inScrapbox(url) {
   return url.indexOf(BASE_URL) === 0;
