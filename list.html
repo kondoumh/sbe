@@ -5,11 +5,11 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css"/>
   </head>
-  <body onload="getPageTitles();">
-    <i class="fas fa-step-backward"></i>
-    <i class="fas fa-backward"></i>
-    <i class="fas fa-forward"></i>
-    <i class="fas fa-step-forward"></i>
+  <body onload="getPageTitles('head');">
+    <i class="fas fa-step-backward" onclick="getPageTitles('head');"></i>
+    <i class="fas fa-backward" onclick="getPageTitles('backwaod');"></i>
+    <i class="fas fa-forward" onclick="getPageTitles('forward');"></i>
+    <i class="fas fa-step-forward" onclick="getPageTitles('tail');"></i>
     <span id=sbe_paging></span>
     <div id="titles"></div>
     <br /><br /><br />
