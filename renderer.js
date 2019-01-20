@@ -4,6 +4,7 @@ const ElectronSearchText = require("electron-search-text");
 const dragula = require("dragula");
 const BASE_URL = "https://scrapbox.io/";
 const DEFAULT_ICON_URL = BASE_URL + "assets/img/favicon/favicon.ico";
+const LIST_PAGE = "list.html";
 
 const tabGroup = new TabGroup({
   ready: tabGroup => {
@@ -81,7 +82,7 @@ onload = () => {
     const path = getPath();
     localStorage.setItem("projectName", path[0]);
     console.log(localStorage.getItem("projectName"));
-    addTab("list.html");
+    addTab(LIST_PAGE);
   });
   document.querySelector("#tabgroup").addEventListener('dblclick', e => {
     duplicateTab();
