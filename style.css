@@ -95,3 +95,14 @@ footer {
 .state-visible {
     display: block;
 }
+
+.url-input {
+    box-sizing: border-box;
+    width: 220px;
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 2px;
+    border: 1px solid rgba(0,0,0,.1);
+    outline-width: 2px;
+    padding-right: 30px;
+}
