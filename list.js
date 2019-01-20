@@ -1,23 +1,41 @@
 const BASE_URL = "https://scrapbox.io/";
+const LIMIT = 100;
 
 function getPageTitles(direction) {
   const titles = document.getElementById("titles");
   const status = document.getElementById("sbe_paging");
   const projectName = localStorage.getItem("projectName");
+  if (direction === "head") {
+      sessionStorage.clear();
+  }
   const skip = sessionStorage.getItem("skip");
-  const start = skip ? parseInt(skip) : 1;
-  const pagesUrl = BASE_URL + "api/pages/" + projectName + "?skip=" + (start - 1) + "&limit=100";
+  let start = skip ? parseInt(skip) : 1;
+  const count = sessionStorage.getItem("count");
+  const totalCount = count ? parseInt(count) : LIMIT;
+  if (direction === "forward") {
+      start += LIMIT;
+      if (start >= totalCount) return;
+  } else if (direction === "backward") {
+      start -= LIMIT;
+      if (start < 0) {
+          start = 0;
+      }
+  } else if (direction === "tail") {
+      start = totalCount - totalCount % LIMIT + 1;
+  }
+  const pagesUrl = BASE_URL + "api/pages/" + projectName + "?skip=" + (start - 1) + "&limit=" + LIMIT;
+  titles.innerHTML = "";
+  sessionStorage.setItem("skip", start);
   fetch(pagesUrl, {
     credentials: "include"
   })
     .then(res => {
       if (res.status === 200) {
         res.json().then(data => {
-          const limit = parseInt(data.limit);
-          const end = start + limit - 1;
+          const end = start + LIMIT - 1;
           const total = parseInt(data.count);
+          sessionStorage.setItem("count", total);
           status.innerHTML = start + " - " + end + " total:" + total + "<br>";
-          titles.innerHTML = direction + "<br>";
           Object.keys(data.pages).forEach(key => {
             titles.innerHTML +=
               "<a href=" +
@@ -33,9 +51,6 @@ function getPageTitles(direction) {
               data.pages[key].linked +
               " linked<br>";
           });
-          if (start + limit < total) {
-            sessionStorage.setItem("skip", start + limit);
-          }
         });
       } else {
         titles.innerHTML = "ng - " + projectName;
