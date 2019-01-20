@@ -85,7 +85,6 @@ onload = () => {
   });
   document.querySelector("#open_url").addEventListener('change', e => {
     openUrl(e.target.value);
-    document.querySelector("#open_url").value = ""
   });
 };
 
