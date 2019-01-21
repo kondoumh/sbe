@@ -2,7 +2,7 @@ const BASE_URL = "https://scrapbox.io/";
 const LIMIT = 100;
 
 function getPageTitles(direction) {
-  const titles = document.getElementById("titles");
+  const table = document.getElementById("sbe_pages");
   const status = document.getElementById("sbe_paging");
   const projectName = localStorage.getItem("projectName");
   if (direction === "head") {
@@ -24,7 +24,15 @@ function getPageTitles(direction) {
       start = totalCount - totalCount % LIMIT + 1;
   }
   const pagesUrl = BASE_URL + "api/pages/" + projectName + "?skip=" + (start - 1) + "&limit=" + LIMIT;
-  titles.innerHTML = "";
+  table.innerHTML = "";
+  let header = table.createTHead();
+  let hrow = header.insertRow(-1);
+  let hcell1 = hrow.insertCell(0);
+  let hcell2 = hrow.insertCell(1);
+  let hcell3 = hrow.insertCell(2);
+  hcell1.innerHTML = "views";
+  hcell2.innerHTML = "linked";
+  hcell3.innerHTML = "Title";
   sessionStorage.setItem("skip", start);
   fetch(pagesUrl, {
     credentials: "include"
@@ -37,26 +45,20 @@ function getPageTitles(direction) {
           sessionStorage.setItem("count", total);
           status.innerHTML = start + " - " + end + " total:" + total + "<br>";
           Object.keys(data.pages).forEach(key => {
-            titles.innerHTML +=
-              "<a href=" +
-              BASE_URL +
-              projectName +
-              "/" +
-              encodeURI(data.pages[key].title) +
-              ">" +
-              data.pages[key].title +
-              "</a> / " +
-              data.pages[key].views +
-              " views  / " +
-              data.pages[key].linked +
-              " linked<br>";
+            let row = table.insertRow(-1);
+            let cell1 = row.insertCell(0);
+            let cell2 = row.insertCell(1);
+            let cell3 = row.insertCell(2);
+            cell1.innerHTML = data.pages[key].views;
+            cell2.innerHTML = data.pages[key].linked;
+            cell3.innerHTML = "<a href=" + BASE_URL + projectName + "/" + encodeURI(data.pages[key].title) + ">" + data.pages[key].title + "</a>";
           });
         });
       } else {
-        titles.innerHTML = "ng - " + projectName;
+        status.innerHTML = "ng - " + projectName;
       }
     })
     .catch(error => {
-      titles.innerHTML = error;
+      status.innerHTML = error;
     });
 }

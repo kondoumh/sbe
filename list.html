@@ -1,18 +1,43 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Page titles</title>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css"/>
-  </head>
-  <body onload="getPageTitles('head');">
-    <i class="fas fa-step-backward" onclick="getPageTitles('head');"></i>
-    <i class="fas fa-backward" onclick="getPageTitles('backward');"></i>
-    <i class="fas fa-forward" onclick="getPageTitles('forward');"></i>
-    <i class="fas fa-step-forward" onclick="getPageTitles('tail');"></i>
-    <span id=sbe_paging></span>
-    <div id="titles"></div>
-    <br /><br /><br />
-    <script src="list.js"></script>
-  </body>
+
+<head>
+  <title>Page titles</title>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" />
+  <style>
+    table {
+      border-collapse: collapse;
+      border-spacing: 0;
+      width: 100%;
+      border: 1px solid #ddd;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 5px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2
+    }
+  </style>
+</head>
+
+<body onload="getPageTitles('head');">
+  <i class="fas fa-step-backward" onclick="getPageTitles('head');"></i>
+  <i class="fas fa-backward" onclick="getPageTitles('backward');"></i>
+  <i class="fas fa-forward" onclick="getPageTitles('forward');"></i>
+  <i class="fas fa-step-forward" onclick="getPageTitles('tail');"></i>
+  <span id=sbe_paging></span>
+  <table id="sbe_pages"></table>
+  <i class="fas fa-step-backward" onclick="getPageTitles('head');"></i>
+  <i class="fas fa-backward" onclick="getPageTitles('backward');"></i>
+  <i class="fas fa-forward" onclick="getPageTitles('forward');"></i>
+  <i class="fas fa-step-forward" onclick="getPageTitles('tail');"></i>
+  <br /><br /><br /><br /><br />
+  <script src="list.js"></script>
+</body>
+
 </html>
