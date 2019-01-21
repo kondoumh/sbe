@@ -57,9 +57,9 @@ sbe.exe --proxy-server=your.proxy.host:port
 
 ## Release Notes
 ### v0.3.0 (WIP)
-- [x] Add tab for text-base page list with pagenation.
-- [x] Add another textbox to open page directory from url.
-- [x] Search with in the project from textbox above.
+- [x] Add another text-box to opening page from url.
+- [x] Search with in the project from the text-box above.
+- [x] Add tab for text-base page list.
 
 ### v0.2.0
 - [x] Change the style of back/foroward button according to the state of webview.
