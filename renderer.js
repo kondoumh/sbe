@@ -87,9 +87,6 @@ onload = () => {
   document.querySelector("#tabgroup").addEventListener('dblclick', e => {
     duplicateTab();
   });
-  document.querySelector("#open_url").addEventListener('change', e => {
-    openUrl(e.target.value);
-  });
   document.querySelector("#open_url").addEventListener('keypress', e => {
     const key = e.which || e.keyCode;
     if (key === 13) {
