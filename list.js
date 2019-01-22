@@ -2,8 +2,8 @@ const BASE_URL = "https://scrapbox.io/";
 const LIMIT = 100;
 
 function getPageTitles(direction) {
-  const table = document.getElementById("sbe_pages");
-  const status = document.getElementById("sbe_paging");
+  const table = document.querySelector("#sbe_pages");
+  const status = document.querySelector("#sbe_paging");
   const projectName = localStorage.getItem("projectName");
   if (direction === "head") {
       sessionStorage.clear();
