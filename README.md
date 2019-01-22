@@ -56,7 +56,7 @@ sbe.exe --proxy-server=your.proxy.host:port
 ![Screenshot](https://user-images.githubusercontent.com/2092183/50725987-ceb89980-1149-11e9-9017-fb7186ce00b1.gif)
 
 ## Release Notes
-### v0.3.0 (WIP)
+### v0.3.0
 - [x] Add another text-box to opening page from url.
 - [x] Search with in the project from the text-box above.
 - [x] Add tab for text-base page list.
