@@ -30,9 +30,11 @@ function getPageTitles(direction) {
   let hcell1 = hrow.insertCell(0);
   let hcell2 = hrow.insertCell(1);
   let hcell3 = hrow.insertCell(2);
-  hcell1.innerHTML = "views";
-  hcell2.innerHTML = "linked";
-  hcell3.innerHTML = "Title";
+  let hcell4 = hrow.insertCell(3);
+  hcell1.innerHTML = "pin"
+  hcell2.innerHTML = "views";
+  hcell3.innerHTML = "linked";
+  hcell4.innerHTML = "Title";
   sessionStorage.setItem("skip", start);
   fetch(pagesUrl, {
     credentials: "include"
@@ -49,9 +51,11 @@ function getPageTitles(direction) {
             let cell1 = row.insertCell(0);
             let cell2 = row.insertCell(1);
             let cell3 = row.insertCell(2);
-            cell1.innerHTML = data.pages[key].views;
-            cell2.innerHTML = data.pages[key].linked;
-            cell3.innerHTML = "<a href=" + BASE_URL + projectName + "/" + encodeURI(data.pages[key].title) + ">" + data.pages[key].title + "</a>";
+            let cell4 = row.insertCell(3);
+            cell1.innerHTML = data.pages[key].pin === 0 ? "" : "&#x2714;";
+            cell2.innerHTML = data.pages[key].views;
+            cell3.innerHTML = data.pages[key].linked;
+            cell4.innerHTML = "<a href=" + BASE_URL + projectName + "/" + encodeURI(data.pages[key].title) + ">" + data.pages[key].title + "</a>";
           });
         });
       } else {
