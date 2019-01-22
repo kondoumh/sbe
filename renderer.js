@@ -81,7 +81,6 @@ onload = () => {
   document.querySelector("#btn_titles").addEventListener('click', e => {
     const path = getPath();
     localStorage.setItem("projectName", path[0]);
-    console.log(localStorage.getItem("projectName"));
     addTab(LIST_PAGE);
   });
   document.querySelector("#tabgroup").addEventListener('dblclick', e => {
@@ -171,7 +170,11 @@ function updateTab(tab, url) {
       else {
         tab.setIcon(DEFAULT_ICON_URL);
       }
-      tab.setTitle(toTitle(path[1]) + " - " + toTitle(path[0]));
+      if (tab.webview.getURL().indexOf(LIST_PAGE) !== -1) {
+        tab.setTitle("page list");
+      } else {
+        tab.setTitle(toTitle(path[1]) + " - " + toTitle(path[0]));
+      }
     });
   }
   else if (path.length > 1 && path[1].length === 0) {
