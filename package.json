@@ -26,6 +26,7 @@
   "dependencies": {
     "dragula": "^3.7.2",
     "electron-search-text": "^0.3.0",
+    "electron-store": "^2.0.0",
     "electron-tabs": "^0.9.5"
   }
 }
