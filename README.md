@@ -60,6 +60,7 @@ sbe.exe --proxy-server=your.proxy.host:port
 - [x] Add another text-box to opening page from url.
 - [x] Search with in the project from the text-box above.
 - [x] Add tab for text-base page list.
+- [x] Add setting for restore window size. (#2,@tobachi)
 
 ### v0.2.0
 - [x] Change the style of back/foroward button according to the state of webview.
