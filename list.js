@@ -31,10 +31,12 @@ function getPageTitles(direction) {
   let hcell2 = hrow.insertCell(1);
   let hcell3 = hrow.insertCell(2);
   let hcell4 = hrow.insertCell(3);
+  let hcell5 = hrow.insertCell(4);
   hcell1.innerHTML = "pin"
   hcell2.innerHTML = "views";
   hcell3.innerHTML = "linked";
-  hcell4.innerHTML = "Title";
+  hcell4.innerHTML = "img";
+  hcell5.innerHTML = "Title";
   sessionStorage.setItem("skip", start);
   fetch(pagesUrl, {
     credentials: "include"
@@ -52,10 +54,12 @@ function getPageTitles(direction) {
             let cell2 = row.insertCell(1);
             let cell3 = row.insertCell(2);
             let cell4 = row.insertCell(3);
-            cell1.innerHTML = data.pages[key].pin === 0 ? "" : "&#x2714;";
+            let cell5 = row.insertCell(4);
+            cell1.innerHTML = data.pages[key].pin !== 0 ? "&#x2714;" : "";
             cell2.innerHTML = data.pages[key].views;
             cell3.innerHTML = data.pages[key].linked;
-            cell4.innerHTML = "<a href=" + BASE_URL + projectName + "/" + encodeURI(data.pages[key].title) + ">" + data.pages[key].title + "</a>";
+            cell4.innerHTML = data.pages[key].image !== null ? "<img src=" + data.pages[key].image + " width='25' height='25'>" : "";
+            cell5.innerHTML = "<a href=" + BASE_URL + projectName + "/" + encodeURI(data.pages[key].title) + ">" + data.pages[key].title + "</a>";
           });
         });
       } else {
