@@ -5,11 +5,22 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require("path");
 const url = require("url");
 const Menu = electron.Menu;
+const Store = require("electron-store");
+
+const store = new Store({
+  defaults: {
+    bounds: {
+      width: 1024,
+      height: 800,
+    },
+  },
+});
 
 let mainWindow;
 
 const createWindow = () => {
-  mainWindow = new BrowserWindow({ width: 1024, height: 800 });
+  const {width, height, x, y} = store.get("bounds");
+  mainWindow = new BrowserWindow({ width: width, height: height, x: x, y: y});
 
   mainWindow.loadURL(
     url.format({
@@ -19,6 +30,11 @@ const createWindow = () => {
     })
   );
 
+  ['resize', 'move'].forEach(e => {
+    mainWindow.on(e, () => {
+        store.set('bounds', mainWindow.getBounds())
+    });
+  })
   initWindowMenu();
 
   mainWindow.on("closed", () => {
