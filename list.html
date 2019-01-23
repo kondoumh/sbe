@@ -30,6 +30,11 @@
   <i class="fas fa-backward" onclick="getPageTitles('backward');"></i>
   <i class="fas fa-forward" onclick="getPageTitles('forward');"></i>
   <i class="fas fa-step-forward" onclick="getPageTitles('tail');"></i>
+  <select id=sort_key onchange="getPageTitles('head');">
+    <option>updated</option>
+    <option>views</option>
+    <option>linked</option>
+  </select>
   <span id=sbe_paging></span>
   <table id="sbe_pages"></table>
   <i class="fas fa-step-backward" onclick="getPageTitles('head');"></i>

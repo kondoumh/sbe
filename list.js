@@ -2,6 +2,7 @@ const BASE_URL = "https://scrapbox.io/";
 const LIMIT = 100;
 
 function getPageTitles(direction) {
+  const sortKey = document.querySelector("#sort_key").value;
   const table = document.querySelector("#sbe_pages");
   const status = document.querySelector("#sbe_paging");
   const projectName = localStorage.getItem("projectName");
@@ -23,7 +24,7 @@ function getPageTitles(direction) {
   } else if (direction === "tail") {
       start = totalCount - totalCount % LIMIT + 1;
   }
-  const pagesUrl = BASE_URL + "api/pages/" + projectName + "?skip=" + (start - 1) + "&limit=" + LIMIT;
+  const pagesUrl = BASE_URL + "api/pages/" + projectName + "?skip=" + (start - 1) + "&limit=" + LIMIT + "&sort=" + sortKey;
   table.innerHTML = "";
   let header = table.createTHead();
   let hrow = header.insertRow(-1);
