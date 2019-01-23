@@ -56,11 +56,15 @@ sbe.exe --proxy-server=your.proxy.host:port
 ![Screenshot](https://user-images.githubusercontent.com/2092183/50725987-ceb89980-1149-11e9-9017-fb7186ce00b1.gif)
 
 ## Release Notes
+### v0.3.1
+- [x] fix title of page list.
+- [x] Add dropdown list to select sort key for page list.
+
 ### v0.3.0
 - [x] Add another text-box to opening page from url.
 - [x] Search with in the project from the text-box above.
 - [x] Add tab for text-base page list.
-- [x] Add setting for restore window size. (#2,@tobachi)
+- [x] Add setting for restore window size.
 
 ### v0.2.0
 - [x] Change the style of back/foroward button according to the state of webview.
