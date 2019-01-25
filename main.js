@@ -67,15 +67,15 @@ function initWindowMenu() {
         { role: "cut" },
         { role: "copy" },
         { role: "paste" },
+          {
+            label: "Paste [url title]",
+            accelerator: "CmdOrCtrl+L",
+            click() {
+              mainWindow.webContents.send("pasteUrlTitle");
+            }
+          },
         { role: "delete" },
         { role: "selectall" },
-        {
-          label: "Paste [url title]",
-          accelerator: "CmdOrCtrl+U",
-          click() {
-            mainWindow.webContents.send("pasteUrlTitle");
-          }
-        },
       ]
     },
     {
