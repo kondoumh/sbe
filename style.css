@@ -24,6 +24,9 @@ footer {
     height: 23px;
     padding-left: 4px;
     border-top: 1px solid #999;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .toolbar {
