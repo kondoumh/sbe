@@ -56,8 +56,13 @@ sbe.exe --proxy-server=your.proxy.host:port
 ![Screenshot](https://user-images.githubusercontent.com/2092183/50725987-ceb89980-1149-11e9-9017-fb7186ce00b1.gif)
 
 ## Release Notes
+
+### v0.3.2
+- [x] Paste URL with title.
+- [x] Add updated column to page list.
+
 ### v0.3.1
-- [x] fix title of page list.
+- [x] Fix title of page list.
 - [x] Add dropdown list to select sort key for page list.
 
 ### v0.3.0
