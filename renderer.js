@@ -139,18 +139,21 @@ ipcRenderer.on("pasteUrlTitle", () => {
   fetch(text, {
     credentials: "include"
   }).then(res => {
-    showStatusMessage("parsing document...");
-    res.text().then(body => {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(body, 'text/html');
-      const title = doc.title;
-      if (title) {
-        tabGroup.getActiveTab().webview.insertText("[" + text + " " + title.replace(/[\r\[\]]/g, " ") + "]");
-      } else {
-        tabGroup.getActiveTab().webview.insertText("[" + text + " " + "no title]");
-      }
-      showStatusMessage("ready");
-    })
+    if (res.status === 200) {
+      showStatusMessage("parsing document...");
+      res.text().then(body => {
+        const doc = new DOMParser().parseFromString(body, "text/html");
+        const title = doc.title;
+        if (title) {
+          tabGroup.getActiveTab().webview.insertText("[" + text + " " + title.replace(/[\r\[\]]/g, " ") + "]");
+        } else {
+          tabGroup.getActiveTab().webview.insertText("[" + text + " " + "no title]");
+        }
+        showStatusMessage("ready");
+      });
+    } else {
+      showStatusMessage("can not fetch : status " + res.status);
+    }
   }).catch(error => {
     showStatusMessage("error has occured. - " + error);
   })
