@@ -19,15 +19,6 @@ const store = new Store({
 let mainWindow;
 
 const createWindow = () => {
-  const extensions = BrowserWindow.getExtensions();
-  if (!extensions["ScrapScripts"]) {
-    if (process.platform === "win32") {
-      const extensionDir = app.getPath("home") + "\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\";
-      console.log(extensionDir);
-      BrowserWindow.addExtension(extensionDir + "pmpjhaeadhebhjmninnnpikcdogmjgok\\1.2.1_0");
-      console.log(BrowserWindow.getExtensions());
-    }
-  }
   const {width, height, x, y} = store.get("bounds");
   mainWindow = new BrowserWindow({ width: width, height: height, x: x, y: y});
 
