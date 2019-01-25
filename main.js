@@ -69,6 +69,13 @@ function initWindowMenu() {
         { role: "paste" },
         { role: "delete" },
         { role: "selectall" },
+        {
+          label: "Paste [url title]",
+          accelerator: "CmdOrCtrl+U",
+          click() {
+            mainWindow.webContents.send("pasteUrlTitle");
+          }
+        },
       ]
     },
     {

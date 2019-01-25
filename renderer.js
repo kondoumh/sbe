@@ -129,6 +129,33 @@ ipcRenderer.on("reload", () => {
   tabGroup.getActiveTab().webview.reload();
 });
 
+ipcRenderer.on("pasteUrlTitle", () => {
+  const text = clipboard.readText("selection");
+  if (!isUrl(text)) {
+    showStatusMessage("Invalid URL. : " + text);
+    return;
+  }
+  showStatusMessage("fetching document...");
+  fetch(text, {
+    credentials: "include"
+  }).then(res => {
+    showStatusMessage("parsing document...");
+    res.text().then(body => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(body, 'text/html');
+      const title = doc.title;
+      if (title) {
+        tabGroup.getActiveTab().webview.insertText("[" + text + " " + title.replace(/[\r\[\]]/g, " ") + "]");
+      } else {
+        tabGroup.getActiveTab().webview.insertText("[" + text + " " + "no title]");
+      }
+      showStatusMessage("ready");
+    })
+  }).catch(error => {
+    showStatusMessage("error has occured. - " + error);
+  })
+});
+
 function goBack() {
   const webview = tabGroup.getActiveTab().webview;
   if (webview && webview.canGoBack()) {
@@ -192,14 +219,14 @@ function showTargetPageTitle(url) {
   if (inScrapbox(title)) {
     title = title.substring(BASE_URL.length);
   }
-  document.querySelector("#statusbar").innerHTML = title;
+  showStatusMessage(title);
 }
 
 function openUrl(url) {
   if (inScrapbox(url)) {
     addTab(url);
   }
-  else if (url.match(/^http(s)?:\/\/.+/)) {
+  else if (isUrl(url)) {
       shell.openExternal(url);
   } else {
     const path = getPath();
@@ -223,10 +250,18 @@ function getPath(url) {
   return cururl.substring(BASE_URL.length).split(/\/|#/);
 }
 
+function isUrl(text) {
+  return text.match(/^http(s)?:\/\/.+/);
+}
+
 function inScrapbox(url) {
   return url.indexOf(BASE_URL) === 0;
 }
 
 function resetSearchBoxCount() {
   document.querySelector("#search-count").innerHTML = "";
+}
+
+function showStatusMessage(message) {
+  document.querySelector("#statusbar").innerHTML = message;
 }
