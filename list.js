@@ -6,6 +6,7 @@ function getPageTitles(direction) {
   const table = document.querySelector("#sbe_pages");
   const status = document.querySelector("#sbe_paging");
   const projectName = localStorage.getItem("projectName");
+  const hide_pinned = document.querySelector("#hide_pinned").checked;
   if (direction === "head") {
       sessionStorage.clear();
   }
@@ -52,6 +53,7 @@ function getPageTitles(direction) {
           sessionStorage.setItem("count", total);
           status.innerHTML = start + " - " + end + " total:" + total + "<br>";
           Object.keys(data.pages).forEach(key => {
+            if (hide_pinned && data.pages[key].pin !== 0) return;
             let row = table.insertRow(-1);
             let cell1 = row.insertCell(0);
             let cell2 = row.insertCell(1);

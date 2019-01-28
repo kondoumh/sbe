@@ -30,6 +30,8 @@
   <i class="fas fa-backward" onclick="getPageTitles('backward');"></i>
   <i class="fas fa-forward" onclick="getPageTitles('forward');"></i>
   <i class="fas fa-step-forward" onclick="getPageTitles('tail');"></i>
+  <input id="hide_pinned" type="checkbox" onchange="getPageTitles('head');" />
+  <label for="hide_pinned">hide pinned</label>
   <select id=sort_key onchange="getPageTitles('head');">
     <option>updated</option>
     <option>views</option>
