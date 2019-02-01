@@ -204,7 +204,7 @@ function updateTab(tab, url) {
       credentials: "include"
     }).then(res => {
       if (res.status === 200) {
-        tab.setIcon(iconUrl);
+        tab.setIcon(res.url);
       }
       else {
         tab.setIcon(DEFAULT_ICON_URL);
