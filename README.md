@@ -57,6 +57,10 @@ sbe.exe --proxy-server=your.proxy.host:port
 
 ## Release Notes
 
+### v0.4.0
+- [x] Improve tab rendering.
+- [x] Add filter by pinning state in page list.
+
 ### v0.3.2
 - [x] Paste URL with title.
 - [x] Add updated column to page list.
