@@ -1,6 +1,6 @@
 {
   "name": "sbe",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "An unofficial Scrapbox desktop app by Electron",
   "main": "main.js",
   "config": {
