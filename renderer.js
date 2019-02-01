@@ -190,8 +190,15 @@ function updateNavButtons(webview) {
 }
 
 function updateTab(tab, url) {
+  if (tab.webview.getURL().indexOf(LIST_PAGE) !== -1) {
+    tab.setTitle("page list");
+    return;
+  }
   const path = getPath(url);
   if (path.length > 1 && path[1].length > 0) {
+    const newTitle = toTitle(path[1]) + " - " + toTitle(path[0]);
+    if (tab.getTitle() === newTitle) return;
+    tab.setTitle(newTitle);
     const iconUrl = BASE_URL + "api/pages/" + path[0] + "/" + path[1] + "/icon";
     fetch(iconUrl, {
       credentials: "include"
@@ -201,11 +208,6 @@ function updateTab(tab, url) {
       }
       else {
         tab.setIcon(DEFAULT_ICON_URL);
-      }
-      if (tab.webview.getURL().indexOf(LIST_PAGE) !== -1) {
-        tab.setTitle("page list");
-      } else {
-        tab.setTitle(toTitle(path[1]) + " - " + toTitle(path[0]));
       }
     });
   }
