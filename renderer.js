@@ -33,8 +33,10 @@ const addTab = (url, closable = true) => {
           showTargetPageTitle(e.url);
         });
         tab.webview.addEventListener("load-commit", e => {
-          updateNavButtons(tab.webview);
-          updateTab(tab, e.url);
+          if (inScrapbox(e.url) || e.url.indexOf(LIST_PAGE) !== -1) {
+            updateNavButtons(tab.webview);
+            updateTab(tab, e.url);
+          }
         });
         tab.on("webview-ready", tab => {
           tab.searcher = new ElectronSearchText({
