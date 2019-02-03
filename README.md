@@ -10,6 +10,11 @@ An unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 - Copy page url to the clipboard
 - Cut, copy and paste widh accelerator keys
 - History back / forward
+- Open page from url
+- Show pages list that can be sorted by updated / views / linked
+- Paste link with `[url title]` format
+
+![Screenshot](https://user-images.githubusercontent.com/2092183/50725987-ceb89980-1149-11e9-9017-fb7186ce00b1.gif)
 
 ## How to run
 ### requirement
@@ -52,35 +57,3 @@ if you run binary in proxy. you have to add argument (via shortcut link) as belo
 sbe.exe --proxy-server=your.proxy.host:port
 ```
 
-## Screenshot
-![Screenshot](https://user-images.githubusercontent.com/2092183/50725987-ceb89980-1149-11e9-9017-fb7186ce00b1.gif)
-
-## Release Notes
-
-### v0.4.0
-- [x] Improve tab rendering.
-- [x] Add filter by pinning state in page list.
-
-### v0.3.2
-- [x] Paste URL with title.
-- [x] Add updated column to page list.
-
-### v0.3.1
-- [x] Fix title of page list.
-- [x] Add dropdown list to select sort key for page list.
-
-### v0.3.0
-- [x] Add another text-box to opening page from url.
-- [x] Search with in the project from the text-box above.
-- [x] Add tab for text-base page list.
-- [x] Add setting for restore window size.
-
-### v0.2.0
-- [x] Change the style of back/foroward button according to the state of webview.
-- [x] Enable to arrange order of tabs with drag & drop.
-- [x] Duplicates tab on double clicking in tab area.
-- [x] Shows first image of the page as icon on the tab of the page.
-- [x] Implove search box behavior.
-
-### v0.1.0
-First release
