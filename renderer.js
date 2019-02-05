@@ -218,11 +218,11 @@ function updateTab(tab, url) {
 }
 
 function toTitle(path) {
-  return decodeURI(path).replace(/_/g, " ");
+  return decodeURIComponent(path).replace(/_/g, " ");
 }
 
 function showTargetPageTitle(url) {
-  let title = url !== "" ? decodeURI(url) : "ready";
+  let title = url !== "" ? decodeURIComponent(url) : "ready";
   if (inScrapbox(title)) {
     title = title.substring(BASE_URL.length);
   }
