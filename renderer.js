@@ -46,6 +46,14 @@ const addTab = (url, closable = true) => {
             box: ".search-box",
             visibleClass: ".state-visible"
           });
+          const contextMenu = require('electron-context-menu');
+          contextMenu({
+            window: tab.webview,
+            prepend: (params, webview) => [{	
+                label: 'Rainbow',	
+                visible: params.mediaType === 'image'	
+            }]	
+          });
           tab.ready = true;
         });
         tab.on("active", tab => {
