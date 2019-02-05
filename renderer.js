@@ -237,7 +237,7 @@ function openUrl(url) {
       shell.openExternal(url);
   } else {
     const path = getPath();
-    const searchUrl = BASE_URL + path[0] + "/search/page?q=" + decodeURI(url);
+    const searchUrl = BASE_URL + path[0] + "/search/page?q=" + encodeURIComponent(url);
     addTab(searchUrl);
   }
 }
