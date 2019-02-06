@@ -66,7 +66,7 @@ function getPageTitles(direction) {
             cell3.innerHTML = data.pages[key].linked;
             cell4.innerHTML = formatDate(data.pages[key].updated);
             cell5.innerHTML = data.pages[key].image !== null ? "<img src=" + data.pages[key].image + " width='25' height='25'>" : "";
-            cell6.innerHTML = "<a href=" + BASE_URL + projectName + "/" + encodeURIComponent(data.pages[key].title) + ">" + data.pages[key].title + "</a>";
+            cell6.innerHTML = "<a href=" + BASE_URL + projectName + "/" + encodeURIComponent(data.pages[key].title) + " target='_blank'>" + data.pages[key].title + "</a>";
           });
         });
       } else {
