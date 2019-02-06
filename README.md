@@ -2,7 +2,7 @@
 An unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 
 ## Features
-- Open page in new tab (Windows: Ctrl + click / macOS: Cmd + click)
+- Open page in new tab via context menu or Ctrl(Cmd) + click
 - Open top page in new tab
 - Duplicate current page in new tab
 - Open url with default web browser
@@ -56,4 +56,3 @@ if you run binary in proxy. you have to add argument (via shortcut link) as belo
 ```
 sbe.exe --proxy-server=your.proxy.host:port
 ```
-
