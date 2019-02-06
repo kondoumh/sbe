@@ -1,4 +1,4 @@
-const {electron, shell, ipcRenderer, clipboard} = require("electron");
+const {electron, shell, ipcRenderer, clipboard, MenuItem} = require("electron");
 const TabGroup = require("electron-tabs");
 const ElectronSearchText = require("electron-search-text");
 const dragula = require("dragula");
@@ -49,10 +49,13 @@ const addTab = (url, closable = true) => {
           const contextMenu = require('electron-context-menu');
           contextMenu({
             window: tab.webview,
-            prepend: (params, webview) => [{
-                label: 'Rainbow',	
-                visible: params.mediaType === 'image'	
-            }]
+            prepend: (params, webview) => [
+              {
+                label: "Open link",
+                click: ()=> { openUrl(params.linkURL); },
+                visible: params.linkURL && params.mediaType === 'none'
+              }
+            ]
           });
           tab.ready = true;
         });
