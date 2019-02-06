@@ -54,6 +54,14 @@ const addTab = (url, closable = true) => {
                 label: "Open link",
                 click: ()=> { openUrl(params.linkURL); },
                 visible: params.linkURL && params.mediaType === 'none'
+              },
+              {
+                label: "Search on Google \"" + params.selectionText + "\"",
+                click: () => {
+                  url = "https://www.google.com/search?q=" + params.selectionText;
+                  openUrl(url);
+                },
+                visible: params.selectionText !== ""
               }
             ]
           });
