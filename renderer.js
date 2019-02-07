@@ -51,7 +51,7 @@ const addTab = (url, closable = true) => {
             window: tab.webview,
             prepend: (params, webview) => [
               {
-                label: "Open link",
+                label: "Open",
                 click: ()=> { openUrl(params.linkURL); },
                 visible: params.linkURL && params.mediaType === 'none'
               },
