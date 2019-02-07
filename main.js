@@ -136,16 +136,6 @@ function initWindowMenu() {
           click() {
             mainWindow.webContents.send("toggleSearch");
           }
-        },
-        {
-          label: "About sbe",
-          click() {
-            openAboutWindow({
-              icon_path: __dirname + "/icons/png/512x512.png",
-              copyright: 'Copyright (c) 2019 kondoumh',
-              package_json_dir: __dirname,
-            });
-          }
         }
       ]
     }
@@ -165,7 +155,12 @@ function initWindowMenu() {
     template.unshift({
       label: app.getName(),
       submenu: [
-        { role: "about" },
+        {
+          label: "about",
+          click() {
+            showAboutWindow();
+          }
+        },
         { type: "separator" },
         { role: "services", submenu: [] },
         { type: "separator" },
@@ -176,8 +171,28 @@ function initWindowMenu() {
         { role: "quit" }
       ]
     });
+  } else {
+    template.push({
+      label: "help",
+      submenu: [
+        {
+          label: "about",
+          click() {
+            showAboutWindow();
+          }
+        }
+      ]
+    })
   }
 
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
+}
+
+function showAboutWindow() {
+  openAboutWindow({
+    icon_path: __dirname + "/icons/png/512x512.png",
+    copyright: 'Copyright (c) 2019 kondoumh',
+    package_json_dir: __dirname,
+  });
 }
