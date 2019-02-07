@@ -24,6 +24,7 @@
     "electron-packager": "^12.0.2"
   },
   "dependencies": {
+    "about-window": "^1.12.1",
     "dragula": "^3.7.2",
     "electron-context-menu": "^0.11.0",
     "electron-search-text": "^0.3.0",

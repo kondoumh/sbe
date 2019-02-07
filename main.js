@@ -6,6 +6,7 @@ const path = require("path");
 const url = require("url");
 const Menu = electron.Menu;
 const Store = require("electron-store");
+const openAboutWindow = require("about-window").default;
 
 const store = new Store({
   defaults: {
@@ -134,6 +135,16 @@ function initWindowMenu() {
           accelerator: "CmdOrCtrl+F",
           click() {
             mainWindow.webContents.send("toggleSearch");
+          }
+        },
+        {
+          label: "About sbe",
+          click() {
+            openAboutWindow({
+              icon_path: __dirname + "/icons/png/512x512.png",
+              copyright: 'Copyright (c) 2019 kondoumh',
+              package_json_dir: __dirname,
+            });
           }
         }
       ]
