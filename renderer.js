@@ -180,6 +180,18 @@ ipcRenderer.on("pasteUrlTitle", () => {
   })
 });
 
+ipcRenderer.on("insertHeadline1", () => {
+  tabGroup.getActiveTab().webview.insertText("[* 1]");
+});
+
+ipcRenderer.on("insertHeadline2", () => {
+  tabGroup.getActiveTab().webview.insertText("[** 2]");
+});
+
+ipcRenderer.on("insertHeadline3", () => {
+  tabGroup.getActiveTab().webview.insertText("[*** 3]");
+});
+
 function goBack() {
   const webview = tabGroup.getActiveTab().webview;
   if (webview && webview.canGoBack()) {

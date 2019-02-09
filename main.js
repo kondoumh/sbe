@@ -68,15 +68,37 @@ function initWindowMenu() {
         { role: "cut" },
         { role: "copy" },
         { role: "paste" },
-          {
-            label: "Paste [url title]",
-            accelerator: "CmdOrCtrl+L",
-            click() {
-              mainWindow.webContents.send("pasteUrlTitle");
-            }
-          },
+        {
+          label: "Paste [url title]",
+          accelerator: "CmdOrCtrl+L",
+          click() {
+            mainWindow.webContents.send("pasteUrlTitle");
+          }
+        },
         { role: "delete" },
         { role: "selectall" },
+        { type: "separator" },
+        {
+          label: "Insert [* 1]",
+          accelerator: "CmdOrCtrl+1",
+          click() {
+            mainWindow.webContents.send("insertHeadline1");
+          }
+        },
+        {
+          label: "Insert [** 2]",
+          accelerator: "CmdOrCtrl+2",
+          click() {
+            mainWindow.webContents.send("insertHeadline2");
+          }
+        },
+        {
+          label: "Insert [*** 3]",
+          accelerator: "CmdOrCtrl+3",
+          click() {
+            mainWindow.webContents.send("insertHeadline3");
+          }
+        }
       ]
     },
     {
