@@ -1,4 +1,4 @@
-const {electron, shell, ipcRenderer, clipboard, MenuItem} = require("electron");
+const {shell, ipcRenderer, clipboard} = require("electron");
 const TabGroup = require("electron-tabs");
 const ElectronSearchText = require("electron-search-text");
 const dragula = require("dragula");
