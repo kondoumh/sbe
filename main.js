@@ -1,10 +1,7 @@
-const electron = require("electron");
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
+const {app, ipcMain, Menu, BrowserWindow} = require("electron");
 
 const path = require("path");
 const url = require("url");
-const Menu = electron.Menu;
 const Store = require("electron-store");
 const openAboutWindow = require("about-window").default;
 
