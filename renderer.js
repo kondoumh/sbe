@@ -36,6 +36,7 @@ const addTab = (url, closable = true) => {
           if (inScrapbox(e.url) || e.url.indexOf(LIST_PAGE) !== -1) {
             updateNavButtons(tab.webview);
             updateTab(tab, e.url);
+            ipcRenderer.send("url-history-message", e.url);
           }
         });
         tab.on("webview-ready", tab => {

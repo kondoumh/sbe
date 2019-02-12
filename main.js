@@ -215,3 +215,7 @@ function showAboutWindow() {
     package_json_dir: __dirname,
   });
 }
+
+ipcMain.on("url-history-message", (e, arg) => {
+  console.log(arg);
+});
