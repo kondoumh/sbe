@@ -36,7 +36,13 @@ const addTab = (url, closable = true) => {
           if (inScrapbox(e.url) || e.url.indexOf(LIST_PAGE) !== -1) {
             updateNavButtons(tab.webview);
             updateTab(tab, e.url);
-            ipcRenderer.send("url-history-message", e.url);
+            const path = getPath(e.url);
+            if (path.length < 2) return;
+            const select = document.querySelector("#history");
+            const option = document.createElement("option");
+            option.text = path[0] + " - " + toTitle(path[1]);
+            option.value = e.url;
+            select.add(option, 0);
           }
         });
         tab.on("webview-ready", tab => {
@@ -113,6 +119,9 @@ onload = () => {
     if (key === 13) {
       openUrl(e.target.value);
     }
+  });
+  document.querySelector("#history").addEventListener('change', e => {
+    openUrl(document.querySelector("#history").value);
   });
 };
 

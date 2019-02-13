@@ -1,9 +1,10 @@
-const {app, ipcMain, Menu, BrowserWindow} = require("electron");
+const {app, Menu, BrowserWindow} = require("electron");
 
 const path = require("path");
 const url = require("url");
 const Store = require("electron-store");
 const openAboutWindow = require("about-window").default;
+const contextMenu = require('electron-context-menu');
 
 const store = new Store({
   defaults: {
@@ -27,6 +28,14 @@ const createWindow = () => {
       slashes: true
     })
   );
+
+  contextMenu({
+    prepend: (params, browserWindow) => [{
+      label: 'Rainbow',
+      // Only show it when right-clicking images
+      visible: params.mediaType === 'image'
+    }]
+  });
 
   ['resize', 'move'].forEach(e => {
     mainWindow.on(e, () => {
@@ -215,7 +224,3 @@ function showAboutWindow() {
     package_json_dir: __dirname,
   });
 }
-
-ipcMain.on("url-history-message", (e, arg) => {
-  console.log(arg);
-});
