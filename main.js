@@ -29,14 +29,6 @@ const createWindow = () => {
     })
   );
 
-  contextMenu({
-    prepend: (params, browserWindow) => [{
-      label: 'Rainbow',
-      // Only show it when right-clicking images
-      visible: params.mediaType === 'image'
-    }]
-  });
-
   ['resize', 'move'].forEach(e => {
     mainWindow.on(e, () => {
         store.set('bounds', mainWindow.getBounds())
