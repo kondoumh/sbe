@@ -36,13 +36,7 @@ const addTab = (url, closable = true) => {
           if (inScrapbox(e.url) || e.url.indexOf(LIST_PAGE) !== -1) {
             updateNavButtons(tab.webview);
             updateTab(tab, e.url);
-            const path = getPath(e.url);
-            if (path.length < 2) return;
-            const select = document.querySelector("#history");
-            const option = document.createElement("option");
-            option.text = path[0] + " - " + toTitle(path[1]);
-            option.value = e.url;
-            select.add(option, 0);
+            updateHistory(e.url);
           }
         });
         tab.on("webview-ready", tab => {
@@ -312,4 +306,20 @@ function resetSearchBoxCount() {
 
 function showStatusMessage(message) {
   document.querySelector("#statusbar").innerHTML = message;
+}
+
+function updateHistory(url) {
+  const path = getPath(url);
+  if (path.length < 2) return;
+  if (path[1] === "") return;
+  const select = document.querySelector("#history");
+  for (i = 0; i < select.length; i++) {
+    if (select.options[i].value === url) {
+      select.remove(i);
+    };
+  }
+  const option = document.createElement("option");
+  option.text = path[0] + " - " + toTitle(path[1]);
+  option.value = url;
+  select.add(option, 0);
 }
