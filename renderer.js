@@ -325,4 +325,14 @@ function updateHistory(url) {
   option.text = path[0] + " - " + toTitle(path[1]);
   option.value = url;
   select.add(option, 0);
+  console.log(select.options);
+
+  const histories = [];
+  for (i = 0; i < select.length; i++) {
+    let history = new Object();
+    history.text = select.options[i].text;
+    history.url = select.options[i].value;
+    histories.push(history);
+  }
+  ipcRenderer.send("update-history", JSON.stringify(histories));
 }

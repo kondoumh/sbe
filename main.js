@@ -1,4 +1,4 @@
-const {app, Menu, BrowserWindow} = require("electron");
+const {app, Menu, BrowserWindow, ipcMain} = require("electron");
 
 const path = require("path");
 const url = require("url");
@@ -54,6 +54,11 @@ app.on("activate", () => {
     createWindow();
   }
 });
+
+ipcMain.on("update-history", (e, arg) => {
+  console.log(arg);
+  store.set("history", arg);
+})
 
 function initWindowMenu() {
   const template = [
