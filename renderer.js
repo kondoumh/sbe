@@ -115,7 +115,10 @@ onload = () => {
     }
   });
   document.querySelector("#history").addEventListener('change', e => {
-    openUrl(document.querySelector("#history").value);
+    const url = document.querySelector("#history").value;
+    if (inScrapbox(url)) {
+      openUrl(url);
+    }
   });
 };
 
@@ -309,9 +312,9 @@ function showStatusMessage(message) {
 }
 
 function updateHistory(url) {
+  if (!inScrapbox(url) || url.indexOf(LIST_PAGE) !== -1) return;
   const path = getPath(url);
-  if (path.length < 2) return;
-  if (path[1] === "") return;
+  if (path.length < 2 || path[1] === "") return;
   const select = document.querySelector("#history");
   for (i = 0; i < select.length; i++) {
     if (select.options[i].value === url) {
