@@ -338,7 +338,7 @@ function updateHistory(url) {
   option.value = url;
   select.add(option, 0);
   if (select.options.length > MAX_HISTORY) {
-    select.remove(MAX_HISTORY - 1);
+    select.remove(MAX_HISTORY);
   }
 
   const history = [];
