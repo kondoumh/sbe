@@ -5,6 +5,7 @@ const dragula = require("dragula");
 const BASE_URL = "https://scrapbox.io/";
 const DEFAULT_ICON_URL = BASE_URL + "assets/img/favicon/favicon.ico";
 const LIST_PAGE = "list.html";
+const Store = require("electron-store");
 
 const tabGroup = new TabGroup({
   ready: tabGroup => {
@@ -120,6 +121,16 @@ onload = () => {
       openUrl(url);
     }
   });
+
+  const select = document.querySelector("#history");
+  const history = new Store().get("history");
+  history.forEach(item => {
+    const option = document.createElement("option");
+    option.text = item.text;
+    option.value = item.url;
+    select.add(option, 0);
+  });
+
 };
 
 ipcRenderer.on("toggleSearch", () => {
@@ -325,14 +336,11 @@ function updateHistory(url) {
   option.text = path[0] + " - " + toTitle(path[1]);
   option.value = url;
   select.add(option, 0);
-  console.log(select.options);
 
-  const histories = [];
+  const history = [];
   for (i = 0; i < select.length; i++) {
-    let history = new Object();
-    history.text = select.options[i].text;
-    history.url = select.options[i].value;
-    histories.push(history);
+    const item = {text: select.options[i].text, url: select.options[i].value};
+    history.push(item);
   }
-  ipcRenderer.send("update-history", histories);
+  ipcRenderer.send("updateHistory", history);
 }
