@@ -6,6 +6,7 @@ const BASE_URL = "https://scrapbox.io/";
 const DEFAULT_ICON_URL = BASE_URL + "assets/img/favicon/favicon.ico";
 const LIST_PAGE = "list.html";
 const Store = require("electron-store");
+const MAX_HISTORY = 15;
 
 const tabGroup = new TabGroup({
   ready: tabGroup => {
@@ -336,9 +337,12 @@ function updateHistory(url) {
   option.text = path[0] + " - " + toTitle(path[1]);
   option.value = url;
   select.add(option, 0);
+  if (select.options.length > MAX_HISTORY) {
+    select.remove(MAX_HISTORY - 1);
+  }
 
   const history = [];
-  for (i = 0; i < select.length; i++) {
+  for (i = 0; i < select.options.length; i++) {
     const item = {text: select.options[i].text, url: select.options[i].value};
     history.push(item);
   }
