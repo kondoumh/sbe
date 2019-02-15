@@ -4,7 +4,6 @@ const path = require("path");
 const url = require("url");
 const Store = require("electron-store");
 const openAboutWindow = require("about-window").default;
-const contextMenu = require('electron-context-menu');
 
 const store = new Store({
   defaults: {
