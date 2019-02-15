@@ -334,5 +334,5 @@ function updateHistory(url) {
     history.url = select.options[i].value;
     histories.push(history);
   }
-  ipcRenderer.send("update-history", JSON.stringify(histories));
+  ipcRenderer.send("update-history", histories);
 }

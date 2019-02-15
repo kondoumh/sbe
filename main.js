@@ -55,7 +55,6 @@ app.on("activate", () => {
 });
 
 ipcMain.on("update-history", (e, arg) => {
-  console.log(arg);
   store.set("history", arg);
 })
 
