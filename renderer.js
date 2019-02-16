@@ -7,6 +7,7 @@ const DEFAULT_ICON_URL = BASE_URL + "assets/img/favicon/favicon.ico";
 const LIST_PAGE = "list.html";
 const Store = require("electron-store");
 const MAX_HISTORY = 15;
+const MAX_FAV = 10;
 
 const tabGroup = new TabGroup({
   ready: tabGroup => {
@@ -57,6 +58,11 @@ const addTab = (url, closable = true) => {
                 label: "Open",
                 click: ()=> { openUrl(params.linkURL); },
                 visible: params.linkURL && params.mediaType === 'none'
+              },
+              {
+                label: "Add to fav",
+                click: () => { addToFav(tab.webview.getURL()); },
+                visible: inScrapbox(tab.webview.getURL())
               },
               {
                 label: "Search on Google \"" + params.selectionText + "\"",
@@ -122,6 +128,12 @@ onload = () => {
       openUrl(url);
     }
   });
+  document.querySelector("#favorite").addEventListener("change", e => {
+    const url = document.querySelector("#favorite").value;
+    if (inScrapbox(url)) {
+      openUrl(url);
+    }
+  });
 
   const select = document.querySelector("#history");
   const history = new Store().get("history");
@@ -132,6 +144,14 @@ onload = () => {
     select.add(option, 0);
   });
 
+  const selectFav = document.querySelector("#favorite");
+  const favs = new Store().get("favs");
+  favs.forEach(item => {
+    const option = document.createElement("option");
+    option.text = item.text;
+    option.value = item.url;
+    selectFav.append(option);
+  });
 };
 
 ipcRenderer.on("toggleSearch", () => {
@@ -347,4 +367,30 @@ function updateHistory(url) {
     history.push(item);
   }
   ipcRenderer.send("updateHistory", history);
+}
+
+function addToFav(url) {
+  const path = getPath(url);
+  if (path.length < 2 || path[1] === "") return;
+  const select = document.querySelector("#favorite");
+
+  for (i = 0; i < select.length; i++) {
+    if (select.options[i].value === url) {
+      return;
+    };
+  }
+  const option = document.createElement("option");
+  option.text = path[0] + " - " + toTitle(path[1]);
+  option.value = url;
+  select.add(option, 0);
+  if (select.options.length > MAX_FAV) {
+    select.remove(MAX_FAV);
+  }
+
+  const favs = [];
+  for (i = 0; i < select.options.length; i++) {
+    const item = {text: select.options[i].text, url: select.options[i].value};
+    favs.push(item);
+  }
+  ipcRenderer.send("updateFavs", favs);
 }
