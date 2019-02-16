@@ -50,14 +50,14 @@ const addTab = (url, closable = true) => {
             box: ".search-box",
             visibleClass: ".state-visible"
           });
-          const contextMenu = require('electron-context-menu');
+          const contextMenu = require("electron-context-menu");
           contextMenu({
             window: tab.webview,
             prepend: (params, webview) => [
               {
                 label: "Open",
                 click: ()=> { openUrl(params.linkURL); },
-                visible: params.linkURL && params.mediaType === 'none'
+                visible: params.linkURL && params.mediaType === "none"
               },
               {
                 label: "Add to fav",
@@ -90,39 +90,39 @@ const addTab = (url, closable = true) => {
 addTab(BASE_URL, false);
 
 onload = () => {
-  document.querySelector("#btn_back").addEventListener('click', e => {
+  document.querySelector("#btn_back").addEventListener("click", e => {
     goBack();
   });
-  document.querySelector("#btn_forward").addEventListener('click', e => {
+  document.querySelector("#btn_forward").addEventListener("click", e => {
     goForward();
   });
-  document.querySelector("#btn_newtab").addEventListener('click', e => {
+  document.querySelector("#btn_newtab").addEventListener("click", e => {
     addTab();
   });
-  document.querySelector("#btn_duplicate").addEventListener('click', e => {
+  document.querySelector("#btn_duplicate").addEventListener("click", e => {
     duplicateTab();
   })
-  document.querySelector("#btn_copyurl").addEventListener('click', e => {
+  document.querySelector("#btn_copyurl").addEventListener("click", e => {
     copyUrl();
   });
-  document.querySelector("#btn_reload").addEventListener('click', e => {
+  document.querySelector("#btn_reload").addEventListener("click", e => {
     tabGroup.getActiveTab().webview.reload();
   });
-  document.querySelector("#btn_titles").addEventListener('click', e => {
+  document.querySelector("#btn_titles").addEventListener("click", e => {
     const path = getPath();
     localStorage.setItem("projectName", path[0]);
     addTab(LIST_PAGE);
   });
-  document.querySelector("#tabgroup").addEventListener('dblclick', e => {
+  document.querySelector("#tabgroup").addEventListener("dblclick", e => {
     duplicateTab();
   });
-  document.querySelector("#open_url").addEventListener('keypress', e => {
+  document.querySelector("#open_url").addEventListener("keypress", e => {
     const key = e.which || e.keyCode;
     if (key === 13) {
       openUrl(e.target.value);
     }
   });
-  document.querySelector("#history").addEventListener('change', e => {
+  document.querySelector("#history").addEventListener("change", e => {
     const url = document.querySelector("#history").value;
     if (inScrapbox(url)) {
       openUrl(url);
