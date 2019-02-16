@@ -246,6 +246,7 @@ function goForward() {
 }
 
 function duplicateTab() {
+  if (tabGroup.getActiveTab().webview.getURL().indexOf(LIST_PAGE) !== -1) return;
   addTab(tabGroup.getActiveTab().webview.getURL());
 }
 
@@ -261,7 +262,7 @@ function updateNavButtons(webview) {
 
 function updateTab(tab, url) {
   if (tab.webview.getURL().indexOf(LIST_PAGE) !== -1) {
-    tab.setTitle("page list");
+    tab.setTitle("page list - " + localStorage.getItem("projectName"));
     return;
   }
   const path = getPath(url);
