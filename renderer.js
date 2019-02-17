@@ -179,7 +179,9 @@ ipcRenderer.on("copyUrl", () => {
 });
 
 ipcRenderer.on("reload", () => {
-  tabGroup.getActiveTab().webview.reload();
+  if (tabGroup.getActiveTab().webview.getURL().indexOf(LIST_PAGE) === -1) {
+    tabGroup.getActiveTab().webview.reload();
+  }
 });
 
 ipcRenderer.on("pasteUrlTitle", () => {
