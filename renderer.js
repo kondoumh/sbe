@@ -104,7 +104,9 @@ onload = () => {
     copyUrl();
   });
   document.querySelector("#btn_reload").addEventListener("click", e => {
-    tabGroup.getActiveTab().webview.reload();
+    if (tabGroup.getActiveTab().webview.getURL().indexOf(LIST_PAGE) === -1) {
+      tabGroup.getActiveTab().webview.reload();
+    }
   });
   document.querySelector("#btn_titles").addEventListener("click", e => {
     const path = getPath();

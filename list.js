@@ -1,14 +1,23 @@
 const BASE_URL = "https://scrapbox.io/";
 const LIMIT = 100;
+let projectName;
 
 function getPageTitles(direction) {
   const sortKey = document.querySelector("#sort_key").value;
   const table = document.querySelector("#sbe_pages");
   const status = document.querySelector("#sbe_paging");
-  const projectName = localStorage.getItem("projectName");
+  if (!projectName) {
+    projectName = sessionStorage.getItem("projectName");
+    if (!projectName) {
+      projectName = localStorage.getItem("projectName");
+      sessionStorage.setItem("projectName", projectName);
+      localStorage.removeItem("projectName");
+    }
+  }
   const show_pinned = document.querySelector("#show_pinned").checked;
   if (direction === "head") {
-      sessionStorage.clear();
+      sessionStorage.removeItem("skip");
+      sessionStorage.removeItem("count");
   }
   const skip = sessionStorage.getItem("skip");
   let start = skip ? parseInt(skip) : 1;
@@ -20,7 +29,7 @@ function getPageTitles(direction) {
   } else if (direction === "backward") {
       start -= LIMIT;
       if (start < 0) {
-          start = 0;
+          start = 1;
       }
   } else if (direction === "tail") {
       start = totalCount - totalCount % LIMIT + 1;
