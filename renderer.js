@@ -6,8 +6,7 @@ const BASE_URL = "https://scrapbox.io/";
 const DEFAULT_ICON_URL = BASE_URL + "assets/img/favicon/favicon.ico";
 const LIST_PAGE = "list.html";
 const Store = require("electron-store");
-const MAX_HISTORY = 15;
-const MAX_FAV = 10;
+const MAX_FAV = 5;
 
 const tabGroup = new TabGroup({
   ready: tabGroup => {
@@ -39,7 +38,6 @@ const addTab = (url, closable = true) => {
           if (inScrapbox(e.url) || e.url.indexOf(LIST_PAGE) !== -1) {
             updateNavButtons(tab.webview);
             updateTab(tab, e.url);
-            updateHistory(e.url);
           }
         });
         tab.on("webview-ready", tab => {
@@ -122,26 +120,18 @@ onload = () => {
       openUrl(e.target.value);
     }
   });
-  document.querySelector("#history").addEventListener("change", e => {
-    const url = document.querySelector("#history").value;
-    if (inScrapbox(url)) {
-      openUrl(url);
-    }
-  });
   document.querySelector("#favorite").addEventListener("change", e => {
     const url = document.querySelector("#favorite").value;
-    if (inScrapbox(url)) {
-      openUrl(url);
-    }
-  });
-
-  const select = document.querySelector("#history");
-  const history = new Store().get("history");
-  history.forEach(item => {
-    const option = document.createElement("option");
-    option.text = item.text;
-    option.value = item.url;
-    select.add(option, 0);
+    
+    if (!inScrapbox(url)) return;
+    let opened = false;
+    tabGroup.eachTab(currentTab => {
+      if (currentTab.webview.getURL() === url) {
+        currentTab.activate();
+        opened = true;
+      }
+     });
+     if (!opened) openUrl(url);
   });
 
   const selectFav = document.querySelector("#favorite");
@@ -344,32 +334,6 @@ function showStatusMessage(message) {
   document.querySelector("#statusbar").innerHTML = message;
 }
 
-function updateHistory(url) {
-  if (!inScrapbox(url) || url.indexOf(LIST_PAGE) !== -1) return;
-  const path = getPath(url);
-  if (path.length < 2 || path[1] === "") return;
-  const select = document.querySelector("#history");
-  for (i = 0; i < select.length; i++) {
-    if (select.options[i].value === url) {
-      select.remove(i);
-    };
-  }
-  const option = document.createElement("option");
-  option.text =  toTitle(path[1]) + " - " + path[0];
-  option.value = url;
-  select.add(option, 0);
-  if (select.options.length > MAX_HISTORY) {
-    select.remove(MAX_HISTORY);
-  }
-
-  const history = [];
-  for (i = 0; i < select.options.length; i++) {
-    const item = {text: select.options[i].text, url: select.options[i].value};
-    history.push(item);
-  }
-  ipcRenderer.send("updateHistory", history);
-}
-
 function addToFav(url) {
   const path = getPath(url);
   if (path.length < 2 || path[1] === "") return;
@@ -384,12 +348,13 @@ function addToFav(url) {
   option.text = toTitle(path[1]) + " - " + path[0];
   option.value = url;
   select.add(option);
-  if (select.options.length > MAX_FAV) {
-    select.remove(MAX_FAV);
+  if (select.options.length > MAX_FAV + 1) {
+    select.remove(1);
   }
 
   const favs = [];
   for (i = 0; i < select.options.length; i++) {
+    if (!inScrapbox(select.options[i].value)) continue;
     const item = {text: select.options[i].text, url: select.options[i].value};
     favs.push(item);
   }
