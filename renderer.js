@@ -35,7 +35,7 @@ const addTab = (url, closable = true) => {
           showTargetPageTitle(e.url);
         });
         tab.webview.addEventListener("load-commit", e => {
-          if (inScrapbox(e.url) || e.url.indexOf(LIST_PAGE) !== -1) {
+          if (inScrapbox(e.url) || listPage(e.url)) {
             updateNavButtons(tab.webview);
             updateTab(tab, e.url);
           }
@@ -104,7 +104,7 @@ onload = () => {
     copyUrl();
   });
   document.querySelector("#btn_reload").addEventListener("click", e => {
-    if (tabGroup.getActiveTab().webview.getURL().indexOf(LIST_PAGE) === -1) {
+    if (!listPage(tabGroup.getActiveTab().webview.getURL())) {
       tabGroup.getActiveTab().webview.reload();
     }
   });
@@ -179,7 +179,7 @@ ipcRenderer.on("copyUrl", () => {
 });
 
 ipcRenderer.on("reload", () => {
-  if (tabGroup.getActiveTab().webview.getURL().indexOf(LIST_PAGE) === -1) {
+  if (!listPage(tabGroup.getActiveTab().webview.getURL())) {
     tabGroup.getActiveTab().webview.reload();
   }
 });
@@ -241,8 +241,9 @@ function goForward() {
 }
 
 function duplicateTab() {
-  if (tabGroup.getActiveTab().webview.getURL().indexOf(LIST_PAGE) !== -1) return;
-  addTab(tabGroup.getActiveTab().webview.getURL());
+  if (!listPage(tabGroup.getActiveTab().webview.getURL())) {
+    addTab(tabGroup.getActiveTab().webview.getURL());
+  }
 }
 
 function copyUrl() {
@@ -256,7 +257,7 @@ function updateNavButtons(webview) {
 }
 
 function updateTab(tab, url) {
-  if (tab.webview.getURL().indexOf(LIST_PAGE) !== -1) {
+  if (listPage(tab.webview.getURL())) {
     tab.setTitle("page list - " + localStorage.getItem("projectName"));
     return;
   }
@@ -329,6 +330,10 @@ function isUrl(text) {
 
 function inScrapbox(url) {
   return url.indexOf(BASE_URL) === 0;
+}
+
+function listPage(url) {
+  return url.indexOf(LIST_PAGE) !== -1;
 }
 
 function resetSearchBoxCount() {
