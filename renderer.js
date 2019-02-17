@@ -132,6 +132,7 @@ onload = () => {
       }
      });
      if (!opened) openUrl(url);
+     selectFav.selectedIndex = 0;
   });
 
   const selectFav = document.querySelector("#favorite");
