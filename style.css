@@ -110,10 +110,9 @@ footer {
     padding-right: 30px;
 }
 
-.history {
-    width: 200px;
+.dropdwon {
     box-sizing: border-box;
-    width: 220px;
+    width: 150px;
     padding: 5px;
     font-size: 14px;
     border-radius: 2px;

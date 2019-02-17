@@ -355,7 +355,7 @@ function updateHistory(url) {
     };
   }
   const option = document.createElement("option");
-  option.text = path[0] + " - " + toTitle(path[1]);
+  option.text =  toTitle(path[1]) + " - " + path[0];
   option.value = url;
   select.add(option, 0);
   if (select.options.length > MAX_HISTORY) {
@@ -381,9 +381,9 @@ function addToFav(url) {
     };
   }
   const option = document.createElement("option");
-  option.text = path[0] + " - " + toTitle(path[1]);
+  option.text = toTitle(path[1]) + " - " + path[0];
   option.value = url;
-  select.add(option, 0);
+  select.add(option);
   if (select.options.length > MAX_FAV) {
     select.remove(MAX_FAV);
   }
