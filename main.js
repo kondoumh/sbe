@@ -54,10 +54,6 @@ app.on("activate", () => {
   }
 });
 
-ipcMain.on("updateHistory", (e, arg) => {
-  store.set("history", arg);
-});
-
 ipcMain.on("updateFavs", (e, arg) => {
   store.set("favs", arg);
 });
