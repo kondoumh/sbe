@@ -329,11 +329,11 @@ function isUrl(text) {
 }
 
 function inScrapbox(url) {
-  return url.indexOf(BASE_URL) === 0;
+  return url.startsWith(BASE_URL);
 }
 
 function listPage(url) {
-  return url.indexOf(LIST_PAGE) !== -1;
+  return !inScrapbox(url) && url.endsWith(LIST_PAGE);
 }
 
 function resetSearchBoxCount() {
