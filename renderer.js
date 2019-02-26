@@ -364,6 +364,7 @@ function isPage(url) {
 function addToFav(url) {
   const select = document.querySelector("#favorite");
   const option = document.createElement("option");
+  const path = getPath(url);
   option.text = toTitle(path[1]) + " - " + path[0];
   option.value = url;
   select.add(option, 1);
