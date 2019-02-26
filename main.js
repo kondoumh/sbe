@@ -179,7 +179,7 @@ function initWindowMenu() {
       label: app.getName(),
       submenu: [
         {
-          label: "about",
+          label: "about sbe",
           click() {
             showAboutWindow();
           }
@@ -199,7 +199,7 @@ function initWindowMenu() {
       label: "help",
       submenu: [
         {
-          label: "about",
+          label: "about sbe",
           click() {
             showAboutWindow();
           }
