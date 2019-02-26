@@ -6,7 +6,7 @@ const BASE_URL = "https://scrapbox.io/";
 const DEFAULT_ICON_URL = BASE_URL + "assets/img/favicon/favicon.ico";
 const LIST_PAGE = "list.html";
 const Store = require("electron-store");
-const MAX_FAV = 5;
+const MAX_FAV = 10;
 
 const tabGroup = new TabGroup({
   ready: tabGroup => {
