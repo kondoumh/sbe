@@ -60,7 +60,8 @@ const addTab = (url, closable = true) => {
               {
                 label: "Add to fav",
                 click: () => { addToFav(tab.webview.getURL()); },
-                visible: inScrapbox(tab.webview.getURL())
+                visible: inScrapbox(tab.webview.getURL()) && isPage(tab.webview.getURL())
+                        && !inFavList(tab.webview.getURL())
               },
               {
                 label: "Search on Google \"" + params.selectionText + "\"",
@@ -344,16 +345,24 @@ function showStatusMessage(message) {
   document.querySelector("#statusbar").innerHTML = message;
 }
 
-function addToFav(url) {
-  const path = getPath(url);
-  if (path.length < 2 || path[1] === "") return;
+function inFavList(url) {
   const select = document.querySelector("#favorite");
 
   for (i = 0; i < select.length; i++) {
     if (select.options[i].value === url) {
-      return;
+      return true;
     };
   }
+  return false;
+}
+
+function isPage(url) {
+  const path = getPath(url);
+  return (path.length >= 2 && path[1] !== "");
+}
+
+function addToFav(url) {
+  const select = document.querySelector("#favorite");
   const option = document.createElement("option");
   option.text = toTitle(path[1]) + " - " + path[0];
   option.value = url;
