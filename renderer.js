@@ -357,9 +357,11 @@ function addToFav(url) {
   const option = document.createElement("option");
   option.text = toTitle(path[1]) + " - " + path[0];
   option.value = url;
-  select.add(option);
+  select.add(option, 1);
   if (select.options.length > MAX_FAV + 1) {
-    select.remove(1);
+    for (i = select.options.length; i > MAX_FAV; i--) {
+      select.remove(i);
+    }
   }
 
   const favs = [];
