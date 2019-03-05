@@ -58,6 +58,15 @@ const addTab = (url, closable = true) => {
                 visible: params.linkURL && params.mediaType === "none"
               },
               {
+                label: "Info",
+                click: ()=> {
+                  const content = document.querySelector('#dialog-contents');
+                  content.innerHTML = params.linkURL;
+                  modal.showModal();
+                },
+                visible: params.linkURL && params.mediaType === "none"
+              },
+              {
                 label: "Add to fav",
                 click: () => { addToFav(tab.webview.getURL()); },
                 visible: inScrapbox(tab.webview.getURL()) && isPage(tab.webview.getURL())
@@ -87,8 +96,16 @@ const addTab = (url, closable = true) => {
 }
 
 addTab(BASE_URL, false);
+let modal;
 
 onload = () => {
+  modal = document.querySelector('#page-info');
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      modal.close('cancelled');
+    }
+  });
+
   document.querySelector("#btn_back").addEventListener("click", e => {
     goBack();
   });
@@ -382,3 +399,4 @@ function addToFav(url) {
   }
   ipcRenderer.send("updateFavs", favs);
 }
+
