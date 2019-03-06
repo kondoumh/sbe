@@ -57,14 +57,13 @@ const addTab = (url, closable = true) => {
                 click: ()=> { openUrl(params.linkURL); },
                 visible: params.linkURL && params.mediaType === "none"
               },
+              { type: "separator" },
               {
                 label: "Info",
                 click: ()=> {
-                  const content = document.querySelector('#dialog-contents');
-                  content.innerHTML = params.linkURL;
-                  modal.showModal();
+                  getPageInfo(params.linkURL);
                 },
-                visible: params.linkURL && params.mediaType === "none"
+                visible: params.linkURL && params.mediaType === "none" && isPage(params.linkURL)
               },
               {
                 label: "Add to fav",
@@ -400,3 +399,23 @@ function addToFav(url) {
   ipcRenderer.send("updateFavs", favs);
 }
 
+function getPageInfo(url) {
+  const path = getPath(url);
+  const pageUrl = BASE_URL + "api/pages/" + path[0] + "/" + path[1];
+  fetch(pageUrl, {
+    credentials: "include"
+  }).then(res => {
+    if (res.status === 200) {
+      res.json().then(data => {
+        const content = document.querySelector('#dialog-contents');
+        content.innerHTML = "Title:" + data.title + "<br>";
+        content.innerHTML += "Created by :" + data.user.displayName + "<br>";
+        content.innerHTML += "Description: <br>";
+        data.descriptions.forEach(description => {
+          content.innerHTML += description + "<br>";
+        });
+        modal.showModal();
+      });
+    }
+  });
+}
