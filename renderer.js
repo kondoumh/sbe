@@ -96,6 +96,8 @@ const addTab = (url, closable = true) => {
 
 addTab(BASE_URL, false);
 let modal;
+let openIt;
+let openItUrl;
 
 onload = () => {
   modal = document.querySelector('#page-info');
@@ -104,6 +106,11 @@ onload = () => {
       modal.close('cancelled');
     }
   });
+  openIt = document.querySelector("#open-it");
+  openIt.addEventListener('click', () => {
+    modal.close();
+    addTab(openItUrl);
+  })
 
   document.querySelector("#btn_back").addEventListener("click", e => {
     goBack();
@@ -414,6 +421,7 @@ function getPageInfo(url) {
         data.descriptions.forEach(description => {
           content.innerHTML += description + "<br>";
         });
+        openItUrl = url;
         modal.showModal();
       });
     }
