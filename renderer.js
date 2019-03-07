@@ -415,9 +415,8 @@ function getPageInfo(url) {
     if (res.status === 200) {
       res.json().then(data => {
         const content = document.querySelector('#dialog-contents');
-        content.innerHTML = "Title:" + data.title + "<br>";
-        content.innerHTML += "Created by :" + data.user.displayName + "<br>";
-        content.innerHTML += "Description: <br>";
+        content.innerHTML = "[" + data.title + "] : by " + data.user.displayName;
+        content.innerHTML += "<hr>";
         data.descriptions.forEach(description => {
           content.innerHTML += description + "<br>";
         });

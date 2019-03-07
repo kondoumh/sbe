@@ -138,6 +138,8 @@ dialog[open] {
 
 .modal-body {
   padding: 3px;
+  font-size: 14px;
+  font-family: "serif";
 }
 
 @keyframes slide-up {
