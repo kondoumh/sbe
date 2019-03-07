@@ -142,6 +142,10 @@ dialog[open] {
   font-family: "serif";
 }
 
+.modal-footer {
+  text-align: center;
+}
+
 @keyframes slide-up {
   0% {
     opacity: 0;
