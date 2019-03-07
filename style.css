@@ -127,6 +127,7 @@ dialog {
   border: 0;
   border-radius: 0.6rem;
   box-shadow: 0 0 1em black;
+  max-width: 70%;
 }
 dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.4);
@@ -138,12 +139,14 @@ dialog[open] {
 
 .modal-body {
   padding: 3px;
-  font-size: 14px;
+  font-size: 16px;
   font-family: "serif";
 }
 
 .modal-footer {
   text-align: center;
+  padding: 3px;
+  font-size: 20px
 }
 
 @keyframes slide-up {
