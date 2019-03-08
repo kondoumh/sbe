@@ -410,19 +410,26 @@ function addToFav(url) {
 function getPageInfo(url) {
   const path = getPath(url);
   const pageUrl = BASE_URL + "api/pages/" + path[0] + "/" + path[1];
+  showStatusMessage("fetching page info...");
   fetch(pageUrl, {
     credentials: "include"
   }).then(res => {
     if (res.status === 200) {
+      showStatusMessage("parsing page info...");
       res.json().then(data => {
+        showStatusMessage("build page info...");
         const content = document.querySelector('#dialog-contents');
         content.innerHTML = "[" + data.title + "] : by " + data.user.displayName;
+        data.collaborators.forEach(collaborator => {
+          content.innerHTML += ", " + collaborator.displayName;
+        });
         content.innerHTML += "<hr>";
         data.descriptions.forEach(description => {
           content.innerHTML += description + "<br>";
         });
         openItUrl = url;
         modal.showModal();
+        showStatusMessage("ready");
       });
     }
   });
