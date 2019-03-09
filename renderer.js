@@ -55,7 +55,7 @@ const addTab = (url, closable = true) => {
               {
                 label: "Open",
                 click: ()=> { openUrl(params.linkURL); },
-                visible: params.linkURL && params.mediaType === "none"
+                visible: params.linkURL && (params.mediaType === "none" || params.mediaType === "image")
               },
               { type: "separator" },
               {
@@ -63,8 +63,7 @@ const addTab = (url, closable = true) => {
                 click: ()=> {
                   getPageInfo(params.linkURL);
                 },
-                visible: params.linkURL && params.mediaType === "none" 
-                         && inScrapbox(params.linkURL) && isPage(params.linkURL)
+                visible: params.linkURL && inScrapbox(params.linkURL) && isPage(params.linkURL)
               },
               {
                 label: "Add to fav",
