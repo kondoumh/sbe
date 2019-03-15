@@ -85,6 +85,13 @@ const addTab = (url, closable = true) => {
                   tabGroup.getActiveTab().webview.insertText(enLarge(params.selectionText));
                 },
                 visible: params.selectionText !== ""
+              },
+              {
+                label: "Smaller",
+                click: () => {
+                  tabGroup.getActiveTab().webview.insertText(makeSmaller(params.selectionText));
+                },
+                visible: params.selectionText !== ""
               }
             ]
           });
@@ -442,5 +449,28 @@ function getPageInfo(url) {
 }
 
 function enLarge(text) {
-  return `[** ${text}]`;
+  const re = /\[(\*+)\s([^\[\]]+)\]/;
+  let result = text;
+  if (!text.match(re)) {
+    result = `[* ${text}]`;
+  } else {
+    const ar = re.exec(text);
+    result = `[${ar[1]}* ${ar[2]}]`;
+  }
+  return result;
+}
+
+function makeSmaller(text) {
+  const re = /\[(\*+)\s([^\[\]]+)\]/;
+  let result = text;
+  if (text.match(re)) {
+    const ar = re.exec(text);
+    if (ar[1].length === 1) {
+      result = ar[2];
+    } else {
+      const a = ar[1].substr(0, ar[1].length - 1);
+      result = `[${a} ${ar[2]}]`;
+    }
+  }
+  return result;
 }
