@@ -80,16 +80,37 @@ const addTab = (url, closable = true) => {
                 visible: params.selectionText !== ""
               },
               {
-                label: "Larger",
+                label: "Heading1",
                 click: () => {
-                  tabGroup.getActiveTab().webview.insertText(enLarge(params.selectionText));
+                  tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 1));
                 },
                 visible: params.selectionText !== ""
               },
               {
-                label: "Smaller",
+                label: "Heading2",
                 click: () => {
-                  tabGroup.getActiveTab().webview.insertText(makeSmaller(params.selectionText));
+                  tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 2));
+                },
+                visible: params.selectionText !== ""
+              },
+              {
+                label: "Heading3",
+                click: () => {
+                  tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 3));
+                },
+                visible: params.selectionText !== ""
+              },
+              {
+                label: "heading4",
+                click: () => {
+                  tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 4));
+                },
+                visible: params.selectionText !== ""
+              },
+              {
+                label: "body",
+                click: () => {
+                  tabGroup.getActiveTab().webview.insertText(setBody(params.selectionText));
                 },
                 visible: params.selectionText !== ""
               }
@@ -448,29 +469,25 @@ function getPageInfo(url) {
   });
 }
 
-function enLarge(text) {
+function setHeading(text, level) {
   const re = /\[(\*+)\s([^\[\]]+)\]/;
+  let slevel = "*".repeat(level);
   let result = text;
   if (!text.match(re)) {
-    result = `[* ${text}]`;
+    result = `[${slevel} ${text}]`;
   } else {
     const ar = re.exec(text);
-    result = `[${ar[1]}* ${ar[2]}]`;
+    result = `[${slevel} ${ar[2]}]`;
   }
   return result;
 }
 
-function makeSmaller(text) {
+function setBody(text) {
   const re = /\[(\*+)\s([^\[\]]+)\]/;
   let result = text;
   if (text.match(re)) {
     const ar = re.exec(text);
-    if (ar[1].length === 1) {
-      result = ar[2];
-    } else {
-      const a = ar[1].substr(0, ar[1].length - 1);
-      result = `[${a} ${ar[2]}]`;
-    }
+    result = ar[2];
   }
   return result;
 }
