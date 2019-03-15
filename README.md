@@ -14,6 +14,7 @@ An unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 - Show pages list that can be sorted by updated / views / linked
 - Paste link with `[url title]` format
 - Add page to fav list
+- Preview page info
 
 ![Screenshot](https://user-images.githubusercontent.com/2092183/50725987-ceb89980-1149-11e9-9017-fb7186ce00b1.gif)
 
