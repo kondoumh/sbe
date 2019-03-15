@@ -78,6 +78,13 @@ const addTab = (url, closable = true) => {
                   openUrl(url);
                 },
                 visible: params.selectionText !== ""
+              },
+              {
+                label: "Larger",
+                click: () => {
+                  tabGroup.getActiveTab().webview.insertText(enLarge(params.selectionText));
+                },
+                visible: params.selectionText !== ""
               }
             ]
           });
@@ -432,4 +439,8 @@ function getPageInfo(url) {
       });
     }
   });
+}
+
+function enLarge(text) {
+  return `[** ${text}]`;
 }
