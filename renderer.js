@@ -84,35 +84,35 @@ const addTab = (url, closable = true) => {
                 click: () => {
                   tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 1));
                 },
-                visible: params.selectionText !== ""
+                visible: params.selectionText && !params.linkURL
               },
               {
                 label: "Heading2",
                 click: () => {
                   tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 2));
                 },
-                visible: params.selectionText !== ""
+                visible: params.selectionText && !params.linkURL
               },
               {
                 label: "Heading3",
                 click: () => {
                   tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 3));
                 },
-                visible: params.selectionText !== ""
+                visible: params.selectionText && !params.linkURL
               },
               {
                 label: "heading4",
                 click: () => {
                   tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 4));
                 },
-                visible: params.selectionText !== ""
+                visible: params.selectionText && !params.linkURL
               },
               {
                 label: "body",
                 click: () => {
                   tabGroup.getActiveTab().webview.insertText(setBody(params.selectionText));
                 },
-                visible: params.selectionText !== ""
+                visible: params.selectionText && !params.linkURL
               }
             ]
           });
