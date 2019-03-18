@@ -39,10 +39,15 @@ function getPageTitles(direction) {
   let header = table.createTHead();
   let hrow = header.insertRow(-1);
   let hcell1 = hrow.insertCell(0);
+  hcell1.style.width = "25px";
   let hcell2 = hrow.insertCell(1);
+  hcell2.style.width = "50px";
   let hcell3 = hrow.insertCell(2);
+  hcell3.style.width = "50px";
   let hcell4 = hrow.insertCell(3);
+  hcell4.style.width = "150px";
   let hcell5 = hrow.insertCell(4);
+  hcell5.style.width = "350px";
   let hcell6 = hrow.insertCell(5);
   hcell1.innerHTML = "pin"
   hcell2.innerHTML = "views";
