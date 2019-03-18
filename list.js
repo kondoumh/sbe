@@ -48,8 +48,8 @@ function getPageTitles(direction) {
   hcell2.innerHTML = "views";
   hcell3.innerHTML = "linked";
   hcell4.innerHTML = "updated";
-  hcell5.innerHTML = "image";
-  hcell6.innerHTML = "title";
+  hcell5.innerHTML = "title";
+  hcell6.innerHTML = "image";
   sessionStorage.setItem("skip", start);
   fetch(pagesUrl, {
     credentials: "include"
@@ -74,8 +74,8 @@ function getPageTitles(direction) {
             cell2.innerHTML = data.pages[key].views;
             cell3.innerHTML = data.pages[key].linked;
             cell4.innerHTML = formatDate(data.pages[key].updated);
-            cell5.innerHTML = data.pages[key].image !== null ? "<img src=" + data.pages[key].image + " width='25' height='25'>" : "";
-            cell6.innerHTML = "<a href=" + BASE_URL + projectName + "/" + encodeURIComponent(data.pages[key].title) + " target='_blank'>" + data.pages[key].title + "</a>";
+            cell5.innerHTML = "<a href=" + BASE_URL + projectName + "/" + encodeURIComponent(data.pages[key].title) + " target='_blank'>" + data.pages[key].title + "</a>";
+            cell6.innerHTML = data.pages[key].image !== null ? "<img src=" + data.pages[key].image + ">" : "";
           });
         });
       } else {
