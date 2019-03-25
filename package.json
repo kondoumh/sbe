@@ -20,7 +20,7 @@
   "author": "kondoumh",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^4.0.8",
+    "electron": "^4.1.1",
     "electron-packager": "^13.1.1"
   },
   "dependencies": {
@@ -28,7 +28,7 @@
     "dragula": "^3.7.2",
     "electron-context-menu": "^0.11.0",
     "electron-search-text": "^0.3.0",
-    "electron-store": "^2.0.0",
+    "electron-store": "^3.0.0",
     "electron-tabs": "^0.9.5"
   }
 }
