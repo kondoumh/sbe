@@ -496,49 +496,50 @@ function setBody(text) {
   return result;
 }
 
-function showProjectSummary() {
+async function showProjectSummary() {
   const BASE_URL = "https://scrapbox.io/";
   const projectName = "kondoumh";
   const pagesUrl = BASE_URL + "api/pages/" + projectName;
-  let totalCount = 0;
-  fetch(pagesUrl, {
-    credentials: "include"
-  }).then(res => {
-    if (res.status === 200) {
-      res.json().then(data => {
-        totalCount = data.count;
-        console.log(totalCount);
-        collectProjectMetrics(pagesUrl, totalCount);
-      });
-    } else {
-      console.log(res.status);
-    }
-  }).catch(error => {
-    console.log(error);
-  });
+
+  const total = await fetchPostCount(pagesUrl);
+  console.log("total: " + total);
+  await collectProjectMetrics(pagesUrl, total);
 }
 
-function collectProjectMetrics(pagesUrl, totalCount) {
+async function fetchPostCount(pagesUrl) {
+  const count = await fetch(pagesUrl, {credentials: "include"})
+    .then(res => res.json()).then(data => data.count);
+  return parseInt(count);
+}
+
+async function collectProjectMetrics(pagesUrl, totalCount) {
   let n = 0;
   let views = 0;
+  let linked = 0
   for (count = 0; totalCount + 50 > count; count+= 50) {
     const url = pagesUrl + "?skip=" + (count - 1) + "&limit=" + 50;
-    fetch(url, {
+    await fetch(url, {
       credentials: "include"
     }).then(res => {
       if (res.status === 200) {
         res.json().then(data => {
           Object.keys(data.pages).forEach(key => {
-            console.log(n++ + "," + data.pages[key].views);
+            console.log(n++ + "\t" + data.pages[key].views + "\t" + data.pages[key].linked);
             views += parseInt(data.pages[key].views);
+            linked += parseInt(data.pages[key].linked);
           });
-          //console.log("Amount of views : " + views);
         });
       } else {
         console.log(res.status);
       }
     }).catch(error => {
       console.log(error);
-    });    
+    });
   }
+  console.log(`Views ${views} : Linked ${linked}`);
+
+  const content = document.querySelector('#dialog-contents');
+  content.innerHTML = `Views ${views} : Linked ${linked}`;
+  modal.showModal();
+
 }
