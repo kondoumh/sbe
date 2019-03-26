@@ -502,7 +502,6 @@ async function showProjectSummary() {
   const pagesUrl = BASE_URL + "api/pages/" + projectName;
 
   const total = await fetchPostCount(pagesUrl);
-  console.log("total: " + total);
   await collectProjectMetrics(pagesUrl, total);
 }
 
@@ -515,7 +514,8 @@ async function fetchPostCount(pagesUrl) {
 async function collectProjectMetrics(pagesUrl, totalCount) {
   let n = 0;
   let views = 0;
-  let linked = 0
+  let linked = 0;
+  let pages = 0;
   for (count = 0; totalCount + 50 > count; count+= 50) {
     const url = pagesUrl + "?skip=" + (count - 1) + "&limit=" + 50;
     await fetch(url, {
@@ -524,22 +524,22 @@ async function collectProjectMetrics(pagesUrl, totalCount) {
       if (res.status === 200) {
         res.json().then(data => {
           Object.keys(data.pages).forEach(key => {
-            console.log(n++ + "\t" + data.pages[key].views + "\t" + data.pages[key].linked);
             views += parseInt(data.pages[key].views);
             linked += parseInt(data.pages[key].linked);
+            showStatusMessage("fetching.. " + pages++ + " / " + totalCount);
           });
         });
       } else {
-        console.log(res.status);
+        showStatusMessage(res.status);
+        return;
       }
     }).catch(error => {
-      console.log(error);
+      showStatusMessage(error);
+      return;
     });
   }
-  console.log(`Views ${views} : Linked ${linked}`);
-
   const content = document.querySelector('#dialog-contents');
-  content.innerHTML = `Views ${views} : Linked ${linked}`;
+  content.innerHTML = `Pages ${totalCount} : Views ${views} : Linked ${linked}`;
+  showStatusMessage("ready");
   modal.showModal();
-
 }
