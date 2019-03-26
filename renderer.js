@@ -498,7 +498,8 @@ function setBody(text) {
 
 async function showProjectSummary() {
   const BASE_URL = "https://scrapbox.io/";
-  const projectName = "kondoumh";
+  const path = getPath();
+  const projectName = path[0];
   const pagesUrl = BASE_URL + "api/pages/" + projectName;
 
   const total = await fetchPostCount(pagesUrl);
