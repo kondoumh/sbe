@@ -159,6 +159,12 @@ function initWindowMenu() {
           click() {
             mainWindow.webContents.send("toggleSearch");
           }
+        },
+        {
+          label: "Show Project Summary",
+          click() {
+            mainWindow.webContents.send("showProjectSummary")
+          }
         }
       ]
     }

@@ -243,6 +243,10 @@ ipcRenderer.on("reload", () => {
   }
 });
 
+ipcRenderer.on("showProjectSummary", () => {
+  showProjectSummary();
+});
+
 ipcRenderer.on("pasteUrlTitle", () => {
   const text = clipboard.readText("selection");
   if (!isUrl(text)) {
@@ -490,4 +494,51 @@ function setBody(text) {
     result = ar[2];
   }
   return result;
+}
+
+function showProjectSummary() {
+  const BASE_URL = "https://scrapbox.io/";
+  const projectName = "kondoumh";
+  const pagesUrl = BASE_URL + "api/pages/" + projectName;
+  let totalCount = 0;
+  fetch(pagesUrl, {
+    credentials: "include"
+  }).then(res => {
+    if (res.status === 200) {
+      res.json().then(data => {
+        totalCount = data.count;
+        console.log(totalCount);
+        collectProjectMetrics(pagesUrl, totalCount);
+      });
+    } else {
+      console.log(res.status);
+    }
+  }).catch(error => {
+    console.log(error);
+  });
+}
+
+function collectProjectMetrics(pagesUrl, totalCount) {
+  let n = 0;
+  let views = 0;
+  for (count = 0; totalCount + 50 > count; count+= 50) {
+    const url = pagesUrl + "?skip=" + (count - 1) + "&limit=" + 50;
+    fetch(url, {
+      credentials: "include"
+    }).then(res => {
+      if (res.status === 200) {
+        res.json().then(data => {
+          Object.keys(data.pages).forEach(key => {
+            console.log(n++ + "," + data.pages[key].views);
+            views += parseInt(data.pages[key].views);
+          });
+          //console.log("Amount of views : " + views);
+        });
+      } else {
+        console.log(res.status);
+      }
+    }).catch(error => {
+      console.log(error);
+    });    
+  }
 }
