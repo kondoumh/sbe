@@ -131,6 +131,7 @@ const addTab = (url, closable = true) => {
 
 addTab(BASE_URL, false);
 let modal;
+let modal2;
 let openIt;
 let openItUrl;
 
@@ -145,7 +146,18 @@ onload = () => {
   openIt.addEventListener('click', () => {
     modal.close();
     addTab(openItUrl);
-  })
+  });
+  modal2 = document.querySelector('#project-info');
+  modal2.addEventListener('click', (event) => {
+    if (event.target === modal2) {
+      modal2.close('cancelled');
+    }
+  });
+  openIt = document.querySelector("#copy-content");
+  openIt.addEventListener('click', () => {
+    const content = document.querySelector('#project-dialog-contents');
+    clipboard.writeText(content.innerHTML.replace(/<br>/g, "\n"));
+  });
 
   document.querySelector("#btn_back").addEventListener("click", e => {
     goBack();
@@ -539,12 +551,12 @@ async function collectProjectMetrics(pagesUrl, totalCount) {
     });
   }
   const path = getPath();
-  const content = document.querySelector('#dialog-contents');
+  const content = document.querySelector('#project-dialog-contents');
   content.innerHTML = `Project: ${path[0]}<br>`
   content.innerHTML += `${getDate()}<br>`
   content.innerHTML += `Pages ${totalCount} : Views ${views} : Linked ${linked}`;
   showStatusMessage("ready");
-  modal.showModal();
+  modal2.showModal();
 }
 
 function getDate() {
