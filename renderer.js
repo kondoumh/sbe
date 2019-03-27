@@ -7,6 +7,9 @@ const DEFAULT_ICON_URL = BASE_URL + "assets/img/favicon/favicon.ico";
 const LIST_PAGE = "list.html";
 const Store = require("electron-store");
 const MAX_FAV = 10;
+let modalPageInfo;
+let openItUrl;
+let modalProjectInfo;
 
 const tabGroup = new TabGroup({
   ready: tabGroup => {
@@ -130,35 +133,8 @@ const addTab = (url, closable = true) => {
 }
 
 addTab(BASE_URL, false);
-let modal;
-let modal2;
-let openIt;
-let openItUrl;
 
 onload = () => {
-  modal = document.querySelector("#page-info");
-  modal.addEventListener("click", (event) => {
-    if (event.target === modal) {
-      modal.close("cancelled");
-    }
-  });
-  openIt = document.querySelector("#open-it");
-  openIt.addEventListener("click", () => {
-    modal.close();
-    addTab(openItUrl);
-  });
-  modal2 = document.querySelector("#project-info");
-  modal2.addEventListener("click", (event) => {
-    if (event.target === modal2) {
-      modal2.close("cancelled");
-    }
-  });
-  openIt = document.querySelector("#copy-content");
-  openIt.addEventListener("click", () => {
-    const content = document.querySelector("#project-dialog-contents");
-    clipboard.writeText(content.innerHTML.replace(/<br>/g, "\n"));
-  });
-
   document.querySelector("#btn_back").addEventListener("click", e => {
     goBack();
   });
@@ -478,11 +454,27 @@ function getPageInfo(url) {
           content.innerHTML += description + "<br>";
         });
         openItUrl = url;
-        modal.showModal();
+        createPageDialog().showModal();
         showStatusMessage("ready");
       });
     }
   });
+}
+
+function createPageDialog() {
+  if (!modalPageInfo) {
+    modalPageInfo = document.querySelector("#page-info");
+    modalPageInfo.addEventListener("click", (event) => {
+      if (event.target === modalPageInfo) {
+        modalPageInfo.close("cancelled");
+      }
+    });
+    document.querySelector("#open-it").addEventListener("click", () => {
+      modalPageInfo.close();
+      addTab(openItUrl);
+    });
+  }
+  return modalPageInfo;
 }
 
 function setHeading(text, level) {
@@ -555,7 +547,7 @@ async function collectProjectMetrics(pagesUrl, totalCount, projectName) {
   content.innerHTML += `${getDate()}<br>`
   content.innerHTML += `Pages ${totalCount} : Views ${views} : Linked ${linked}`;
   showStatusMessage("ready");
-  modal2.showModal();
+  createProjectDialog().showModal();
 }
 
 function getDate() {
@@ -566,4 +558,20 @@ function getDate() {
     hour12: false
   };
   return now.toLocaleDateString(navigator.language, options);
+}
+
+function createProjectDialog() {
+  if (!modalProjectInfo) {
+    modalProjectInfo = document.querySelector("#project-info");
+    modalProjectInfo.addEventListener("click", (event) => {
+      if (event.target === modalProjectInfo) {
+        modalProjectInfo.close("cancelled");
+      }
+    });
+    document.querySelector("#copy-content").addEventListener("click", () => {
+      const content = document.querySelector("#project-dialog-contents");
+      clipboard.writeText(content.innerHTML.replace(/<br>/g, "\n"));
+    });
+  }
+  return modalProjectInfo;
 }
