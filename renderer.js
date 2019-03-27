@@ -255,8 +255,8 @@ ipcRenderer.on("reload", () => {
   }
 });
 
-ipcRenderer.on("showProjectSummary", () => {
-  showProjectSummary();
+ipcRenderer.on("showProjectActivities", () => {
+  showProjectActivities();
 });
 
 ipcRenderer.on("pasteUrlTitle", () => {
@@ -508,13 +508,13 @@ function setBody(text) {
   return result;
 }
 
-async function showProjectSummary() {
+async function showProjectActivities() {
   const path = getPath();
   const projectName = path[0];
   const pagesUrl = BASE_URL + "api/pages/" + projectName;
 
   const total = await fetchPostCount(pagesUrl);
-  await collectProjectMetrics(pagesUrl, total);
+  await collectProjectMetrics(pagesUrl, total, projectName);
 }
 
 async function fetchPostCount(pagesUrl) {
@@ -523,7 +523,7 @@ async function fetchPostCount(pagesUrl) {
   return parseInt(count);
 }
 
-async function collectProjectMetrics(pagesUrl, totalCount) {
+async function collectProjectMetrics(pagesUrl, totalCount, projectName) {
   let n = 0;
   let views = 0;
   let linked = 0;
@@ -550,9 +550,8 @@ async function collectProjectMetrics(pagesUrl, totalCount) {
       return;
     });
   }
-  const path = getPath();
   const content = document.querySelector('#project-dialog-contents');
-  content.innerHTML = `Project: ${path[0]}<br>`
+  content.innerHTML = `Project: ${projectName}<br>`
   content.innerHTML += `${getDate()}<br>`
   content.innerHTML += `Pages ${totalCount} : Views ${views} : Linked ${linked}`;
   showStatusMessage("ready");

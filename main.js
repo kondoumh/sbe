@@ -162,9 +162,9 @@ function initWindowMenu() {
         },
         { type: "separator" },
         {
-          label: "Show Project Summary",
+          label: "Show project activties",
           click() {
-            mainWindow.webContents.send("showProjectSummary")
+            mainWindow.webContents.send("showProjectActivities")
           }
         }
       ]
