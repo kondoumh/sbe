@@ -566,5 +566,5 @@ function getDate() {
     hour: "numeric", minute: "numeric", second: "numeric",
     hour12: false
   };
-  return now.toLocaleDateString("ja-JP", options);
+  return now.toLocaleDateString(navigator.language, options);
 }
