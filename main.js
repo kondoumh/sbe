@@ -160,6 +160,7 @@ function initWindowMenu() {
             mainWindow.webContents.send("toggleSearch");
           }
         },
+        { type: "separator" },
         {
           label: "Show Project Summary",
           click() {
