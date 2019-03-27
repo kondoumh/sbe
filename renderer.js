@@ -497,7 +497,6 @@ function setBody(text) {
 }
 
 async function showProjectSummary() {
-  const BASE_URL = "https://scrapbox.io/";
   const path = getPath();
   const projectName = path[0];
   const pagesUrl = BASE_URL + "api/pages/" + projectName;
@@ -539,8 +538,21 @@ async function collectProjectMetrics(pagesUrl, totalCount) {
       return;
     });
   }
+  const path = getPath();
   const content = document.querySelector('#dialog-contents');
-  content.innerHTML = `Pages ${totalCount} : Views ${views} : Linked ${linked}`;
+  content.innerHTML = `Project: ${path[0]}<br>`
+  content.innerHTML += `${getDate()}<br>`
+  content.innerHTML += `Pages ${totalCount} : Views ${views} : Linked ${linked}`;
   showStatusMessage("ready");
   modal.showModal();
+}
+
+function getDate() {
+  var now = new Date();
+  var options = { 
+    weekday: 'short', year: 'numeric', month: 'long', day: 'numeric',
+    hour: "numeric", minute: "numeric", second: "numeric",
+    hour12: false
+  };
+  return now.toLocaleDateString("ja-JP", options);
 }
