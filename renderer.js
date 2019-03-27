@@ -136,26 +136,26 @@ let openIt;
 let openItUrl;
 
 onload = () => {
-  modal = document.querySelector('#page-info');
-  modal.addEventListener('click', (event) => {
+  modal = document.querySelector("#page-info");
+  modal.addEventListener("click", (event) => {
     if (event.target === modal) {
-      modal.close('cancelled');
+      modal.close("cancelled");
     }
   });
   openIt = document.querySelector("#open-it");
-  openIt.addEventListener('click', () => {
+  openIt.addEventListener("click", () => {
     modal.close();
     addTab(openItUrl);
   });
-  modal2 = document.querySelector('#project-info');
-  modal2.addEventListener('click', (event) => {
+  modal2 = document.querySelector("#project-info");
+  modal2.addEventListener("click", (event) => {
     if (event.target === modal2) {
-      modal2.close('cancelled');
+      modal2.close("cancelled");
     }
   });
   openIt = document.querySelector("#copy-content");
-  openIt.addEventListener('click', () => {
-    const content = document.querySelector('#project-dialog-contents');
+  openIt.addEventListener("click", () => {
+    const content = document.querySelector("#project-dialog-contents");
     clipboard.writeText(content.innerHTML.replace(/<br>/g, "\n"));
   });
 
@@ -468,7 +468,7 @@ function getPageInfo(url) {
       showStatusMessage("parsing page info...");
       res.json().then(data => {
         showStatusMessage("build page info...");
-        const content = document.querySelector('#dialog-contents');
+        const content = document.querySelector("#dialog-contents");
         content.innerHTML = "[" + data.title + "] : by " + data.user.displayName;
         data.collaborators.forEach(collaborator => {
           content.innerHTML += ", " + collaborator.displayName;
@@ -550,7 +550,7 @@ async function collectProjectMetrics(pagesUrl, totalCount, projectName) {
       return;
     });
   }
-  const content = document.querySelector('#project-dialog-contents');
+  const content = document.querySelector("#project-dialog-contents");
   content.innerHTML = `Project: ${projectName}<br>`
   content.innerHTML += `${getDate()}<br>`
   content.innerHTML += `Pages ${totalCount} : Views ${views} : Linked ${linked}`;
@@ -561,7 +561,7 @@ async function collectProjectMetrics(pagesUrl, totalCount, projectName) {
 function getDate() {
   var now = new Date();
   var options = { 
-    weekday: 'short', year: 'numeric', month: 'long', day: 'numeric',
+    weekday: "short", year: "numeric", month: "long", day: "numeric",
     hour: "numeric", minute: "numeric", second: "numeric",
     hour12: false
   };
