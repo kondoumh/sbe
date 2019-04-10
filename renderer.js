@@ -19,7 +19,7 @@ const tabGroup = new TabGroup({
   }
 });
 
-const addTab = (url, closable = true) => {
+const addTab = (url, closable = true, projectName) => {
   if (!url) {
     url = BASE_URL;
   }
@@ -120,6 +120,9 @@ const addTab = (url, closable = true) => {
             ]
           });
           tab.ready = true;
+          if (projectName) {
+            tab.projectName = projectName;
+          }
         });
         tab.on("active", tab => {
           if (tab.ready) {
@@ -151,14 +154,12 @@ onload = () => {
     copyUrl();
   });
   document.querySelector("#btn_reload").addEventListener("click", e => {
-    if (!listPage(tabGroup.getActiveTab().webview.getURL())) {
-      tabGroup.getActiveTab().webview.reload();
-    }
+    tabGroup.getActiveTab().webview.reload();
   });
   document.querySelector("#btn_titles").addEventListener("click", e => {
     const path = getPath();
     localStorage.setItem("projectName", path[0]);
-    addTab(LIST_PAGE);
+    addTab(LIST_PAGE, true, path[0]);
   });
   document.querySelector("#tabgroup").addEventListener("dblclick", e => {
     duplicateTab();
@@ -226,9 +227,7 @@ ipcRenderer.on("copyUrl", () => {
 });
 
 ipcRenderer.on("reload", () => {
-  if (!listPage(tabGroup.getActiveTab().webview.getURL())) {
-    tabGroup.getActiveTab().webview.reload();
-  }
+  tabGroup.getActiveTab().webview.reload();
 });
 
 ipcRenderer.on("showProjectActivities", () => {
@@ -309,7 +308,11 @@ function updateNavButtons(webview) {
 
 function updateTab(tab, url) {
   if (listPage(tab.webview.getURL())) {
-    tab.setTitle("page list - " + localStorage.getItem("projectName"));
+    let projectName = localStorage.getItem("projectName");
+    if (!projectName) {
+      projectName = tab.projectName;
+    }
+    tab.setTitle("page list - " + projectName);
     return;
   }
   const path = getPath(url);
