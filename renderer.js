@@ -137,7 +137,8 @@ const addTab = (url, closable = true, projectName) => {
 
 addTab(BASE_URL, false);
 
-onload = () => {
+
+ipcRenderer.on("domReady", () => {
   document.querySelector("#btn_back").addEventListener("click", e => {
     goBack();
   });
@@ -191,7 +192,7 @@ onload = () => {
     option.value = item.url;
     selectFav.append(option);
   });
-};
+});
 
 ipcRenderer.on("toggleSearch", () => {
   const tab = tabGroup.getActiveTab();

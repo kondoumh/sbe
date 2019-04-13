@@ -40,7 +40,9 @@ const createWindow = () => {
     });
   })
   initWindowMenu();
-
+  mainWindow.webContents.once("dom-ready", () => {
+    mainWindow.webContents.send("domReady");
+  });
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
