@@ -158,6 +158,12 @@ function initWindowMenu() {
             mainWindow.webContents.send("reload");
           }
         },
+        {
+          label: "page list",
+          click() {
+            mainWindow.webContents.send("showPageList");
+          }
+        },
         { type: "separator" },
         {
           label: "Search in window",

@@ -157,9 +157,7 @@ onload = () => {
     tabGroup.getActiveTab().webview.reload();
   });
   document.querySelector("#btn_titles").addEventListener("click", e => {
-    const path = getPath();
-    localStorage.setItem("projectName", path[0]);
-    addTab(LIST_PAGE, true, path[0]);
+    showPageList();
   });
   document.querySelector("#tabgroup").addEventListener("dblclick", e => {
     duplicateTab();
@@ -230,6 +228,10 @@ ipcRenderer.on("reload", () => {
   tabGroup.getActiveTab().webview.reload();
 });
 
+ipcRenderer.on("showPageList", () => {
+  showPageList();
+});
+
 ipcRenderer.on("showProjectActivities", () => {
   showProjectActivities();
 });
@@ -275,6 +277,12 @@ ipcRenderer.on("insertHeadline2", () => {
 ipcRenderer.on("insertHeadline3", () => {
   tabGroup.getActiveTab().webview.insertText("[*** 3]");
 });
+
+function showPageList() {
+  const path = getPath();
+  localStorage.setItem("projectName", path[0]);
+  addTab(LIST_PAGE, true, path[0]);
+}
 
 function goBack() {
   const webview = tabGroup.getActiveTab().webview;
