@@ -18,7 +18,13 @@ let mainWindow;
 
 const createWindow = () => {
   const {width, height, x, y} = store.get("bounds");
-  mainWindow = new BrowserWindow({ width: width, height: height, x: x, y: y});
+  mainWindow = new BrowserWindow({
+    webPreferences: {
+      webviewTag: true,
+      nodeIntegration: true
+    },
+    width: width, height: height, x: x, y: y
+  });
 
   mainWindow.loadURL(
     url.format({
