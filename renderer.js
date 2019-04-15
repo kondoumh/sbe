@@ -59,7 +59,7 @@ const addTab = (url, closable = true, projectName) => {
           const contextMenu = require("electron-context-menu");
           contextMenu({
             window: tab.webview,
-            prepend: (params, webview) => [
+            prepend: (actions, params, webview) => [
               {
                 label: "Open",
                 click: ()=> { openUrl(params.linkURL); },
