@@ -31,6 +31,11 @@ const addTab = (url, closable = true, projectName) => {
       iconURL: DEFAULT_ICON_URL,
       closable: closable,
       ready: tab => {
+        tab.webview.addEventListener("dom-ready", e => {
+          // Remove this once https://github.com/electron/electron/issues/14474 is fixed
+          tab.webview.blur();
+          tab.webview.focus();
+        });
         tab.webview.addEventListener("new-window", e => {
           openUrl(e.url);
         });
