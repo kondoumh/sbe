@@ -471,6 +471,10 @@ function getPageInfo(url) {
           content.innerHTML += description + "<br>";
         });
         openItUrl = url;
+        document.querySelector("#contents-image").src = "";
+        if (data.image) {
+          document.querySelector("#contents-image").src = data.image;
+        }
         createPageDialog().showModal();
         showStatusMessage("ready");
       });
