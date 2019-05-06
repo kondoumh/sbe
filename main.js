@@ -21,8 +21,9 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({
     webPreferences: {
       webviewTag: true,
-      nodeIntegration: true
-    }
+      nodeIntegration: true,
+    },
+    width: width, height: height, x: x, y: y
   });
   mainWindow.setBounds({x: x, y: y, width: width, height: height});
 
