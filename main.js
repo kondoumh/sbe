@@ -22,9 +22,9 @@ const createWindow = () => {
     webPreferences: {
       webviewTag: true,
       nodeIntegration: true
-    },
-    width: width, height: height, x: x, y: y
+    }
   });
+  mainWindow.setBounds({x: x, y: y, width: width, height: height});
 
   mainWindow.loadURL(
     url.format({
@@ -36,7 +36,7 @@ const createWindow = () => {
 
   ['resize', 'move'].forEach(e => {
     mainWindow.on(e, () => {
-        store.set('bounds', mainWindow.getBounds())
+        store.set('bounds', mainWindow.getBounds());
     });
   })
   initWindowMenu();
