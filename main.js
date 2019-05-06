@@ -1,3 +1,4 @@
+const electron = require("electron");
 const {app, Menu, BrowserWindow, ipcMain} = require("electron");
 
 const path = require("path");
@@ -17,7 +18,17 @@ const store = new Store({
 let mainWindow;
 
 const createWindow = () => {
-  const {width, height, x, y} = store.get("bounds");
+  let {width, height, x, y} = store.get("bounds");
+  const displays = electron.screen.getAllDisplays();
+  const activeDisplay = displays.find((display) => {
+    return display.bounds.x <= x && display.bounds.y <= y &&
+      display.bounds.x + display.bounds.width >= x &&
+      display.bounds.y + display.bounds.height >= y;
+  });
+  if (!activeDisplay) {
+    x = 0; y = 0; width = 1024, height = 800;
+  }
+
   mainWindow = new BrowserWindow({
     webPreferences: {
       webviewTag: true,
