@@ -1,104 +1,68 @@
-const BASE_URL = "https://scrapbox.io/";
-const LIMIT = 100;
-let projectName;
-
-function getPageTitles(direction) {
-  const sortKey = document.querySelector("#sort_key").value;
-  const table = document.querySelector("#sbe_pages");
-  const status = document.querySelector("#sbe_paging");
-  if (!projectName) {
-    projectName = sessionStorage.getItem("projectName");
-    if (!projectName) {
-      projectName = localStorage.getItem("projectName");
-      sessionStorage.setItem("projectName", projectName);
-      localStorage.removeItem("projectName");
+const app = new Vue({
+  el: '#app',
+  async mounted () {
+    if (!this.projectName) {
+      this.projectName = sessionStorage.getItem("projectName")
+      if (!this.projectName) {
+        this.projectName = localStorage.getItem("projectName")
+        sessionStorage.setItem("projectName", this.projectName)
+        localStorage.removeItem("projectName")
+      }
     }
-  }
-  const show_pinned = document.querySelector("#show_pinned").checked;
-  if (direction === "head") {
-      sessionStorage.removeItem("skip");
-      sessionStorage.removeItem("count");
-  }
-  const skip = sessionStorage.getItem("skip");
-  let start = skip ? parseInt(skip) : 1;
-  const count = sessionStorage.getItem("count");
-  const totalCount = count ? parseInt(count) : LIMIT;
-  if (direction === "forward") {
-      start += LIMIT;
-      if (start >= totalCount) return;
-  } else if (direction === "backward") {
-      start -= LIMIT;
-      if (start < 0) {
-          start = 1;
-      }
-  } else if (direction === "tail") {
-      start = totalCount - totalCount % LIMIT + 1;
-  }
-  const pagesUrl = BASE_URL + "api/pages/" + projectName + "?skip=" + (start - 1) + "&limit=" + LIMIT + "&sort=" + sortKey;
-  table.innerHTML = "";
-  let header = table.createTHead();
-  let hrow = header.insertRow(-1);
-  let hcell1 = hrow.insertCell(0);
-  hcell1.style.width = "25px";
-  let hcell2 = hrow.insertCell(1);
-  hcell2.style.width = "50px";
-  let hcell3 = hrow.insertCell(2);
-  hcell3.style.width = "50px";
-  let hcell4 = hrow.insertCell(3);
-  hcell4.style.width = "150px";
-  let hcell5 = hrow.insertCell(4);
-  hcell5.style.width = "350px";
-  let hcell6 = hrow.insertCell(5);
-  hcell1.innerHTML = "pin"
-  hcell2.innerHTML = "views";
-  hcell3.innerHTML = "linked";
-  hcell4.innerHTML = "updated";
-  hcell5.innerHTML = "title";
-  hcell6.innerHTML = "image";
-  sessionStorage.setItem("skip", start);
-  fetch(pagesUrl, {
-    credentials: "include"
-  })
-    .then(res => {
-      if (res.status === 200) {
-        res.json().then(data => {
-          const end = start + LIMIT - 1;
-          const total = parseInt(data.count);
-          sessionStorage.setItem("count", total);
-          status.innerHTML = start + " - " + end + " total:" + total + "<br>";
-          Object.keys(data.pages).forEach(key => {
-            if (!show_pinned && data.pages[key].pin !== 0) return;
-            let row = table.insertRow(-1);
-            let cell1 = row.insertCell(0);
-            let cell2 = row.insertCell(1);
-            let cell3 = row.insertCell(2);
-            let cell4 = row.insertCell(3);
-            let cell5 = row.insertCell(4);
-            let cell6 = row.insertCell(5);
-            cell1.innerHTML = data.pages[key].pin !== 0 ? "&#x2714;" : "";
-            cell2.innerHTML = data.pages[key].views;
-            cell3.innerHTML = data.pages[key].linked;
-            cell4.innerHTML = formatDate(data.pages[key].updated);
-            cell5.innerHTML = "<a href=" + BASE_URL + projectName + "/" + encodeURIComponent(data.pages[key].title) + " target='_blank'>" + data.pages[key].title + "</a>";
-            cell6.innerHTML = data.pages[key].image !== null ? "<img src=" + data.pages[key].image + ">" : "";
-          });
-        });
-      } else {
-        status.innerHTML = "ng - " + projectName;
-      }
-    })
-    .catch(error => {
-      status.innerHTML = error;
-    });
-}
 
-function formatDate(timestamp) {
-  let date = new Date();
-  date.setTime(timestamp * 1000);
-  const options = {
-    year: "numeric", month: "numeric", day: "numeric",
-    hour: "numeric", minute: "numeric", second: "numeric",
-    hour12: false
-  };
-  return date.toLocaleString(navigator.language, options);
-}
+    this.fetchData()
+  },
+  methods: {
+    async fetchData () {
+      const skip = (this.pagination.page - 1) * this.pagination.rowsPerPage
+      let url = `https://scrapbox.io/api/pages/${this.projectName}?skip=${skip}&limit=${this.pagination.rowsPerPage}&sort=${this.pagination.sortBy}`
+      const res = await axios.get(url)
+      this.items = await res.data.pages // .filter(page => page.pin === 0)
+      this.pagination.totalItems = res.data.count // - res.data.pages.filter(page => page.pin !== 0).length
+    },
+    formatDate (timestamp) {
+      let date = new Date()
+      date.setTime(timestamp * 1000)
+      const options = {
+        year: "numeric", month: "numeric", day: "numeric",
+        hour: "numeric", minute: "numeric", second: "numeric",
+        hour12: false
+      }
+      return date.toLocaleString(navigator.language, options)
+    },
+    input (page) {
+      this.fetchData()
+    }
+  },
+  computed: {
+    page () {
+      if (this.pagination.rowsPerPage == null || this.pagination.totalItems == null ) return 0
+      return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
+    }
+  },
+  watch: {
+    pagination: {
+      handler () {
+        this.pagination.descending = false
+        this.fetchData()
+      }
+    }
+  },
+  data: () => ({
+    items: [],
+    ptojectName: '',
+    pagination: {
+      sortBy: 'updated',
+      rowsPerPage: 15,
+      totalItems: 0
+    },
+    headers: [
+      { text: 'pin', value: 'pin', sortable: false, width: '5%' },
+      { text: 'views', value: 'views', width: '10%' },
+      { text: 'linked', value: 'linked', width: '10%' },
+      { text: 'updated', value: 'updated', width: '25%' },
+      { text: 'title', value: 'title', sortable: false, width: '30%'},
+      { text: 'image', value: 'image', sortable: false, width: '25%' }
+    ]
+  })
+})
