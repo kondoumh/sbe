@@ -202,7 +202,13 @@ function initWindowMenu() {
       label: "Debug",
       submenu: [
         { role: "forceReload"},
-        { role: "toggledevtools" }
+        { role: "toggledevtools" },
+        { 
+          label: "open devTools for Tab",
+          click () {
+            mainWindow.webContents.send("openDevToolsForTab");
+          }
+        }
       ]
     });
   }

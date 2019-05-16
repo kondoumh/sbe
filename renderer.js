@@ -1,5 +1,4 @@
 const {shell, ipcRenderer, clipboard} = require("electron");
-const {app} = require("electron").remote;
 const TabGroup = require("electron-tabs");
 const ElectronSearchText = require("electron-search-text");
 const dragula = require("dragula");
@@ -50,9 +49,6 @@ const addTab = (url, closable = true, projectName) => {
           }
         });
         tab.on("webview-ready", tab => {
-          if (!app.isPackaged) {
-            tab.webview.openDevTools();
-          }
           tab.searcher = new ElectronSearchText({
             target: ".etabs-view.visible",
             input: ".search-input",
@@ -286,6 +282,10 @@ ipcRenderer.on("insertHeadline2", () => {
 
 ipcRenderer.on("insertHeadline3", () => {
   tabGroup.getActiveTab().webview.insertText("[*** 3]");
+});
+
+ipcRenderer.on("openDevToolsForTab", () => {
+  tabGroup.getActiveTab().webview.openDevTools();
 });
 
 function showPageList() {
