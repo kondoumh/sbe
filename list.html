@@ -12,13 +12,32 @@
       tr:nth-child(even) {
         background-color: #f2f2f2
       }
-      table.v-table tbody td, table.v-table tbody th, table.v-table thead td, table.v-table thead th {
+      table.v-table tbody td,
+      table.v-table tbody th,
+      table.v-table thead td,
+      table.v-table thead th,
+      table.v-table thead th:not(:first-child) {
         height: 35px;
         font-size: medium;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 350px;
+        padding: 0 10px;
+      }
+      .theme--light.v-pagination .v-pagination__item {
+        background: #fff;
+        color: #000;
+        width: auto;
+        min-width: 34px;
+        padding: 0 5px;
+      }
+      .theme--light.v-pagination .v-pagination__item--active {
+        background: #0640f5;
+        color: #fff;
+        width: auto;
+        min-width: 34px;
+        padding: 0 5px;
       }
     </style>  
   </head>

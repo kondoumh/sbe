@@ -53,16 +53,16 @@ const app = new Vue({
     ptojectName: '',
     pagination: {
       sortBy: 'updated',
-      rowsPerPage: 15,
+      rowsPerPage: 20,
       totalItems: 0
     },
     headers: [
-      { text: 'pin', value: 'pin', sortable: false, width: '5%' },
-      { text: 'views', value: 'views', width: '10%' },
-      { text: 'linked', value: 'linked', width: '10%' },
-      { text: 'updated', value: 'updated', width: '25%' },
-      { text: 'title', value: 'title', sortable: false, width: '30%'},
-      { text: 'image', value: 'image', sortable: false, width: '25%' }
+      { text: 'pin', value: 'pin', sortable: false, width: '25px' },
+      { text: 'views', value: 'views', width: '50px' },
+      { text: 'linked', value: 'linked', width: '50px' },
+      { text: 'updated', value: 'updated', width: '50px' },
+      { text: 'title', value: 'title', sortable: false, width: '150px'},
+      { text: 'image', value: 'image', sortable: false, width: '350px' }
     ]
   })
 })
