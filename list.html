@@ -5,7 +5,7 @@
     <title>Vuetify Data tables component sample</title>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/vuetify@1.5.14/dist/vuetify.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons">
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <style>
@@ -64,13 +64,14 @@
         </td>
         <td><img :src="props.item.image" style="width: auto; height: 25px"></td>
       </template>
-    </v-data-table>
-    <div class="text-xs-center pt-2">
-      <v-pagination
-        v-model="pagination.page"
-        :length="page"
-        @input="input"
-      ></v-pagination>
+      </v-data-table>
+      <div class="text-xs-center pt-2">
+        <v-pagination
+          v-model="pagination.page"
+          :length="page"
+          @input="input"
+        ></v-pagination>
+      </div>
     </div>
     <script src="list.js"></script>
   </body>
