@@ -1,60 +1,85 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <title>Page titles</title>
-  <meta charset="UTF-8" />
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" />
-  <style>
-    table {
-      border-collapse: collapse;
-      border-spacing: 0;
-      width: 100%;
-      border: 1px solid #ddd;
-    }
-
-    th,
-    td {
-      text-align: left;
-      padding: 3px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 350px;
-    }
-
-    tr:nth-child(even) {
-      background-color: #f2f2f2
-    }
-
-    img {
-      height: 25px;
-      widows: auto;
-    }
-  </style>
-</head>
-
-<body onload="getPageTitles('head');">
-  <i class="fas fa-step-backward" onclick="getPageTitles('head');"></i>
-  <i class="fas fa-backward" onclick="getPageTitles('backward');"></i>
-  <i class="fas fa-forward" onclick="getPageTitles('forward');"></i>
-  <i class="fas fa-step-forward" onclick="getPageTitles('tail');"></i>
-  <input id="show_pinned" type="checkbox" onchange="getPageTitles('head');" />
-  <label for="show_pinned">show pinned</label>
-  <select id=sort_key onchange="getPageTitles('head');">
-    <option>updated</option>
-    <option>views</option>
-    <option>accessed</option>
-    <option>linked</option>
-  </select>
-  <span id=sbe_paging></span>
-  <table id="sbe_pages"></table>
-  <i class="fas fa-step-backward" onclick="getPageTitles('head');"></i>
-  <i class="fas fa-backward" onclick="getPageTitles('backward');"></i>
-  <i class="fas fa-forward" onclick="getPageTitles('forward');"></i>
-  <i class="fas fa-step-forward" onclick="getPageTitles('tail');"></i>
-  <br /><br /><br /><br /><br />
-  <script src="list.js"></script>
-</body>
-
+  <head>
+    <meta charset="UTF-8">
+    <title>Vuetify Data tables component sample</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+      tr:nth-child(even) {
+        background-color: #f2f2f2
+      }
+      table.v-table tbody td,
+      table.v-table tbody th,
+      table.v-table thead td,
+      table.v-table thead th,
+      table.v-table thead th:not(:first-child) {
+        height: 35px;
+        font-size: medium;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 350px;
+        padding: 0 10px;
+      }
+      .theme--light.v-pagination .v-pagination__item {
+        background: #fff;
+        color: #000;
+        width: auto;
+        min-width: 34px;
+        padding: 0 5px;
+      }
+      .theme--light.v-pagination .v-pagination__item--active {
+        background: #0640f5;
+        color: #fff;
+        width: auto;
+        min-width: 34px;
+        padding: 0 5px;
+      }
+      .dummy-area {
+        min-height: 70px;
+      }
+    </style>  
+  </head>
+  <body>
+    <div id="app">
+      <v-app id="inspire">
+        <div>
+          <div class="text-xs-center pt-2">
+            <v-pagination
+              v-model="pagination.page"
+              :length="page"
+              @input="input"
+            ></v-pagination>
+          </div>
+          <v-data-table
+          :headers="headers"
+          :items="items"
+          :rows-per-page-items="rowsPerPageItems"
+          :pagination.sync="pagination"
+          :total-items="pagination.totalItems"
+          class="elevation-1">
+            <template v-slot:items="props">
+              <td class="text-xs-left">{{ props.item.pin != 0 ? "&#x2714;" : "" }}</td>
+              <td class="text-xs-left">{{ props.item.views }}</td>
+              <td class="text-xs-left">{{ props.item.linked }}</td>
+              <td class="text-xs-left">{{ formatDate(props.item.updated) }}</td>
+              <td class="text-xs-left">
+                <a
+                  :href="'https://scrapbox.io/'+ projectName + '/' + props.item.title"
+                  target="_blank"
+                >{{ props.item.title }}</a>
+              </td>
+              <td><img :src="props.item.image" style="width: auto; height: 25px"></td>
+            </template>
+          </v-data-table>
+          <div class="dummy-area"></div>
+        </div>
+      </v-app>
+    </div>
+    <script src="list.js"></script>
+  </body>
 </html>

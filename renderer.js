@@ -284,6 +284,10 @@ ipcRenderer.on("insertHeadline3", () => {
   tabGroup.getActiveTab().webview.insertText("[*** 3]");
 });
 
+ipcRenderer.on("openDevToolsForTab", () => {
+  tabGroup.getActiveTab().webview.openDevTools();
+});
+
 function showPageList() {
   const path = getPath();
   localStorage.setItem("projectName", path[0]);
