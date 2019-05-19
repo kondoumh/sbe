@@ -39,39 +39,46 @@
         min-width: 34px;
         padding: 0 5px;
       }
+      .dummy-area {
+        min-height: 70px;
+      }
     </style>  
   </head>
   <body>
     <div id="app">
-      <v-data-table
-      :headers="headers"
-      :items="items"
-      hide-actions
-      :pagination.sync="pagination"
-      :total-items="pagination.totalItems"
-      class="elevation-1"
-    >
-      <template v-slot:items="props">
-        <td class="text-xs-left">{{ props.item.pin != 0 ? "&#x2714;" : "" }}</td>
-        <td class="text-xs-left">{{ props.item.views }}</td>
-        <td class="text-xs-left">{{ props.item.linked }}</td>
-        <td class="text-xs-left">{{ formatDate(props.item.updated) }}</td>
-        <td class="text-xs-left">
-          <a
-            :href="'https://scrapbox.io/'+ projectName + '/' + props.item.title"
-            target="_blank"
-          >{{ props.item.title }}</a>
-        </td>
-        <td><img :src="props.item.image" style="width: auto; height: 25px"></td>
-      </template>
-      </v-data-table>
-      <div class="text-xs-center pt-2">
-        <v-pagination
-          v-model="pagination.page"
-          :length="page"
-          @input="input"
-        ></v-pagination>
-      </div>
+      <v-app id="inspire">
+        <div>
+          <div class="text-xs-center pt-2">
+            <v-pagination
+              v-model="pagination.page"
+              :length="page"
+              @input="input"
+            ></v-pagination>
+          </div>
+          <v-data-table
+          :headers="headers"
+          :items="items"
+          :rows-per-page-items="rowsPerPageItems"
+          :pagination.sync="pagination"
+          :total-items="pagination.totalItems"
+          class="elevation-1">
+            <template v-slot:items="props">
+              <td class="text-xs-left">{{ props.item.pin != 0 ? "&#x2714;" : "" }}</td>
+              <td class="text-xs-left">{{ props.item.views }}</td>
+              <td class="text-xs-left">{{ props.item.linked }}</td>
+              <td class="text-xs-left">{{ formatDate(props.item.updated) }}</td>
+              <td class="text-xs-left">
+                <a
+                  :href="'https://scrapbox.io/'+ projectName + '/' + props.item.title"
+                  target="_blank"
+                >{{ props.item.title }}</a>
+              </td>
+              <td><img :src="props.item.image" style="width: auto; height: 25px"></td>
+            </template>
+          </v-data-table>
+          <div class="dummy-area"></div>
+        </div>
+      </v-app>
     </div>
     <script src="list.js"></script>
   </body>

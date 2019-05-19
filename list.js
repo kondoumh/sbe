@@ -51,9 +51,10 @@ const app = new Vue({
   data: () => ({
     items: [],
     ptojectName: '',
+    rowsPerPageItems: [15, 20, 25, 50, 75, 100],
     pagination: {
       sortBy: 'updated',
-      rowsPerPage: 20,
+      rowsPerPage: 50,
       totalItems: 0
     },
     headers: [
