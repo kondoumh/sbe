@@ -63,7 +63,7 @@
           :total-items="pagination.totalItems"
           class="elevation-1">
             <template v-slot:items="props">
-              <td class="text-xs-left">{{ props.item.pin != 0 ? "&#x2714;" : "" }}</td>
+              <td class="text-xs-left">{{ props.item.pin != 0 ? "&#128204;" : "" }}</td>
               <td class="text-xs-left">{{ props.item.views }}</td>
               <td class="text-xs-left">{{ props.item.linked }}</td>
               <td class="text-xs-left">{{ formatDate(props.item.updated) }}</td>
