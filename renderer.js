@@ -133,9 +133,6 @@ const addTab = (url, closable = true, projectName) => {
           if (tab.ready) {
             updateNavButtons(tab.webview);
             resetSearchBoxCount();
-            if (listPage(tab.webview.getURL())) {
-              console.log("activated");
-            }
           }
         });
     }
