@@ -9,8 +9,8 @@ const app = new Vue({
         localStorage.removeItem("projectName")
       }
     }
-
     this.fetchData()
+    window.addEventListener('focus', this.onActive)
   },
   methods: {
     async fetchData () {
@@ -32,6 +32,9 @@ const app = new Vue({
       return date.toLocaleString(navigator.language, options)
     },
     input (page) {
+      this.fetchData()
+    },
+    onActive () {
       this.fetchData()
     }
   },
