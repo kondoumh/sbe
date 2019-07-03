@@ -10,7 +10,7 @@ const app = new Vue({
       }
     }
     this.fetchData()
-    window.addEventListener('focus', this.onActive)
+    window.addEventListener('focus', this.onFocus)
   },
   methods: {
     async fetchData () {
@@ -18,8 +18,8 @@ const app = new Vue({
       let url = `https://scrapbox.io/api/pages/${this.projectName}?skip=${skip}&limit=${this.pagination.rowsPerPage}&sort=${this.pagination.sortBy}`
       const res = await fetch(url)
       const data = await res.json()
-      this.items = await data.pages // .filter(page => page.pin === 0)
-      this.pagination.totalItems = data.count // - res.data.pages.filter(page => page.pin !== 0).length
+      this.items = await data.pages
+      this.pagination.totalItems = data.count
     },
     formatDate (timestamp) {
       let date = new Date()
@@ -34,7 +34,7 @@ const app = new Vue({
     input (page) {
       this.fetchData()
     },
-    onActive () {
+    onFocus () {
       this.fetchData()
     }
   },
