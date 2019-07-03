@@ -40,7 +40,7 @@ const createWindow = () => {
 
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, "desktop.html"),
+      pathname: path.join(__dirname, "container.html"),
       protocol: "file:",
       slashes: true
     })

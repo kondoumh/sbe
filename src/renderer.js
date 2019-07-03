@@ -4,7 +4,7 @@ const ElectronSearchText = require("electron-search-text");
 const dragula = require("dragula");
 const BASE_URL = "https://scrapbox.io/";
 const DEFAULT_ICON_URL = BASE_URL + "assets/img/favicon/favicon.ico";
-const LIST_PAGE = "list.html";
+const LIST_PAGE = "page-list.html";
 const Store = require("electron-store");
 const MAX_FAV = 10;
 let modalPageInfo;

@@ -2,7 +2,7 @@
   "name": "sbe",
   "version": "0.8.2",
   "description": "An unofficial Scrapbox desktop app by Electron",
-  "main": "main.js",
+  "main": "src/main.js",
   "config": {
     "proxy": "your.proxy.host:port"
   },
