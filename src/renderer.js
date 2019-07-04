@@ -1,4 +1,4 @@
-const {shell, ipcRenderer, clipboard} = require("electron");
+const { shell, ipcRenderer, clipboard } = require("electron");
 const TabGroup = require("electron-tabs");
 const ElectronSearchText = require("electron-search-text");
 const dragula = require("dragula");
@@ -15,7 +15,7 @@ const tabGroup = new TabGroup({
   ready: tabGroup => {
     dragula([tabGroup.tabContainer], {
       direction: "horizontal"
-    })
+    });
   }
 });
 
@@ -24,117 +24,117 @@ const addTab = (url, closable = true, projectName) => {
     url = BASE_URL;
   }
   const tab = tabGroup.addTab({
-      title: "new tab",
-      src: url,
-      visible: true,
-      active: true,
-      iconURL: DEFAULT_ICON_URL,
-      closable: closable,
-      ready: tab => {
-        tab.webview.addEventListener("dom-ready", e => {
-          // Remove this once https://github.com/electron/electron/issues/14474 is fixed
-          tab.webview.blur();
-          tab.webview.focus();
+    title: "new tab",
+    src: url,
+    visible: true,
+    active: true,
+    iconURL: DEFAULT_ICON_URL,
+    closable: closable,
+    ready: tab => {
+      tab.webview.addEventListener("dom-ready", e => {
+        // Remove this once https://github.com/electron/electron/issues/14474 is fixed
+        tab.webview.blur();
+        tab.webview.focus();
+      });
+      tab.webview.addEventListener("new-window", e => {
+        openUrl(e.url);
+      });
+      tab.webview.addEventListener("update-target-url", e => {
+        showTargetPageTitle(e.url);
+      });
+      tab.webview.addEventListener("load-commit", e => {
+        if (inScrapbox(e.url) || listPage(e.url)) {
+          updateNavButtons(tab.webview);
+          updateTab(tab, e.url);
+        }
+      });
+      tab.on("webview-ready", tab => {
+        tab.searcher = new ElectronSearchText({
+          target: ".etabs-view.visible",
+          input: ".search-input",
+          count: ".search-count",
+          box: ".search-box",
+          visibleClass: ".state-visible"
         });
-        tab.webview.addEventListener("new-window", e => {
-          openUrl(e.url);
+        const contextMenu = require("electron-context-menu");
+        contextMenu({
+          window: tab.webview,
+          prepend: (actions, params, webview) => [
+            {
+              label: "Open",
+              click: () => { openUrl(params.linkURL); },
+              visible: params.linkURL && (params.mediaType === "none" || params.mediaType === "image")
+            },
+            { type: "separator" },
+            {
+              label: "Info",
+              click: () => {
+                getPageInfo(params.linkURL);
+              },
+              visible: params.linkURL && inScrapbox(params.linkURL) && isPage(params.linkURL)
+            },
+            {
+              label: "Add to fav",
+              click: () => { addToFav(tab.webview.getURL()); },
+              visible: !params.linkURL && inScrapbox(tab.webview.getURL())
+                && isPage(tab.webview.getURL()) && !inFavList(tab.webview.getURL())
+            },
+            {
+              label: "Search on Google \"" + params.selectionText + "\"",
+              click: () => {
+                url = "https://www.google.com/search?q=" + params.selectionText;
+                openUrl(url);
+              },
+              visible: params.selectionText !== ""
+            },
+            {
+              label: "Heading1",
+              click: () => {
+                tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 1));
+              },
+              visible: params.selectionText && !params.linkURL
+            },
+            {
+              label: "Heading2",
+              click: () => {
+                tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 2));
+              },
+              visible: params.selectionText && !params.linkURL
+            },
+            {
+              label: "Heading3",
+              click: () => {
+                tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 3));
+              },
+              visible: params.selectionText && !params.linkURL
+            },
+            {
+              label: "heading4",
+              click: () => {
+                tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 4));
+              },
+              visible: params.selectionText && !params.linkURL
+            },
+            {
+              label: "body",
+              click: () => {
+                tabGroup.getActiveTab().webview.insertText(setBody(params.selectionText));
+              },
+              visible: params.selectionText && !params.linkURL
+            }
+          ]
         });
-        tab.webview.addEventListener("update-target-url", e => {
-          showTargetPageTitle(e.url);
-        });
-        tab.webview.addEventListener("load-commit", e => {
-          if (inScrapbox(e.url) || listPage(e.url)) {
-            updateNavButtons(tab.webview);
-            updateTab(tab, e.url);
-          }
-        });
-        tab.on("webview-ready", tab => {
-          tab.searcher = new ElectronSearchText({
-            target: ".etabs-view.visible",
-            input: ".search-input",
-            count: ".search-count",
-            box: ".search-box",
-            visibleClass: ".state-visible"
-          });
-          const contextMenu = require("electron-context-menu");
-          contextMenu({
-            window: tab.webview,
-            prepend: (actions, params, webview) => [
-              {
-                label: "Open",
-                click: ()=> { openUrl(params.linkURL); },
-                visible: params.linkURL && (params.mediaType === "none" || params.mediaType === "image")
-              },
-              { type: "separator" },
-              {
-                label: "Info",
-                click: ()=> {
-                  getPageInfo(params.linkURL);
-                },
-                visible: params.linkURL && inScrapbox(params.linkURL) && isPage(params.linkURL)
-              },
-              {
-                label: "Add to fav",
-                click: () => { addToFav(tab.webview.getURL()); },
-                visible: !params.linkURL && inScrapbox(tab.webview.getURL())
-                         && isPage(tab.webview.getURL()) && !inFavList(tab.webview.getURL())
-              },
-              {
-                label: "Search on Google \"" + params.selectionText + "\"",
-                click: () => {
-                  url = "https://www.google.com/search?q=" + params.selectionText;
-                  openUrl(url);
-                },
-                visible: params.selectionText !== ""
-              },
-              {
-                label: "Heading1",
-                click: () => {
-                  tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 1));
-                },
-                visible: params.selectionText && !params.linkURL
-              },
-              {
-                label: "Heading2",
-                click: () => {
-                  tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 2));
-                },
-                visible: params.selectionText && !params.linkURL
-              },
-              {
-                label: "Heading3",
-                click: () => {
-                  tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 3));
-                },
-                visible: params.selectionText && !params.linkURL
-              },
-              {
-                label: "heading4",
-                click: () => {
-                  tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 4));
-                },
-                visible: params.selectionText && !params.linkURL
-              },
-              {
-                label: "body",
-                click: () => {
-                  tabGroup.getActiveTab().webview.insertText(setBody(params.selectionText));
-                },
-                visible: params.selectionText && !params.linkURL
-              }
-            ]
-          });
-          tab.ready = true;
-          if (projectName) {
-            tab.projectName = projectName;
-          }
-        });
-        tab.on("active", tab => {
-          if (tab.ready) {
-            updateNavButtons(tab.webview);
-            resetSearchBoxCount();
-          }
-        });
+        tab.ready = true;
+        if (projectName) {
+          tab.projectName = projectName;
+        }
+      });
+      tab.on("active", tab => {
+        if (tab.ready) {
+          updateNavButtons(tab.webview);
+          resetSearchBoxCount();
+        }
+      });
     }
   });
   return tab;
@@ -176,7 +176,7 @@ ipcRenderer.on("domReady", () => {
   });
   document.querySelector("#favorite").addEventListener("change", e => {
     const url = document.querySelector("#favorite").value;
-    
+
     if (!inScrapbox(url)) return;
     let opened = false;
     tabGroup.eachTab(currentTab => {
@@ -184,9 +184,9 @@ ipcRenderer.on("domReady", () => {
         currentTab.activate();
         opened = true;
       }
-     });
-     if (!opened) openUrl(url);
-     selectFav.selectedIndex = 0;
+    });
+    if (!opened) openUrl(url);
+    selectFav.selectedIndex = 0;
   });
 
   const selectFav = document.querySelector("#favorite");
@@ -373,7 +373,7 @@ function openUrl(url) {
     addTab(url);
   }
   else if (isUrl(url)) {
-      shell.openExternal(url);
+    shell.openExternal(url);
   } else {
     const path = getPath();
     const searchUrl = BASE_URL + path[0] + "/search/page?q=" + encodeURIComponent(url);
@@ -448,7 +448,7 @@ function addToFav(url) {
   const favs = [];
   for (i = 0; i < select.options.length; i++) {
     if (!inScrapbox(select.options[i].value)) continue;
-    const item = {text: select.options[i].text, url: select.options[i].value};
+    const item = { text: select.options[i].text, url: select.options[i].value };
     favs.push(item);
   }
   ipcRenderer.send("updateFavs", favs);
@@ -535,7 +535,7 @@ async function showProjectActivities() {
 }
 
 async function fetchPostCount(pagesUrl) {
-  const count = await fetch(pagesUrl, {credentials: "include"})
+  const count = await fetch(pagesUrl, { credentials: "include" })
     .then(res => res.json()).then(data => data.count);
   return parseInt(count);
 }
@@ -545,7 +545,7 @@ async function collectProjectMetrics(pagesUrl, totalCount, projectName) {
   let views = 0;
   let linked = 0;
   let pages = 0;
-  for (count = 0; totalCount + 50 > count; count+= 50) {
+  for (count = 0; totalCount + 50 > count; count += 50) {
     const url = pagesUrl + "?skip=" + (count - 1) + "&limit=" + 50;
     await fetch(url, {
       credentials: "include"
@@ -577,7 +577,7 @@ async function collectProjectMetrics(pagesUrl, totalCount, projectName) {
 
 function getDate() {
   var now = new Date();
-  var options = { 
+  var options = {
     weekday: "short", year: "numeric", month: "long", day: "numeric",
     hour: "numeric", minute: "numeric", second: "numeric",
     hour12: false
