@@ -1,10 +1,9 @@
 const { shell, ipcRenderer, clipboard } = require("electron");
 const TabGroup = require("electron-tabs");
+const { isUrl, inScrapbox, listPage, BASE_URL, LIST_PAGE } = require("./UrlHelper");
 const ElectronSearchText = require("electron-search-text");
 const dragula = require("dragula");
-const BASE_URL = "https://scrapbox.io/";
 const DEFAULT_ICON_URL = BASE_URL + "assets/img/favicon/favicon.ico";
-const LIST_PAGE = "page-list.html";
 const Store = require("electron-store");
 const MAX_FAV = 10;
 let modalPageInfo;
@@ -394,18 +393,6 @@ function getPath(url) {
     }
   }
   return cururl.substring(BASE_URL.length).split(/\/|#/);
-}
-
-function isUrl(text) {
-  return text.match(/^http(s)?:\/\/.+/);
-}
-
-function inScrapbox(url) {
-  return url.startsWith(BASE_URL);
-}
-
-function listPage(url) {
-  return !inScrapbox(url) && url.endsWith(LIST_PAGE);
 }
 
 function resetSearchBoxCount() {
