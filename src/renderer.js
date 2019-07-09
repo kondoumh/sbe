@@ -142,6 +142,7 @@ const addTab = (url, closable = true, projectName) => {
 addTab(BASE_URL, false);
 
 // IPC event handlers
+/////////////////////////////////////////////////
 ipcRenderer.on("domReady", () => {
   document.querySelector("#btn_back").addEventListener("click", e => {
     goBack();
@@ -286,6 +287,8 @@ ipcRenderer.on("insertHeadline3", () => {
 ipcRenderer.on("openDevToolsForTab", () => {
   tabGroup.getActiveTab().webview.openDevTools();
 });
+// end of IPC event handlers
+/////////////////////////////////////////////////
 
 function showPageList() {
   const path = getPath();
