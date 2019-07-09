@@ -1,5 +1,6 @@
 const BASE_URL = "https://scrapbox.io/";
 const LIST_PAGE = "page-list.html";
+const DEFAULT_ICON_URL = BASE_URL + "assets/img/favicon/favicon.ico";
 
 function isUrl(text) {
   return text.match(/^http(s)?:\/\/.+/);
@@ -21,12 +22,18 @@ function getSearchUrl(projectName, url) {
   return BASE_URL + projectName + "/search/page?q=" + encodeURIComponent(url);
 }
 
+function getIconUrl(projectName, pageTitle) {
+  return BASE_URL + "api/pages/" + projectName + "/" + pageTitle + "/icon";
+}
+
 module.exports = {
   isUrl,
   inScrapbox,
   listPage,
   toTitle,
   getSearchUrl,
+  getIconUrl,
   BASE_URL,
-  LIST_PAGE
+  LIST_PAGE,
+  DEFAULT_ICON_URL
 };

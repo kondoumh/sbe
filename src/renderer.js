@@ -1,9 +1,8 @@
 const { shell, ipcRenderer, clipboard } = require("electron");
 const TabGroup = require("electron-tabs");
-const { isUrl, inScrapbox, listPage, toTitle, getSearchUrl, BASE_URL, LIST_PAGE } = require("./UrlHelper");
+const { isUrl, inScrapbox, listPage, toTitle, getSearchUrl, getIconUrl, BASE_URL, LIST_PAGE, DEFAULT_ICON_URL } = require("./UrlHelper");
 const ElectronSearchText = require("electron-search-text");
 const dragula = require("dragula");
-const DEFAULT_ICON_URL = BASE_URL + "assets/img/favicon/favicon.ico";
 const Store = require("electron-store");
 const MAX_FAV = 10;
 let modalPageInfo;
@@ -340,7 +339,7 @@ function updateTab(tab, url) {
     const newTitle = toTitle(path[1]) + " - " + toTitle(path[0]);
     if (tab.getTitle() === newTitle) return;
     tab.setTitle(newTitle);
-    const iconUrl = BASE_URL + "api/pages/" + path[0] + "/" + path[1] + "/icon";
+    const iconUrl = getIconUrl(path[0], path[1]);
     fetch(iconUrl, {
       credentials: "include"
     }).then(res => {
