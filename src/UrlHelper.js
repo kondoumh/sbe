@@ -17,11 +17,16 @@ function toTitle(path) {
   return decodeURIComponent(path).replace(/_/g, " ");
 }
 
+function getSearchUrl(projectName, url) {
+  return BASE_URL + projectName + "/search/page?q=" + encodeURIComponent(url);
+}
+
 module.exports = {
   isUrl,
   inScrapbox,
   listPage,
   toTitle,
+  getSearchUrl,
   BASE_URL,
   LIST_PAGE
 };

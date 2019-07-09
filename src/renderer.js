@@ -1,6 +1,6 @@
 const { shell, ipcRenderer, clipboard } = require("electron");
 const TabGroup = require("electron-tabs");
-const { isUrl, inScrapbox, listPage, toTitle, BASE_URL, LIST_PAGE } = require("./UrlHelper");
+const { isUrl, inScrapbox, listPage, toTitle, getSearchUrl, BASE_URL, LIST_PAGE } = require("./UrlHelper");
 const ElectronSearchText = require("electron-search-text");
 const dragula = require("dragula");
 const DEFAULT_ICON_URL = BASE_URL + "assets/img/favicon/favicon.ico";
@@ -356,7 +356,7 @@ function updateTab(tab, url) {
 }
 
 function showTargetPageTitle(url) {
-  let title = url !== "" ? decodeURIComponent(url) : "ready";
+  let title = url !== "" ? toTitle(url) : "ready";
   if (inScrapbox(title)) {
     title = title.substring(BASE_URL.length);
   }
@@ -371,8 +371,7 @@ function openUrl(url) {
     shell.openExternal(url);
   } else {
     const path = getPath();
-    const searchUrl = BASE_URL + path[0] + "/search/page?q=" + encodeURIComponent(url);
-    addTab(searchUrl);
+    addTab(getSearchUrl(path[0], url));
   }
 }
 
