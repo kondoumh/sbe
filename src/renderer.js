@@ -1,6 +1,6 @@
 const { shell, ipcRenderer, clipboard } = require("electron");
 const TabGroup = require("electron-tabs");
-const { isUrl, inScrapbox, listPage, BASE_URL, LIST_PAGE } = require("./UrlHelper");
+const { isUrl, inScrapbox, listPage, toTitle, BASE_URL, LIST_PAGE } = require("./UrlHelper");
 const ElectronSearchText = require("electron-search-text");
 const dragula = require("dragula");
 const DEFAULT_ICON_URL = BASE_URL + "assets/img/favicon/favicon.ico";
@@ -141,7 +141,7 @@ const addTab = (url, closable = true, projectName) => {
 
 addTab(BASE_URL, false);
 
-
+// IPC event handlers
 ipcRenderer.on("domReady", () => {
   document.querySelector("#btn_back").addEventListener("click", e => {
     goBack();
@@ -353,10 +353,6 @@ function updateTab(tab, url) {
     tab.setIcon(DEFAULT_ICON_URL);
     tab.setTitle(toTitle(path[0]));
   }
-}
-
-function toTitle(path) {
-  return decodeURIComponent(path).replace(/_/g, " ");
 }
 
 function showTargetPageTitle(url) {

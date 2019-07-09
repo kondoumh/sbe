@@ -13,6 +13,15 @@ function listPage(url) {
   return !inScrapbox(url) && url.endsWith(LIST_PAGE);
 }
 
+function toTitle(path) {
+  return decodeURIComponent(path).replace(/_/g, " ");
+}
+
 module.exports = {
-  isUrl, inScrapbox, listPage, BASE_URL, LIST_PAGE
+  isUrl,
+  inScrapbox,
+  listPage,
+  toTitle,
+  BASE_URL,
+  LIST_PAGE
 };
