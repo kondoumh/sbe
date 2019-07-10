@@ -4,6 +4,7 @@ const { isUrl, inScrapbox, listPage, toTitle, getSearchUrl, getIconUrl, BASE_URL
 const ElectronSearchText = require("electron-search-text");
 const dragula = require("dragula");
 const Store = require("electron-store");
+const getDate = require("./DateHelper");
 const MAX_FAV = 10;
 let modalPageInfo;
 let openItUrl;
@@ -557,16 +558,6 @@ async function collectProjectMetrics(pagesUrl, totalCount, projectName) {
   content.innerHTML += `Pages ${totalCount} : Views ${views} : Linked ${linked}`;
   showStatusMessage("ready");
   createProjectDialog().showModal();
-}
-
-function getDate() {
-  var now = new Date();
-  var options = {
-    weekday: "short", year: "numeric", month: "long", day: "numeric",
-    hour: "numeric", minute: "numeric", second: "numeric",
-    hour12: false
-  };
-  return now.toLocaleDateString(navigator.language, options);
 }
 
 function createProjectDialog() {
