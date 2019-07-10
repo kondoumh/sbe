@@ -36,6 +36,9 @@ const app = new Vue({
     },
     onFocus () {
       this.fetchData()
+    },
+    encodeTitle(title) {
+      return encodeURIComponent(title)
     }
   },
   computed: {
