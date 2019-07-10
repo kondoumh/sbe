@@ -68,7 +68,7 @@
               <td class="text-xs-left">{{ formatDate(props.item.updated) }}</td>
               <td class="text-xs-left">
                 <a
-                  :href="'https://scrapbox.io/'+ projectName + '/' + props.item.title"
+                  :href="'https://scrapbox.io/'+ projectName + '/' + encodeTitle(props.item.title)"
                   target="_blank"
                 >{{ props.item.title }}</a>
               </td>
