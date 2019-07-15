@@ -1,6 +1,6 @@
 const { shell, ipcRenderer, clipboard } = require("electron");
 const TabGroup = require("electron-tabs");
-const { isUrl, inScrapbox, listPage, toTitle, getSearchUrl, getIconUrl, BASE_URL, LIST_PAGE, DEFAULT_ICON_URL } = require("./UrlHelper");
+const sbUrl = require("./UrlHelper");
 const ElectronSearchText = require("electron-search-text");
 const dragula = require("dragula");
 const Store = require("electron-store");
@@ -20,14 +20,14 @@ const tabGroup = new TabGroup({
 
 const addTab = (url, closable = true, projectName) => {
   if (!url) {
-    url = BASE_URL;
+    url = sbUrl.BASE_URL;
   }
   const tab = tabGroup.addTab({
     title: "new tab",
     src: url,
     visible: true,
     active: true,
-    iconURL: DEFAULT_ICON_URL,
+    iconURL: sbUrl.DEFAULT_ICON_URL,
     closable: closable,
     ready: tab => {
       tab.webview.addEventListener("dom-ready", e => {
@@ -42,7 +42,7 @@ const addTab = (url, closable = true, projectName) => {
         showTargetPageTitle(e.url);
       });
       tab.webview.addEventListener("load-commit", e => {
-        if (inScrapbox(e.url) || listPage(e.url)) {
+        if (sbUrl.inScrapbox(e.url) || sbUrl.listPage(e.url)) {
           updateNavButtons(tab.webview);
           updateTab(tab, e.url);
         }
@@ -70,12 +70,12 @@ const addTab = (url, closable = true, projectName) => {
               click: () => {
                 getPageInfo(params.linkURL);
               },
-              visible: params.linkURL && inScrapbox(params.linkURL) && isPage(params.linkURL)
+              visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && isPage(params.linkURL)
             },
             {
               label: "Add to fav",
               click: () => { addToFav(tab.webview.getURL()); },
-              visible: !params.linkURL && inScrapbox(tab.webview.getURL())
+              visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
                 && isPage(tab.webview.getURL()) && !inFavList(tab.webview.getURL())
             },
             {
@@ -139,7 +139,7 @@ const addTab = (url, closable = true, projectName) => {
   return tab;
 }
 
-addTab(BASE_URL, false);
+addTab(sbUrl.BASE_URL, false);
 
 // IPC event handlers
 /////////////////////////////////////////////////
@@ -177,7 +177,7 @@ ipcRenderer.on("domReady", () => {
   document.querySelector("#favorite").addEventListener("change", e => {
     const url = document.querySelector("#favorite").value;
 
-    if (!inScrapbox(url)) return;
+    if (!sbUrl.inScrapbox(url)) return;
     let opened = false;
     tabGroup.eachTab(currentTab => {
       if (currentTab.webview.getURL() === url) {
@@ -244,7 +244,7 @@ ipcRenderer.on("showProjectActivities", () => {
 
 ipcRenderer.on("pasteUrlTitle", () => {
   const text = clipboard.readText("selection");
-  if (!isUrl(text)) {
+  if (!sbUrl.isUrl(text)) {
     showStatusMessage("Invalid URL. : " + text);
     return;
   }
@@ -293,7 +293,7 @@ ipcRenderer.on("openDevToolsForTab", () => {
 function showPageList() {
   const path = getPath();
   localStorage.setItem("projectName", path[0]);
-  addTab(LIST_PAGE, true, path[0]);
+  addTab(sbUrl.LIST_PAGE, true, path[0]);
 }
 
 function goBack() {
@@ -311,7 +311,7 @@ function goForward() {
 }
 
 function duplicateTab() {
-  if (!listPage(tabGroup.getActiveTab().webview.getURL())) {
+  if (!sbUrl.listPage(tabGroup.getActiveTab().webview.getURL())) {
     addTab(tabGroup.getActiveTab().webview.getURL());
   }
 }
@@ -327,7 +327,7 @@ function updateNavButtons(webview) {
 }
 
 function updateTab(tab, url) {
-  if (listPage(tab.webview.getURL())) {
+  if (sbUrl.listPage(tab.webview.getURL())) {
     let projectName = localStorage.getItem("projectName");
     if (!projectName) {
       projectName = tab.projectName;
@@ -337,10 +337,10 @@ function updateTab(tab, url) {
   }
   const path = getPath(url);
   if (path.length > 1 && path[1].length > 0) {
-    const newTitle = toTitle(path[1]) + " - " + toTitle(path[0]);
+    const newTitle = sbUrl.toTitle(path[1]) + " - " + sbUrl.toTitle(path[0]);
     if (tab.getTitle() === newTitle) return;
     tab.setTitle(newTitle);
-    const iconUrl = getIconUrl(path[0], path[1]);
+    const iconUrl = sbUrl.getIconUrl(path[0], path[1]);
     fetch(iconUrl, {
       credentials: "include"
     }).then(res => {
@@ -348,33 +348,33 @@ function updateTab(tab, url) {
         tab.setIcon(res.url);
       }
       else {
-        tab.setIcon(DEFAULT_ICON_URL);
+        tab.setIcon(sbUrl.DEFAULT_ICON_URL);
       }
     });
   }
   else if (path.length > 1 && path[1].length === 0) {
-    tab.setIcon(DEFAULT_ICON_URL);
-    tab.setTitle(toTitle(path[0]));
+    tab.setIcon(sbUrl.DEFAULT_ICON_URL);
+    tab.setTitle(sbUrl.toTitle(path[0]));
   }
 }
 
 function showTargetPageTitle(url) {
-  let title = url !== "" ? toTitle(url) : "ready";
-  if (inScrapbox(title)) {
-    title = title.substring(BASE_URL.length);
+  let title = url !== "" ? sbUrl.toTitle(url) : "ready";
+  if (sbUrl.inScrapbox(title)) {
+    title = title.substring(sbUrl.BASE_URL.length);
   }
   showStatusMessage(title);
 }
 
 function openUrl(url) {
-  if (inScrapbox(url)) {
+  if (sbUrl.inScrapbox(url)) {
     addTab(url);
   }
-  else if (isUrl(url)) {
+  else if (sbUrl.isUrl(url)) {
     shell.openExternal(url);
   } else {
     const path = getPath();
-    addTab(getSearchUrl(path[0], url));
+    addTab(sbUrl.getSearchUrl(path[0], url));
   }
 }
 
@@ -382,15 +382,15 @@ function getPath(url) {
   let cururl = url;
   if (!cururl) {
     cururl = tabGroup.getActiveTab().webview.getURL();
-    if (!inScrapbox(cururl)) {
+    if (!sbUrl.inScrapbox(cururl)) {
       tabGroup.getTabs().forEach(tab => {
-        if (inScrapbox(tab.webview.getURL())) {
+        if (sbUrl.inScrapbox(tab.webview.getURL())) {
           cururl = tab.webview.getURL();
         }
       })
     }
   }
-  return cururl.substring(BASE_URL.length).split(/\/|#/);
+  return cururl.substring(sbUrl.BASE_URL.length).split(/\/|#/);
 }
 
 function resetSearchBoxCount() {
@@ -421,7 +421,7 @@ function addToFav(url) {
   const select = document.querySelector("#favorite");
   const option = document.createElement("option");
   const path = getPath(url);
-  option.text = toTitle(path[1]) + " - " + path[0];
+  option.text = sbUrl.toTitle(path[1]) + " - " + path[0];
   option.value = url;
   select.add(option, 1);
   if (select.options.length > MAX_FAV + 1) {
@@ -432,7 +432,7 @@ function addToFav(url) {
 
   const favs = [];
   for (i = 0; i < select.options.length; i++) {
-    if (!inScrapbox(select.options[i].value)) continue;
+    if (!sbUrl.inScrapbox(select.options[i].value)) continue;
     const item = { text: select.options[i].text, url: select.options[i].value };
     favs.push(item);
   }
@@ -441,7 +441,7 @@ function addToFav(url) {
 
 function getPageInfo(url) {
   const path = getPath(url);
-  const pageUrl = BASE_URL + "api/pages/" + path[0] + "/" + path[1];
+  const pageUrl = sbUrl.BASE_URL + "api/pages/" + path[0] + "/" + path[1];
   showStatusMessage("fetching page info...");
   fetch(pageUrl, {
     credentials: "include"
@@ -513,7 +513,7 @@ function setBody(text) {
 async function showProjectActivities() {
   const path = getPath();
   const projectName = path[0];
-  const pagesUrl = BASE_URL + "api/pages/" + projectName;
+  const pagesUrl = sbUrl.BASE_URL + "api/pages/" + projectName;
 
   const total = await fetchPostCount(pagesUrl);
   await collectProjectMetrics(pagesUrl, total, projectName);

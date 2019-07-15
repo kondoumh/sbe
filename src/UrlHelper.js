@@ -1,39 +1,31 @@
-const BASE_URL = "https://scrapbox.io/";
-const LIST_PAGE = "page-list.html";
-const DEFAULT_ICON_URL = BASE_URL + "assets/img/favicon/favicon.ico";
+const sbUrl = {}
 
-function isUrl(text) {
+sbUrl.BASE_URL = "https://scrapbox.io/";
+sbUrl.LIST_PAGE = "page-list.html";
+sbUrl.DEFAULT_ICON_URL = sbUrl.BASE_URL + "assets/img/favicon/favicon.ico";
+
+sbUrl.isUrl = text => {
   return text.match(/^http(s)?:\/\/.+/);
 }
 
-function inScrapbox(url) {
-  return url.startsWith(BASE_URL);
+sbUrl.inScrapbox = url => {
+  return url.startsWith(sbUrl.BASE_URL);
 }
 
-function listPage(url) {
-  return !inScrapbox(url) && url.endsWith(LIST_PAGE);
+sbUrl.listPage = url => {
+  return !sbUrl.inScrapbox(url) && url.endsWith(sbUrl.LIST_PAGE);
 }
 
-function toTitle(path) {
+sbUrl.toTitle = path => {
   return decodeURIComponent(path).replace(/_/g, " ");
 }
 
-function getSearchUrl(projectName, url) {
-  return BASE_URL + projectName + "/search/page?q=" + encodeURIComponent(url);
+sbUrl.getSearchUrl = (projectName, url) => {
+  return sbUrl.BASE_URL + projectName + "/search/page?q=" + encodeURIComponent(url);
 }
 
-function getIconUrl(projectName, pageTitle) {
-  return BASE_URL + "api/pages/" + projectName + "/" + pageTitle + "/icon";
+sbUrl.getIconUrl = (projectName, pageTitle) => {
+  return sbUrl.BASE_URL + "api/pages/" + projectName + "/" + pageTitle + "/icon";
 }
 
-module.exports = {
-  isUrl,
-  inScrapbox,
-  listPage,
-  toTitle,
-  getSearchUrl,
-  getIconUrl,
-  BASE_URL,
-  LIST_PAGE,
-  DEFAULT_ICON_URL
-};
+module.exports = sbUrl;
