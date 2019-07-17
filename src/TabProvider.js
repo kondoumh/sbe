@@ -45,6 +45,20 @@ class TabProvider extends TabGroup {
     return (path.length >= 2 && path[1] !== "");
   }
 
+  goBack() {
+    const webview = this.getActiveWebView();
+    if (webview && webview.canGoBack()) {
+      webview.goBack();
+    }
+  }
+
+  goForward() {
+    const webview = this.getActiveWebView();
+    if (webview && webview.canGoForward()) {
+      webview.goForward();
+    }
+  }
+
   getActiveWebView() {
     return this.getActiveTab().webview;
   }

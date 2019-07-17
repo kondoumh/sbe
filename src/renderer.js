@@ -138,10 +138,10 @@ addTab(sbUrl.BASE_URL, false);
 /////////////////////////////////////////////////
 ipcRenderer.on("domReady", () => {
   document.querySelector("#btn_back").addEventListener("click", e => {
-    goBack();
+    tabGroup.goBack();
   });
   document.querySelector("#btn_forward").addEventListener("click", e => {
-    goForward();
+    tabGroup.goForward();
   });
   document.querySelector("#btn_newtab").addEventListener("click", e => {
     addTab();
@@ -200,11 +200,11 @@ ipcRenderer.on("toggleSearch", () => {
 });
 
 ipcRenderer.on("goBack", () => {
-  goBack();
+  tabGroup.goBack();
 });
 
 ipcRenderer.on("goForward", () => {
-  goForward();
+  tabGroup.goForward();
 });
 
 ipcRenderer.on("newTab", () => {
@@ -287,20 +287,6 @@ function showPageList() {
   const path = tabGroup.getPath();
   localStorage.setItem("projectName", path[0]);
   addTab(sbUrl.LIST_PAGE, true, path[0]);
-}
-
-function goBack() {
-  const webview = tabGroup.getActiveWebView();
-  if (webview && webview.canGoBack()) {
-    webview.goBack();
-  }
-}
-
-function goForward() {
-  const webview = tabGroup.getActiveWebView();
-  if (webview && webview.canGoForward()) {
-    webview.goForward();
-  }
 }
 
 function duplicateTab() {
