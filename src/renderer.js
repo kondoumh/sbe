@@ -37,7 +37,7 @@ const addTab = (url, closable = true, projectName) => {
       tab.webview.addEventListener("load-commit", e => {
         if (sbUrl.inScrapbox(e.url) || sbUrl.listPage(e.url)) {
           updateNavButtons(tab.webview);
-          updateTab(tab, e.url);
+          tabGroup.updateTab(tab, e.url, localStorage.getItem("projectName"));
         }
       });
       tab.on("webview-ready", tab => {
@@ -303,38 +303,6 @@ function copyUrl() {
 function updateNavButtons(webview) {
   document.querySelector("#btn_back").disabled = !webview.canGoBack();
   document.querySelector("#btn_forward").disabled = !webview.canGoForward();
-}
-
-function updateTab(tab, url) {
-  if (sbUrl.listPage(tab.webview.getURL())) {
-    let projectName = localStorage.getItem("projectName");
-    if (!projectName) {
-      projectName = tab.projectName;
-    }
-    tab.setTitle("page list - " + projectName);
-    return;
-  }
-  const path = tabGroup.getPath(url);
-  if (path.length > 1 && path[1].length > 0) {
-    const newTitle = sbUrl.toTitle(path[1]) + " - " + sbUrl.toTitle(path[0]);
-    if (tab.getTitle() === newTitle) return;
-    tab.setTitle(newTitle);
-    const iconUrl = sbUrl.getIconUrl(path[0], path[1]);
-    fetch(iconUrl, {
-      credentials: "include"
-    }).then(res => {
-      if (res.status === 200) {
-        tab.setIcon(res.url);
-      }
-      else {
-        tab.setIcon(sbUrl.DEFAULT_ICON_URL);
-      }
-    });
-  }
-  else if (path.length > 1 && path[1].length === 0) {
-    tab.setIcon(sbUrl.DEFAULT_ICON_URL);
-    tab.setTitle(sbUrl.toTitle(path[0]));
-  }
 }
 
 function showTargetPageTitle(url) {

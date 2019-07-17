@@ -62,6 +62,37 @@ class TabProvider extends TabGroup {
   getActiveWebView() {
     return this.getActiveTab().webview;
   }
+
+  updateTab(tab, url, projectName) {
+    if (sbUrl.listPage(tab.webview.getURL())) {
+      if (!projectName) {
+        projectName = tab.projectName;
+      }
+      tab.setTitle("page list - " + projectName);
+      return;
+    }
+    const path = this.getPath(url);
+    if (path.length > 1 && path[1].length > 0) {
+      const newTitle = sbUrl.toTitle(path[1]) + " - " + sbUrl.toTitle(path[0]);
+      if (tab.getTitle() === newTitle) return;
+      tab.setTitle(newTitle);
+      const iconUrl = sbUrl.getIconUrl(path[0], path[1]);
+      fetch(iconUrl, {
+        credentials: "include"
+      }).then(res => {
+        if (res.status === 200) {
+          tab.setIcon(res.url);
+        }
+        else {
+          tab.setIcon(sbUrl.DEFAULT_ICON_URL);
+        }
+      });
+    }
+    else if (path.length > 1 && path[1].length === 0) {
+      tab.setIcon(sbUrl.DEFAULT_ICON_URL);
+      tab.setTitle(sbUrl.toTitle(path[0]));
+    }
+  }  
 }
 
 module.exports = TabProvider;
