@@ -16,7 +16,7 @@ class TabProvider extends TabGroup {
   getPath(url) {
     let cururl = url;
     if (!cururl) {
-      cururl = this.getActiveTab().webview.getURL();
+      cururl = this.getActiveWebView().getURL();
       if (!sbUrl.inScrapbox(cururl)) {
         this.getTabs().forEach(tab => {
           if (sbUrl.inScrapbox(tab.webview.getURL())) {
@@ -40,23 +40,8 @@ class TabProvider extends TabGroup {
     }
   }
   
-  getPath(url) {
-    let cururl = url;
-    if (!cururl) {
-      cururl = this.getActiveTab().webview.getURL();
-      if (!sbUrl.inScrapbox(cururl)) {
-        this.getTabs().forEach(tab => {
-          if (sbUrl.inScrapbox(tab.webview.getURL())) {
-            cururl = tab.webview.getURL();
-          }
-        })
-      }
-    }
-    return cururl.substring(sbUrl.BASE_URL.length).split(/\/|#/);
-  }
-
   isPage(url) {
-    const path = getPath(url);
+    const path = this.getPath(url);
     return (path.length >= 2 && path[1] !== "");
   }
 

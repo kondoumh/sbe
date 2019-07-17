@@ -284,7 +284,7 @@ ipcRenderer.on("openDevToolsForTab", () => {
 /////////////////////////////////////////////////
 
 function showPageList() {
-  const path = getPath();
+  const path = tabGroup.getPath();
   localStorage.setItem("projectName", path[0]);
   addTab(sbUrl.LIST_PAGE, true, path[0]);
 }
@@ -328,7 +328,7 @@ function updateTab(tab, url) {
     tab.setTitle("page list - " + projectName);
     return;
   }
-  const path = getPath(url);
+  const path = tabGroup.getPath(url);
   if (path.length > 1 && path[1].length > 0) {
     const newTitle = sbUrl.toTitle(path[1]) + " - " + sbUrl.toTitle(path[0]);
     if (tab.getTitle() === newTitle) return;
@@ -366,24 +366,9 @@ function openUrl(url) {
   else if (sbUrl.isUrl(url)) {
     shell.openExternal(url);
   } else {
-    const path = getPath();
+    const path = tabGroup.getPath();
     addTab(sbUrl.getSearchUrl(path[0], url));
   }
-}
-
-function getPath(url) {
-  let cururl = url;
-  if (!cururl) {
-    cururl = tabGroup.getActiveWebView().getURL();
-    if (!sbUrl.inScrapbox(cururl)) {
-      tabGroup.getTabs().forEach(tab => {
-        if (sbUrl.inScrapbox(tab.webview.getURL())) {
-          cururl = tab.webview.getURL();
-        }
-      })
-    }
-  }
-  return cururl.substring(sbUrl.BASE_URL.length).split(/\/|#/);
 }
 
 function resetSearchBoxCount() {
@@ -406,14 +391,14 @@ function inFavList(url) {
 }
 
 function isPage(url) {
-  const path = getPath(url);
+  const path = tabGroup.getPath(url);
   return (path.length >= 2 && path[1] !== "");
 }
 
 function addToFav(url) {
   const select = document.querySelector("#favorite");
   const option = document.createElement("option");
-  const path = getPath(url);
+  const path = tabGroup.getPath(url);
   option.text = sbUrl.toTitle(path[1]) + " - " + path[0];
   option.value = url;
   select.add(option, 1);
@@ -433,7 +418,7 @@ function addToFav(url) {
 }
 
 function getPageInfo(url) {
-  const path = getPath(url);
+  const path = tabGroup.getPath(url);
   const pageUrl = sbUrl.BASE_URL + "api/pages/" + path[0] + "/" + path[1];
   showStatusMessage("fetching page info...");
   fetch(pageUrl, {
@@ -504,7 +489,7 @@ function setBody(text) {
 }
 
 async function showProjectActivities() {
-  const path = getPath();
+  const path = tabGroup.getPath();
   const projectName = path[0];
   const pagesUrl = sbUrl.BASE_URL + "api/pages/" + projectName;
 
