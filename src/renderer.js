@@ -29,7 +29,7 @@ const addTab = (url, closable = true, projectName) => {
         tab.webview.focus();
       });
       tab.webview.addEventListener("new-window", e => {
-        openUrl(e.url);
+        tabGroup.openUrl(e.url);
       });
       tab.webview.addEventListener("update-target-url", e => {
         showTargetPageTitle(e.url);
@@ -54,7 +54,7 @@ const addTab = (url, closable = true, projectName) => {
           prepend: (actions, params, webview) => [
             {
               label: "Open",
-              click: () => { openUrl(params.linkURL); },
+              click: () => { tabGroup.openUrl(params.linkURL); },
               visible: params.linkURL && (params.mediaType === "none" || params.mediaType === "image")
             },
             { type: "separator" },
@@ -75,7 +75,7 @@ const addTab = (url, closable = true, projectName) => {
               label: "Search on Google \"" + params.selectionText + "\"",
               click: () => {
                 url = "https://www.google.com/search?q=" + params.selectionText;
-                openUrl(url);
+                tabGroup.openUrl(url);
               },
               visible: params.selectionText !== ""
             },
@@ -164,7 +164,7 @@ ipcRenderer.on("domReady", () => {
   document.querySelector("#open_url").addEventListener("keypress", e => {
     const key = e.which || e.keyCode;
     if (key === 13) {
-      openUrl(e.target.value);
+      tabGroup.openUrl(e.target.value);
     }
   });
   document.querySelector("#favorite").addEventListener("change", e => {
@@ -178,7 +178,7 @@ ipcRenderer.on("domReady", () => {
         opened = true;
       }
     });
-    if (!opened) openUrl(url);
+    if (!opened) tabGroup.openUrl(url);
     selectFav.selectedIndex = 0;
   });
 
@@ -357,18 +357,6 @@ function showTargetPageTitle(url) {
     title = title.substring(sbUrl.BASE_URL.length);
   }
   showStatusMessage(title);
-}
-
-function openUrl(url) {
-  if (sbUrl.inScrapbox(url)) {
-    addTab(url);
-  }
-  else if (sbUrl.isUrl(url)) {
-    shell.openExternal(url);
-  } else {
-    const path = tabGroup.getPath();
-    addTab(sbUrl.getSearchUrl(path[0], url));
-  }
 }
 
 function resetSearchBoxCount() {
