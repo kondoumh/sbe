@@ -2,9 +2,9 @@ const TabGroup = require("electron-tabs");
 const dragula = require("dragula");
 const sbUrl = require("./UrlHelper");
 
-class TabProvider {
+class TabProvider extends TabGroup {
   constructor() {
-    this.tabGroup = new TabGroup({
+    super({
       ready: tabGroup => {
         dragula([tabGroup.tabContainer], {
           direction: "horizontal"
@@ -13,34 +13,12 @@ class TabProvider {
     });
   }
 
-  addTab (url, closable = true, projectName, fun) {
-    if (!url) {
-      url = sbUrl.BASE_URL;
-    }
-    const tab = tabGroup.addTab({
-      title: "new tab",
-      src: url,
-      visible: true,
-      active: true,
-      iconURL: sbUrl.DEFAULT_ICON_URL,
-      closable: closable,
-      ready: tab => {
-        fun();
-        tab.ready = true;
-        if (projectName) {
-          tab.projectName = projectName;
-        }
-      }
-    });
-    return tab;
-  }
-  
   getPath(url) {
     let cururl = url;
     if (!cururl) {
-      cururl = this.tabGroup.getActiveTab().webview.getURL();
+      cururl = this.getActiveTab().webview.getURL();
       if (!sbUrl.inScrapbox(cururl)) {
-        tabGroup.getTabs().forEach(tab => {
+        this.getTabs().forEach(tab => {
           if (sbUrl.inScrapbox(tab.webview.getURL())) {
             cururl = tab.webview.getURL();
           }
@@ -65,9 +43,9 @@ class TabProvider {
   getPath(url) {
     let cururl = url;
     if (!cururl) {
-      cururl = tabGroup.getActiveTab().webview.getURL();
+      cururl = this.getActiveTab().webview.getURL();
       if (!sbUrl.inScrapbox(cururl)) {
-        tabGroup.getTabs().forEach(tab => {
+        this.getTabs().forEach(tab => {
           if (sbUrl.inScrapbox(tab.webview.getURL())) {
             cururl = tab.webview.getURL();
           }
@@ -83,7 +61,7 @@ class TabProvider {
   }
 
   getActiveWebView() {
-    return this.tabGroup.getActiveTab().webview;
+    return this.getActiveTab().webview;
   }
 }
 

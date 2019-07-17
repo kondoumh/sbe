@@ -1,8 +1,7 @@
 const { shell, ipcRenderer, clipboard } = require("electron");
-const TabGroup = require("electron-tabs");
 const sbUrl = require("./UrlHelper");
+const TabProvider = require("./TabProvider");
 const ElectronSearchText = require("electron-search-text");
-const dragula = require("dragula");
 const Store = require("electron-store");
 const getDate = require("./DateHelper");
 const MAX_FAV = 10;
@@ -10,13 +9,7 @@ let modalPageInfo;
 let openItUrl;
 let modalProjectInfo;
 
-const tabGroup = new TabGroup({
-  ready: tabGroup => {
-    dragula([tabGroup.tabContainer], {
-      direction: "horizontal"
-    });
-  }
-});
+const tabGroup = new TabProvider();
 
 const addTab = (url, closable = true, projectName) => {
   if (!url) {
@@ -89,35 +82,35 @@ const addTab = (url, closable = true, projectName) => {
             {
               label: "Heading1",
               click: () => {
-                tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 1));
+                tabGroup.getActiveWebView().insertText(setHeading(params.selectionText, 1));
               },
               visible: params.selectionText && !params.linkURL
             },
             {
               label: "Heading2",
               click: () => {
-                tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 2));
+                tabGroup.getActiveWebView().insertText(setHeading(params.selectionText, 2));
               },
               visible: params.selectionText && !params.linkURL
             },
             {
               label: "Heading3",
               click: () => {
-                tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 3));
+                tabGroup.getActiveWebView().insertText(setHeading(params.selectionText, 3));
               },
               visible: params.selectionText && !params.linkURL
             },
             {
               label: "heading4",
               click: () => {
-                tabGroup.getActiveTab().webview.insertText(setHeading(params.selectionText, 4));
+                tabGroup.getActiveWebView().insertText(setHeading(params.selectionText, 4));
               },
               visible: params.selectionText && !params.linkURL
             },
             {
               label: "body",
               click: () => {
-                tabGroup.getActiveTab().webview.insertText(setBody(params.selectionText));
+                tabGroup.getActiveWebView().insertText(setBody(params.selectionText));
               },
               visible: params.selectionText && !params.linkURL
             }
@@ -160,7 +153,7 @@ ipcRenderer.on("domReady", () => {
     copyUrl();
   });
   document.querySelector("#btn_reload").addEventListener("click", e => {
-    tabGroup.getActiveTab().webview.reload();
+    tabGroup.getActiveWebView().reload();
   });
   document.querySelector("#btn_titles").addEventListener("click", e => {
     showPageList();
@@ -231,7 +224,7 @@ ipcRenderer.on("copyUrl", () => {
 });
 
 ipcRenderer.on("reload", () => {
-  tabGroup.getActiveTab().webview.reload();
+  tabGroup.getActiveWebView().reload();
 });
 
 ipcRenderer.on("showPageList", () => {
@@ -258,9 +251,9 @@ ipcRenderer.on("pasteUrlTitle", () => {
         const doc = new DOMParser().parseFromString(body, "text/html");
         const title = doc.title;
         if (title) {
-          tabGroup.getActiveTab().webview.insertText("[" + text + " " + title.replace(/[\r\[\]]/g, " ") + "]");
+          tabGroup.getActiveWebView().insertText("[" + text + " " + title.replace(/[\r\[\]]/g, " ") + "]");
         } else {
-          tabGroup.getActiveTab().webview.insertText("[" + text + " " + "no title]");
+          tabGroup.getActiveWebView().insertText("[" + text + " " + "no title]");
         }
         showStatusMessage("ready");
       });
@@ -273,19 +266,19 @@ ipcRenderer.on("pasteUrlTitle", () => {
 });
 
 ipcRenderer.on("insertHeadline1", () => {
-  tabGroup.getActiveTab().webview.insertText("[* 1]");
+  tabGroup.getActiveWebView().insertText("[* 1]");
 });
 
 ipcRenderer.on("insertHeadline2", () => {
-  tabGroup.getActiveTab().webview.insertText("[** 2]");
+  tabGroup.getActiveWebView().insertText("[** 2]");
 });
 
 ipcRenderer.on("insertHeadline3", () => {
-  tabGroup.getActiveTab().webview.insertText("[*** 3]");
+  tabGroup.getActiveWebView().insertText("[*** 3]");
 });
 
 ipcRenderer.on("openDevToolsForTab", () => {
-  tabGroup.getActiveTab().webview.openDevTools();
+  tabGroup.getActiveWebView().openDevTools();
 });
 // end of IPC event handlers
 /////////////////////////////////////////////////
@@ -297,27 +290,27 @@ function showPageList() {
 }
 
 function goBack() {
-  const webview = tabGroup.getActiveTab().webview;
+  const webview = tabGroup.getActiveWebView();
   if (webview && webview.canGoBack()) {
     webview.goBack();
   }
 }
 
 function goForward() {
-  const webview = tabGroup.getActiveTab().webview;
+  const webview = tabGroup.getActiveWebView();
   if (webview && webview.canGoForward()) {
     webview.goForward();
   }
 }
 
 function duplicateTab() {
-  if (!sbUrl.listPage(tabGroup.getActiveTab().webview.getURL())) {
-    addTab(tabGroup.getActiveTab().webview.getURL());
+  if (!sbUrl.listPage(tabGroup.getActiveWebView().getURL())) {
+    addTab(tabGroup.getActiveWebView().getURL());
   }
 }
 
 function copyUrl() {
-  const url = tabGroup.getActiveTab().webview.getURL();
+  const url = tabGroup.getActiveWebView().getURL();
   clipboard.writeText(url);
 }
 
@@ -381,7 +374,7 @@ function openUrl(url) {
 function getPath(url) {
   let cururl = url;
   if (!cururl) {
-    cururl = tabGroup.getActiveTab().webview.getURL();
+    cururl = tabGroup.getActiveWebView().getURL();
     if (!sbUrl.inScrapbox(cururl)) {
       tabGroup.getTabs().forEach(tab => {
         if (sbUrl.inScrapbox(tab.webview.getURL())) {
