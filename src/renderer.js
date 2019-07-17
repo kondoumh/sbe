@@ -63,13 +63,13 @@ const addTab = (url, closable = true, projectName) => {
               click: () => {
                 getPageInfo(params.linkURL);
               },
-              visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && isPage(params.linkURL)
+              visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && tabGroup.isPage(params.linkURL)
             },
             {
               label: "Add to fav",
               click: () => { addToFav(tab.webview.getURL()); },
               visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
-                && isPage(tab.webview.getURL()) && !inFavList(tab.webview.getURL())
+                && tabGroup.isPage(tab.webview.getURL()) && !inFavList(tab.webview.getURL())
             },
             {
               label: "Search on Google \"" + params.selectionText + "\"",
@@ -376,11 +376,6 @@ function inFavList(url) {
     };
   }
   return false;
-}
-
-function isPage(url) {
-  const path = tabGroup.getPath(url);
-  return (path.length >= 2 && path[1] !== "");
 }
 
 function addToFav(url) {
