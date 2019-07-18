@@ -239,34 +239,31 @@ ipcRenderer.on("showProjectActivities", () => {
   showProjectActivities();
 });
 
-ipcRenderer.on("pasteUrlTitle", () => {
+ipcRenderer.on("pasteUrlTitle", async () => {
   const text = clipboard.readText("selection");
   if (!sbUrl.isUrl(text)) {
     showStatusMessage("Invalid URL. : " + text);
     return;
   }
   showStatusMessage("fetching document...");
-  fetch(text, {
-    credentials: "include"
-  }).then(res => {
-    if (res.status === 200) {
-      showStatusMessage("parsing document...");
-      res.text().then(body => {
-        const doc = new DOMParser().parseFromString(body, "text/html");
-        const title = doc.title;
-        if (title) {
-          tabGroup.getActiveWebView().insertText("[" + text + " " + title.replace(/[\r\[\]]/g, " ") + "]");
-        } else {
-          tabGroup.getActiveWebView().insertText("[" + text + " " + "no title]");
-        }
-        showStatusMessage("ready");
-      });
-    } else {
-      showStatusMessage("can not fetch : status " + res.status);
-    }
-  }).catch(error => {
+  const res = await fetch(text, { credentials: "include" }).catch(error => {
     showStatusMessage("error has occured. - " + error);
-  })
+    return;
+  });
+  if (res.status === 200) {
+    showStatusMessage("parsing document...");
+    const body = await res.text();
+    const doc = new DOMParser().parseFromString(body, "text/html");
+    const title = doc.title;
+    if (title) {
+      tabGroup.getActiveWebView().insertText("[" + text + " " + title.replace(/[\r\[\]]/g, " ") + "]");
+    } else {
+      tabGroup.getActiveWebView().insertText("[" + text + " " + "no title]");
+    }
+    showStatusMessage("ready");
+  } else {
+    showStatusMessage("can not fetch : status " + res.status);
+  }
 });
 
 ipcRenderer.on("insertHeadline1", () => {
