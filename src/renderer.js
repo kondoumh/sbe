@@ -5,7 +5,7 @@ const ElectronSearchText = require("electron-search-text");
 const Store = require("electron-store");
 const getDate = require("./DateHelper");
 const { fetchPageInfo, fetchProjectMetrics } = require("./MetaData");
-const MAX_FAV = 10;
+const { inFavs, addToFavs } = require("./Favs");
 let modalPageInfo;
 let modalProjectInfo;
 
@@ -67,9 +67,12 @@ const addTab = (url, closable = true, projectName) => {
             },
             {
               label: "Add to fav",
-              click: () => { addToFav(tab.webview.getURL()); },
+              click: () => {
+                const favs = addToFavs(tab.webview.getURL());
+                ipcRenderer.send("updateFavs", favs);
+              },
               visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
-                && tabGroup.isPage(tab.webview.getURL()) && !inFavList(tab.webview.getURL())
+                && tabGroup.isPage(tab.webview.getURL()) && !inFavs(tab.webview.getURL())
             },
             {
               label: "Search on Google \"" + params.selectionText + "\"",
@@ -319,39 +322,6 @@ function resetSearchBoxCount() {
 
 function showStatusMessage(message) {
   document.querySelector("#statusbar").innerHTML = message;
-}
-
-function inFavList(url) {
-  const select = document.querySelector("#favorite");
-
-  for (i = 0; i < select.length; i++) {
-    if (select.options[i].value === url) {
-      return true;
-    };
-  }
-  return false;
-}
-
-function addToFav(url) {
-  const select = document.querySelector("#favorite");
-  const option = document.createElement("option");
-  const path = tabGroup.getPath(url);
-  option.text = sbUrl.toTitle(path[1]) + " - " + path[0];
-  option.value = url;
-  select.add(option, 1);
-  if (select.options.length > MAX_FAV + 1) {
-    for (i = select.options.length; i > MAX_FAV; i--) {
-      select.remove(i);
-    }
-  }
-
-  const favs = [];
-  for (i = 0; i < select.options.length; i++) {
-    if (!sbUrl.inScrapbox(select.options[i].value)) continue;
-    const item = { text: select.options[i].text, url: select.options[i].value };
-    favs.push(item);
-  }
-  ipcRenderer.send("updateFavs", favs);
 }
 
 async function showPageInfo(url) {
