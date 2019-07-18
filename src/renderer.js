@@ -4,7 +4,7 @@ const TabProvider = require("./TabProvider");
 const ElectronSearchText = require("electron-search-text");
 const Store = require("electron-store");
 const getDate = require("./DateHelper");
-const fetchPageInfo = require("./MetaData");
+const { fetchPageInfo, fetchProjectMetrics } = require("./MetaData");
 const MAX_FAV = 10;
 let modalPageInfo;
 let openItUrl;
@@ -414,43 +414,7 @@ async function showProjectActivities() {
   const projectName = path[0];
   const pagesUrl = sbUrl.BASE_URL + "api/pages/" + projectName;
 
-  const total = await fetchPostCount(pagesUrl);
-  await collectProjectMetrics(pagesUrl, total, projectName);
-}
-
-async function fetchPostCount(pagesUrl) {
-  const count = await fetch(pagesUrl, { credentials: "include" })
-    .then(res => res.json()).then(data => data.count);
-  return parseInt(count);
-}
-
-async function collectProjectMetrics(pagesUrl, totalCount, projectName) {
-  let n = 0;
-  let views = 0;
-  let linked = 0;
-  let pages = 0;
-  for (count = 0; totalCount + 50 > count; count += 50) {
-    const url = pagesUrl + "?skip=" + (count - 1) + "&limit=" + 50;
-    await fetch(url, {
-      credentials: "include"
-    }).then(res => {
-      if (res.status === 200) {
-        res.json().then(data => {
-          Object.keys(data.pages).forEach(key => {
-            views += parseInt(data.pages[key].views);
-            linked += parseInt(data.pages[key].linked);
-            showStatusMessage("fetching.. " + pages++ + " / " + totalCount);
-          });
-        });
-      } else {
-        showStatusMessage(res.status);
-        return;
-      }
-    }).catch(error => {
-      showStatusMessage(error);
-      return;
-    });
-  }
+  const { views, linked, totalCount } = await fetchProjectMetrics(pagesUrl, this.showStatusMessage);
   const content = document.querySelector("#project-dialog-contents");
   content.innerHTML = `Project: ${projectName}<br>`
   content.innerHTML += `${getDate()}<br>`
