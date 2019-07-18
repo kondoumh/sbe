@@ -6,6 +6,7 @@ const Store = require("electron-store");
 const getDate = require("./DateHelper");
 const { fetchPageInfo, fetchProjectMetrics } = require("./MetaData");
 const { inFavs, addToFavs } = require("./Favs");
+const { toHeading, toBodyText} = require("./Heading");
 let modalPageInfo;
 let modalProjectInfo;
 
@@ -85,35 +86,35 @@ const addTab = (url, closable = true, projectName) => {
             {
               label: "Heading1",
               click: () => {
-                tabGroup.getActiveWebView().insertText(setHeading(params.selectionText, 1));
+                tabGroup.getActiveWebView().insertText(toHeading(params.selectionText, 1));
               },
               visible: params.selectionText && !params.linkURL
             },
             {
               label: "Heading2",
               click: () => {
-                tabGroup.getActiveWebView().insertText(setHeading(params.selectionText, 2));
+                tabGroup.getActiveWebView().insertText(toHeading(params.selectionText, 2));
               },
               visible: params.selectionText && !params.linkURL
             },
             {
               label: "Heading3",
               click: () => {
-                tabGroup.getActiveWebView().insertText(setHeading(params.selectionText, 3));
+                tabGroup.getActiveWebView().insertText(toHeading(params.selectionText, 3));
               },
               visible: params.selectionText && !params.linkURL
             },
             {
               label: "heading4",
               click: () => {
-                tabGroup.getActiveWebView().insertText(setHeading(params.selectionText, 4));
+                tabGroup.getActiveWebView().insertText(toHeading(params.selectionText, 4));
               },
               visible: params.selectionText && !params.linkURL
             },
             {
               label: "body",
               click: () => {
-                tabGroup.getActiveWebView().insertText(setBody(params.selectionText));
+                tabGroup.getActiveWebView().insertText(toBodyText(params.selectionText));
               },
               visible: params.selectionText && !params.linkURL
             }
@@ -352,29 +353,6 @@ function createPageDialog(url) {
     });
   }
   return modalPageInfo;
-}
-
-function setHeading(text, level) {
-  const re = /\[(\*+)\s([^\[\]]+)\]/;
-  let slevel = "*".repeat(level);
-  let result = text;
-  if (!text.match(re)) {
-    result = `[${slevel} ${text}]`;
-  } else {
-    const ar = re.exec(text);
-    result = `[${slevel} ${ar[2]}]`;
-  }
-  return result;
-}
-
-function setBody(text) {
-  const re = /\[(\*+)\s([^\[\]]+)\]/;
-  let result = text;
-  if (text.match(re)) {
-    const ar = re.exec(text);
-    result = ar[2];
-  }
-  return result;
 }
 
 async function showProjectActivities() {
