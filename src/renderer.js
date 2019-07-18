@@ -4,6 +4,7 @@ const TabProvider = require("./TabProvider");
 const ElectronSearchText = require("electron-search-text");
 const Store = require("electron-store");
 const getDate = require("./DateHelper");
+const fetchPageInfo = require("./MetaData");
 const MAX_FAV = 10;
 let modalPageInfo;
 let openItUrl;
@@ -354,36 +355,19 @@ function addToFav(url) {
   ipcRenderer.send("updateFavs", favs);
 }
 
-function getPageInfo(url) {
+async function getPageInfo(url) {
   const path = tabGroup.getPath(url);
   const pageUrl = sbUrl.BASE_URL + "api/pages/" + path[0] + "/" + path[1];
   showStatusMessage("fetching page info...");
-  fetch(pageUrl, {
-    credentials: "include"
-  }).then(res => {
-    if (res.status === 200) {
-      showStatusMessage("parsing page info...");
-      res.json().then(data => {
-        showStatusMessage("build page info...");
-        const content = document.querySelector("#dialog-contents");
-        content.innerHTML = "[" + data.title + "] : by " + data.user.displayName;
-        data.collaborators.forEach(collaborator => {
-          content.innerHTML += ", " + collaborator.displayName;
-        });
-        content.innerHTML += "<hr>";
-        data.descriptions.forEach(description => {
-          content.innerHTML += description + "<br>";
-        });
-        openItUrl = url;
-        document.querySelector("#contents-image").src = "";
-        if (data.image) {
-          document.querySelector("#contents-image").src = data.image;
-        }
-        createPageDialog().showModal();
-        showStatusMessage("ready");
-      });
-    }
-  });
+  let content = document.querySelector("#dialog-contents");
+  let image = document.querySelector("#contents-image");
+  const result = await fetchPageInfo(pageUrl, content, image);
+  if (result) {
+    openItUrl = url;
+    createPageDialog().showModal();
+    showStatusMessage("ready");
+  }
+  showStatusMessage("Cannot fetch page Info");
 }
 
 function createPageDialog() {

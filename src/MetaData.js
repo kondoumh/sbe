@@ -1,18 +1,23 @@
-function getPageInfo(url, path) {
-  const pageUrl = BASE_URL + "api/pages/" + path[0] + "/" + path[1];
+async function fetchPageInfo(pageUrl, content, image) {
   const res = await fetch(pageUrl, { credentials: "include" });
   if (res.status === 200) {
     const data = await res.json();
-    let content = "[" + data.title + "] : by " + data.user.displayName;
+
+    content.innerHTML = "[" + data.title + "] : by " + data.user.displayName;
     data.collaborators.forEach(collaborator => {
-      content += ", " + collaborator.displayName;
+      content.innerHTML += ", " + collaborator.displayName;
     });
-    content += "<hr>";
+    content.innerHTML += "<hr>";
     data.descriptions.forEach(description => {
-      content += description + "<br>";
+      content.innerHTML += description + "<br>";
     });
-    return [content, data.image];
+    image.src = "";
+    if (data.image) {
+      image.src = data.image;
+    }
+    return true;
   }
+  return false;
 }
 
-module.exports = getPageInfo;
+module.exports = fetchPageInfo;
