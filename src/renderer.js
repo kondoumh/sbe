@@ -7,7 +7,6 @@ const getDate = require("./DateHelper");
 const { fetchPageInfo, fetchProjectMetrics } = require("./MetaData");
 const MAX_FAV = 10;
 let modalPageInfo;
-let openItUrl;
 let modalProjectInfo;
 
 const tabGroup = new TabProvider();
@@ -62,7 +61,7 @@ const addTab = (url, closable = true, projectName) => {
             {
               label: "Info",
               click: () => {
-                getPageInfo(params.linkURL);
+                showPageInfo(params.linkURL);
               },
               visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && tabGroup.isPage(params.linkURL)
             },
@@ -355,7 +354,7 @@ function addToFav(url) {
   ipcRenderer.send("updateFavs", favs);
 }
 
-async function getPageInfo(url) {
+async function showPageInfo(url) {
   const path = tabGroup.getPath(url);
   const pageUrl = sbUrl.BASE_URL + "api/pages/" + path[0] + "/" + path[1];
   showStatusMessage("fetching page info...");
@@ -363,14 +362,13 @@ async function getPageInfo(url) {
   let image = document.querySelector("#contents-image");
   const result = await fetchPageInfo(pageUrl, content, image);
   if (result) {
-    openItUrl = url;
-    createPageDialog().showModal();
+    createPageDialog(url).showModal();
     showStatusMessage("ready");
   }
   showStatusMessage("Cannot fetch page Info");
 }
 
-function createPageDialog() {
+function createPageDialog(url) {
   if (!modalPageInfo) {
     modalPageInfo = document.querySelector("#page-info");
     modalPageInfo.addEventListener("click", (event) => {
@@ -380,7 +378,7 @@ function createPageDialog() {
     });
     document.querySelector("#open-it").addEventListener("click", () => {
       modalPageInfo.close();
-      addTab(openItUrl);
+      addTab(url);
     });
   }
   return modalPageInfo;
