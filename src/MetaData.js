@@ -27,7 +27,9 @@ async function fetchProjectMetrics(pagesUrl, messageFunc) {
   let pages = 0;
   for (count = 0; totalCount + 50 > count; count += 50) {
     const url = pagesUrl + "?skip=" + (count - 1) + "&limit=" + 50;
-    const res = await fetch(url, { credentials: "include" });
+    const res = await fetch(url, { credentials: "include" }).catch(error => {
+      messageFunc("error.." + error);
+    });
     if (res.status === 200) {
       const data = await res.json();
       Object.keys(data.pages).forEach(key => {
@@ -40,8 +42,11 @@ async function fetchProjectMetrics(pagesUrl, messageFunc) {
   return {views: views, linked: linked, totalCount: totalCount};
 }
 
-async function fetchPostCount(pagesUrl) {
-  const res = await fetch(pagesUrl, { credentials: "include" });
+async function fetchPostCount(pagesUrl, messageFunc) {
+  const res = await fetch(pagesUrl, { credentials: "include" }).catch(error => {
+    messageFunc("error.." + error);
+    return 0;
+  });
   const data = await res.json();
   return parseInt(data.count);
 }
