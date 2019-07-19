@@ -11,6 +11,7 @@ async function fetchPageInfo(pageUrl, content, image) {
     data.descriptions.forEach(description => {
       content.innerHTML += description + "<br>";
     });
+    content.innerHTML += "Views: " + data.views + ", Linked: " + data.linked + "<br>"
     image.src = "";
     if (data.image) {
       image.src = data.image;
