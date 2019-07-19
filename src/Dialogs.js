@@ -2,8 +2,8 @@ let openUrl
 let modalPageInfo;
 let modalProjectInfo;
 
-function createPageDialog(url) {
-  openUrl = url;
+function createPageDialog(data) {
+  openUrl = data.url;
   if (!modalPageInfo) {
     modalPageInfo = document.querySelector("#page-info");
     modalPageInfo.addEventListener("click", (event) => {
@@ -16,6 +16,10 @@ function createPageDialog(url) {
       addTab(openUrl);
     });
   }
+  let content = document.querySelector("#dialog-contents");
+  content.innerHTML = data.content;
+  let image = document.querySelector("#contents-image");
+  image.src = data.image;
   return modalPageInfo;
 }
 

@@ -325,15 +325,13 @@ async function showPageInfo(url) {
   const path = tabGroup.getPath(url);
   const pageUrl = sbUrl.BASE_URL + "api/pages/" + path[0] + "/" + path[1];
   showStatusMessage("fetching page info...");
-  let content = document.querySelector("#dialog-contents");
-  let image = document.querySelector("#contents-image");
-  const result = await fetchPageInfo(pageUrl, content, image);
-  if (result) {
-    createPageDialog(url).showModal();
-    showStatusMessage("ready");
-  } else {
-    showStatusMessage("Cannot fetch page Info");
-  }
+  const { content, image } = await fetchPageInfo(pageUrl);
+  const data = {};
+  data.url = url;
+  data.content = content;
+  data.image = image;
+  createPageDialog(data).showModal();
+  showStatusMessage("ready");
 }
 
 async function showProjectActivities() {

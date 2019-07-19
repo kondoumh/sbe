@@ -1,24 +1,21 @@
-async function fetchPageInfo(pageUrl, content, image) {
+async function fetchPageInfo(pageUrl) {
+  let content, image;
   const res = await fetch(pageUrl, { credentials: "include" });
   if (res.status === 200) {
     const data = await res.json();
 
-    content.innerHTML = "[" + data.title + "] : by " + data.user.displayName;
+    content = "[" + data.title + "] : by " + data.user.displayName;
     data.collaborators.forEach(collaborator => {
-      content.innerHTML += ", " + collaborator.displayName;
+      content += ", " + collaborator.displayName;
     });
-    content.innerHTML += "<hr>";
+    content += "<hr>";
     data.descriptions.forEach(description => {
-      content.innerHTML += description + "<br>";
+      content += description + "<br>";
     });
-    content.innerHTML += "Views: " + data.views + ", Linked: " + data.linked + "<br>"
-    image.src = "";
-    if (data.image) {
-      image.src = data.image;
-    }
-    return true;
+    content += "Views: " + data.views + ", Linked: " + data.linked + "<br>"
+    image = data.image ? data.image : "";
   }
-  return false;
+  return { content: content, image: image }
 }
 
 async function fetchProjectMetrics(pagesUrl, messageFunc) {
