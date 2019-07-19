@@ -20,6 +20,14 @@ sbUrl.toTitle = path => {
   return decodeURIComponent(path).replace(/_/g, " ");
 }
 
+sbUrl.getPageUrl = (projectName, page) => {
+  return sbUrl.BASE_URL + "api/pages/" + projectName + "/" + page;
+}
+
+sbUrl.getPagesUrl = (projectName) => {
+  return sbUrl.BASE_URL + "api/pages/" + projectName;
+}
+
 sbUrl.getSearchUrl = (projectName, url) => {
   return sbUrl.BASE_URL + projectName + "/search/page?q=" + encodeURIComponent(url);
 }

@@ -323,7 +323,7 @@ function showStatusMessage(message) {
 
 async function showPageInfo(url) {
   const path = tabGroup.getPath(url);
-  const pageUrl = sbUrl.BASE_URL + "api/pages/" + path[0] + "/" + path[1];
+  const pageUrl = sbUrl.getPageUrl(path[0], path[1]);
   showStatusMessage("fetching page info...");
   const { content, image } = await fetchPageInfo(pageUrl);
   const data = {};
@@ -337,7 +337,7 @@ async function showPageInfo(url) {
 async function showProjectActivities() {
   const path = tabGroup.getPath();
   const projectName = path[0];
-  const pagesUrl = sbUrl.BASE_URL + "api/pages/" + projectName;
+  const pagesUrl = sbUrl.getPagesUrl(projectName);
   const { views, linked, totalCount } = await fetchProjectMetrics(pagesUrl, this.showStatusMessage);
   const data = {};
   data.projectName = projectName;
