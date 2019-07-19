@@ -19,7 +19,7 @@ function createPageDialog(url) {
   return modalPageInfo;
 }
 
-function createProjectDialog() {
+function createProjectDialog(data) {
   if (!modalProjectInfo) {
     modalProjectInfo = document.querySelector("#project-info");
     modalProjectInfo.addEventListener("click", (event) => {
@@ -32,6 +32,10 @@ function createProjectDialog() {
       clipboard.writeText(content.innerHTML.replace(/<br>/g, "\n"));
     });
   }
+  const content = document.querySelector("#project-dialog-contents");
+  content.innerHTML = `Project: ${data.projectName}<br>`
+  content.innerHTML += `${data.date}<br>`
+  content.innerHTML += `Pages ${data.totalCount} : Views ${data.views} : Linked ${data.linked}`;
   return modalProjectInfo;
 }
 

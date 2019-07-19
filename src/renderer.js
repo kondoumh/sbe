@@ -340,12 +340,13 @@ async function showProjectActivities() {
   const path = tabGroup.getPath();
   const projectName = path[0];
   const pagesUrl = sbUrl.BASE_URL + "api/pages/" + projectName;
-
   const { views, linked, totalCount } = await fetchProjectMetrics(pagesUrl, this.showStatusMessage);
-  const content = document.querySelector("#project-dialog-contents");
-  content.innerHTML = `Project: ${projectName}<br>`
-  content.innerHTML += `${getDate()}<br>`
-  content.innerHTML += `Pages ${totalCount} : Views ${views} : Linked ${linked}`;
+  const data = {};
+  data.projectName = projectName;
+  data.date = getDate();
+  data.totalCount = totalCount;
+  data.views = views;
+  data.linked = linked;
   showStatusMessage("ready");
-  createProjectDialog().showModal();
+  createProjectDialog(data).showModal();
 }
