@@ -7,8 +7,7 @@ const getDate = require("./DateHelper");
 const { fetchPageInfo, fetchProjectMetrics } = require("./MetaData");
 const { inFavs, addToFavs } = require("./Favs");
 const { toHeading, toBodyText} = require("./Heading");
-let modalPageInfo;
-let modalProjectInfo;
+const { createPageDialog, createProjectDialog } = require("./Dialogs");
 
 const tabGroup = new TabProvider();
 
@@ -332,24 +331,9 @@ async function showPageInfo(url) {
   if (result) {
     createPageDialog(url).showModal();
     showStatusMessage("ready");
+  } else {
+    showStatusMessage("Cannot fetch page Info");
   }
-  showStatusMessage("Cannot fetch page Info");
-}
-
-function createPageDialog(url) {
-  if (!modalPageInfo) {
-    modalPageInfo = document.querySelector("#page-info");
-    modalPageInfo.addEventListener("click", (event) => {
-      if (event.target === modalPageInfo) {
-        modalPageInfo.close("cancelled");
-      }
-    });
-    document.querySelector("#open-it").addEventListener("click", () => {
-      modalPageInfo.close();
-      addTab(url);
-    });
-  }
-  return modalPageInfo;
 }
 
 async function showProjectActivities() {
@@ -364,20 +348,4 @@ async function showProjectActivities() {
   content.innerHTML += `Pages ${totalCount} : Views ${views} : Linked ${linked}`;
   showStatusMessage("ready");
   createProjectDialog().showModal();
-}
-
-function createProjectDialog() {
-  if (!modalProjectInfo) {
-    modalProjectInfo = document.querySelector("#project-info");
-    modalProjectInfo.addEventListener("click", (event) => {
-      if (event.target === modalProjectInfo) {
-        modalProjectInfo.close("cancelled");
-      }
-    });
-    document.querySelector("#copy-content").addEventListener("click", () => {
-      const content = document.querySelector("#project-dialog-contents");
-      clipboard.writeText(content.innerHTML.replace(/<br>/g, "\n"));
-    });
-  }
-  return modalProjectInfo;
 }
