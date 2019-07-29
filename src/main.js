@@ -253,8 +253,8 @@ function initWindowMenu() {
 
 function showAboutWindow() {
   openAboutWindow({
-    icon_path: __dirname + "/icons/png/512x512.png",
+    icon_path: __dirname + path.sep + ".." + path.sep + "icons/png/512x512.png",
     copyright: 'Copyright (c) 2019 kondoumh',
-    package_json_dir: __dirname,
+    package_json_dir: __dirname + path.sep + ".." + path.sep,
   });
 }
