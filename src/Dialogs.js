@@ -18,8 +18,10 @@ function createPageDialog(data) {
   }
   let content = document.querySelector("#dialog-contents");
   content.innerHTML = data.content;
-  let image = document.querySelector("#contents-image");
-  image.src = data.image;
+  document.querySelector("#contents-image").src = "";
+  if (data.image) {
+    document.querySelector("#contents-image").src = data.image;
+  }
   return modalPageInfo;
 }
 
