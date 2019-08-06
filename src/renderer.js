@@ -7,7 +7,7 @@ const getDate = require("./DateHelper");
 const { fetchPageInfo, fetchProjectMetrics } = require("./MetaData");
 const { inFavs, addToFavs } = require("./Favs");
 const { toHeading, toBodyText} = require("./Heading");
-const { createPageDialog, createProjectDialog } = require("./Dialogs");
+const { createPageDialog, createProjectDialog, createLiksDialog } = require("./Dialogs");
 
 const tabGroup = new TabProvider();
 
@@ -355,7 +355,14 @@ async function showProjectActivities() {
 
 async function showLinkNext() {
   const path = tabGroup.getPath();
+  if (path[1] === "") return;
   const res = await fetch(sbUrl.getPageUrl(path[0], path[1]));
   const data = await res.json();
   console.log(data.relatedPages.links1hop);
+  const links1hop = data.relatedPages.links1hop;
+  if (links1hop.length > 1) {
+    const linkUrl1 = sbUrl.BASE_URL + path[0] + "/" + links1hop[0].titleLc;
+    const linkUrl2 = sbUrl.BASE_URL + path[0] + "/" + links1hop[1].titleLc;
+    createLiksDialog(linkUrl1, linkUrl2).showModal();
+  }
 }

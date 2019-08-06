@@ -1,6 +1,7 @@
 let openUrl
 let modalPageInfo;
 let modalProjectInfo;
+let modalLinks;
 
 function createPageDialog(data) {
   openUrl = data.url;
@@ -45,7 +46,25 @@ function createProjectDialog(data) {
   return modalProjectInfo;
 }
 
+function createLiksDialog(url1, url2) {
+  const webview = document.querySelector("#link-webview");
+  if (!modalLinks) {
+    modalLinks = document.querySelector("#hop1-links");
+    document.querySelector("#link-prev").addEventListener("click", () => {
+      console.log("prev");
+      webview.src = url1
+    });
+    document.querySelector("#link-next").addEventListener("click", () => {
+      console.log("next");
+      webview.src = url2
+    });
+  }
+  webview.src = url1;
+  return modalLinks;
+}
+
 module.exports = {
   createPageDialog,
-  createProjectDialog
+  createProjectDialog,
+  createLiksDialog
 };
