@@ -35,7 +35,7 @@ class TabProvider extends TabGroup {
     else if (sbUrl.isUrl(url)) {
       shell.openExternal(url);
     } else {
-      const path = getPath();
+      const path = this.getPath();
       addTab(sbUrl.getSearchUrl(path[0], url));
     }
   }
