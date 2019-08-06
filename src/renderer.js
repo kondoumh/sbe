@@ -234,6 +234,10 @@ ipcRenderer.on("showPageList", () => {
   showPageList();
 });
 
+ipcRenderer.on("linkNext", () => {
+  showLinkNext();
+});
+
 ipcRenderer.on("showProjectActivities", () => {
   showProjectActivities();
 });
@@ -347,4 +351,11 @@ async function showProjectActivities() {
   data.linked = linked;
   showStatusMessage("ready");
   createProjectDialog(data).showModal();
+}
+
+async function showLinkNext() {
+  const path = tabGroup.getPath();
+  const res = await fetch(sbUrl.getPageUrl(path[0], path[1]));
+  const data = await res.json();
+  console.log(data.relatedPages.links1hop);
 }
