@@ -54,23 +54,33 @@ function createLiksDialog(urls) {
   const webview = document.querySelector("#link-webview");
   if (!modalLinks) {
     modalLinks = document.querySelector("#hop1-links");
+    modalLinks.addEventListener("click", (event) => {
+      if (event.target === modalLinks) {
+        modalLinks.close("cancelled");
+      }
+    });
     document.querySelector("#link-prev").addEventListener("click", () => {
-      console.log("prev");
       if (urlIdx > 0) {
         urlIdx--;
         webview.src = linkUrls[urlIdx];
+        setLinkPaging(urlIdx, linkUrls.length);
       }
     });
     document.querySelector("#link-next").addEventListener("click", () => {
-      console.log("next");
       if (urlIdx < linkUrls.length) {
         urlIdx++;
         webview.src = linkUrls[urlIdx];
+        setLinkPaging(urlIdx, linkUrls.length);
       }
     });
   }
   webview.src = linkUrls[urlIdx];
+  setLinkPaging(urlIdx, linkUrls.length);
   return modalLinks;
+}
+
+function setLinkPaging(idx, length) {
+  document.querySelector("#link-paging").innerHTML = `${idx + 1} / ${length}`;
 }
 
 module.exports = {

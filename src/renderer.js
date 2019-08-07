@@ -361,7 +361,6 @@ async function showLinkNext() {
   const urls = data.relatedPages.links1hop.map(link => {
     return sbUrl.BASE_URL + path[0] + "/" + link.titleLc;
   })
-  console.log(urls);
   if (urls.length > 0) {
     createLiksDialog(urls).showModal();
   }
