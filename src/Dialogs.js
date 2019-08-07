@@ -2,6 +2,8 @@ let openUrl
 let modalPageInfo;
 let modalProjectInfo;
 let modalLinks;
+let urlIdx = 0;
+let linkUrls;
 
 function createPageDialog(data) {
   openUrl = data.url;
@@ -46,20 +48,28 @@ function createProjectDialog(data) {
   return modalProjectInfo;
 }
 
-function createLiksDialog(url1, url2) {
+function createLiksDialog(urls) {
+  urlIdx = 0;
+  linkUrls = urls;
   const webview = document.querySelector("#link-webview");
   if (!modalLinks) {
     modalLinks = document.querySelector("#hop1-links");
     document.querySelector("#link-prev").addEventListener("click", () => {
       console.log("prev");
-      webview.src = url1
+      if (urlIdx > 0) {
+        urlIdx--;
+        webview.src = linkUrls[urlIdx];
+      }
     });
     document.querySelector("#link-next").addEventListener("click", () => {
       console.log("next");
-      webview.src = url2
+      if (urlIdx < linkUrls.length) {
+        urlIdx++;
+        webview.src = linkUrls[urlIdx];
+      }
     });
   }
-  webview.src = url1;
+  webview.src = linkUrls[urlIdx];
   return modalLinks;
 }
 

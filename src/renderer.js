@@ -358,11 +358,11 @@ async function showLinkNext() {
   if (path[1] === "") return;
   const res = await fetch(sbUrl.getPageUrl(path[0], path[1]));
   const data = await res.json();
-  console.log(data.relatedPages.links1hop);
-  const links1hop = data.relatedPages.links1hop;
-  if (links1hop.length > 1) {
-    const linkUrl1 = sbUrl.BASE_URL + path[0] + "/" + links1hop[0].titleLc;
-    const linkUrl2 = sbUrl.BASE_URL + path[0] + "/" + links1hop[1].titleLc;
-    createLiksDialog(linkUrl1, linkUrl2).showModal();
+  const urls = data.relatedPages.links1hop.map(link => {
+    return sbUrl.BASE_URL + path[0] + "/" + link.titleLc;
+  })
+  console.log(urls);
+  if (urls.length > 0) {
+    createLiksDialog(urls).showModal();
   }
 }
