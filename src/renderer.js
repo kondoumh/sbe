@@ -11,7 +11,7 @@ const { createPageDialog, createProjectDialog, createLinksDialog } = require("./
 
 const tabGroup = new TabProvider();
 
-const addTab = (url, closable = true, projectName) => {
+const addTab = (url, closable = true, projectName, active=true) => {
   if (!url) {
     url = sbUrl.BASE_URL;
   }
@@ -19,7 +19,7 @@ const addTab = (url, closable = true, projectName) => {
     title: "new tab",
     src: url,
     visible: true,
-    active: true,
+    active: active,
     iconURL: sbUrl.DEFAULT_ICON_URL,
     closable: closable,
     ready: tab => {

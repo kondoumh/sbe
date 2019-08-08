@@ -54,6 +54,7 @@ function createLinksDialog(urls, pageUrls) {
   urlIdx = 0;
   linkUrls = urls;
   const contents = document.querySelector("#link-contents");
+  const titleHeader = document.querySelector("#links-header");
   if (!modalLinks) {
     modalLinks = document.querySelector("#hop1-links");
     modalLinks.addEventListener("click", (event) => {
@@ -63,42 +64,41 @@ function createLinksDialog(urls, pageUrls) {
     });
     document.querySelector("#link-begin").addEventListener("click", () => {
       urlIdx = 0;
-      fetchContent(linkUrls[urlIdx], contents);
+      fetchContent(linkUrls[urlIdx], titleHeader, contents);
       setLinkPaging(urlIdx, linkUrls.length);
     });
     document.querySelector("#link-prev").addEventListener("click", () => {
       if (urlIdx > 0) {
         urlIdx--;
-        fetchContent(linkUrls[urlIdx], contents);
+        fetchContent(linkUrls[urlIdx], titleHeader, contents);
         setLinkPaging(urlIdx, linkUrls.length);
       }
     });
     document.querySelector("#link-next").addEventListener("click", () => {
       if (urlIdx < linkUrls.length - 1) {
         urlIdx++;
-        fetchContent(linkUrls[urlIdx], contents);
+        fetchContent(linkUrls[urlIdx], titleHeader, contents);
         setLinkPaging(urlIdx, linkUrls.length);
       }
     });
     document.querySelector("#link-end").addEventListener("click", () => {
       urlIdx = linkUrls.length - 1;
-      fetchContent(linkUrls[urlIdx], contents);
+      fetchContent(linkUrls[urlIdx], titleHeader, contents);
       setLinkPaging(urlIdx, linkUrls.length);
     });
     document.querySelector("#open-link").addEventListener("click", () => {
-      modalLinks.close();
-      addTab(pageUrls[urlIdx]);
+      addTab(pageUrls[urlIdx], true, "", false);
     });
   }
-  fetchContent(linkUrls[urlIdx], contents);
+  fetchContent(linkUrls[urlIdx], titleHeader, contents);
   setLinkPaging(urlIdx, linkUrls.length);
   return modalLinks;
 }
 
-async function fetchContent(url, contents) {
+async function fetchContent(url, titleHeader, contents) {
   const { title, author, content } = await fetchPageText(url);
-  contents.innerHTML = title + " : " + author + "<br><hr>";
-  contents.innerHTML += content;
+  titleHeader.innerHTML = title + " : " + author;
+  contents.innerHTML = content;
 }
 
 function setLinkPaging(idx, length) {

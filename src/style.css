@@ -143,8 +143,19 @@ dialog[open] {
   font-family: "serif";
 }
 
+.modal-pageheader {
+  text-align: center;
+  width: 600px;
+  padding: 3px;
+  font-size: 16px;
+  background: #d7dbd8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .modal-pagetext {
-  width: 500px;
+  width: 600px;
   height: 700px;
   padding: 3px;
   font-size: 16px;
@@ -156,7 +167,7 @@ dialog[open] {
 .modal-footer {
   text-align: center;
   padding: 3px;
-  font-size: 20px
+  font-size: 20px;
 }
 
 @keyframes slide-up {
