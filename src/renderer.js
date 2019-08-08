@@ -359,10 +359,10 @@ async function showLinkNext() {
   const res = await fetch(sbUrl.getPageUrl(path[0], path[1]));
   const data = await res.json();
   const apiUrls = data.relatedPages.links1hop.map(link => {
-    return sbUrl.getPageUrl(path[0], link.titleLc);
+    return sbUrl.getPageUrl(path[0], link.titleLc.replace(/\//g, "%2F"));
   });
   const pageUrls = data.relatedPages.links1hop.map(link => {
-    return sbUrl.BASE_URL + path[0] + "/" + link.titleLc;
+    return sbUrl.BASE_URL + path[0] + "/" + link.titleLc.replace(/\//g, "%2F");
   });
   if (apiUrls.length > 0) {
     createLinksDialog(apiUrls, pageUrls).showModal();
