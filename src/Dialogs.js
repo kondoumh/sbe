@@ -6,6 +6,7 @@ let modalProjectInfo;
 let modalLinks;
 let urlIdx = 0;
 let linkUrls;
+let pageUrls;
 
 function createPageDialog(data) {
   openUrl = data.url;
@@ -50,9 +51,10 @@ function createProjectDialog(data) {
   return modalProjectInfo;
 }
 
-function createLinksDialog(urls, pageUrls) {
+function createLinksDialog(urls, pUrls) {
   urlIdx = 0;
   linkUrls = urls;
+  pageUrls = pUrls;
   const contents = document.querySelector("#link-contents");
   const titleHeader = document.querySelector("#links-header");
   if (!modalLinks) {
