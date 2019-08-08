@@ -167,7 +167,11 @@ dialog[open] {
 .modal-footer {
   text-align: center;
   padding: 3px;
-  font-size: 20px;
+  font-size: 16px;
+}
+
+.modal-button {
+  font-size: 18px;
 }
 
 @keyframes slide-up {
