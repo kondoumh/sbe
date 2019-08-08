@@ -144,8 +144,8 @@ dialog[open] {
 }
 
 .modal-webview {
-  width: 700px;
-  height: 500px;
+  width: 800px;
+  height: 700px;
   padding: 3px;
   font-size: 16px;
   font-family: "serif";

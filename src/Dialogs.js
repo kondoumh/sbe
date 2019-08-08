@@ -48,7 +48,7 @@ function createProjectDialog(data) {
   return modalProjectInfo;
 }
 
-function createLiksDialog(urls) {
+function createLinksDialog(urls) {
   urlIdx = 0;
   linkUrls = urls;
   const webview = document.querySelector("#link-webview");
@@ -58,6 +58,11 @@ function createLiksDialog(urls) {
       if (event.target === modalLinks) {
         modalLinks.close("cancelled");
       }
+    });
+    document.querySelector("#link-begin").addEventListener("click", () => {
+      urlIdx = 0;
+      webview.src = linkUrls[urlIdx];
+      setLinkPaging(urlIdx, linkUrls.length);
     });
     document.querySelector("#link-prev").addEventListener("click", () => {
       if (urlIdx > 0) {
@@ -73,6 +78,15 @@ function createLiksDialog(urls) {
         setLinkPaging(urlIdx, linkUrls.length);
       }
     });
+    document.querySelector("#link-end").addEventListener("click", () => {
+      urlIdx = linkUrls.length - 1;
+      webview.src = linkUrls[urlIdx];
+      setLinkPaging(urlIdx, linkUrls.length);
+    });
+    document.querySelector("#open-link").addEventListener("click", () => {
+      modalLinks.close();
+      addTab(linkUrls[urlIdx]);
+    });
   }
   webview.src = linkUrls[urlIdx];
   setLinkPaging(urlIdx, linkUrls.length);
@@ -86,5 +100,5 @@ function setLinkPaging(idx, length) {
 module.exports = {
   createPageDialog,
   createProjectDialog,
-  createLiksDialog
+  createLinksDialog
 };

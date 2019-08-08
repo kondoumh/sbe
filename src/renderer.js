@@ -7,7 +7,7 @@ const getDate = require("./DateHelper");
 const { fetchPageInfo, fetchProjectMetrics } = require("./MetaData");
 const { inFavs, addToFavs } = require("./Favs");
 const { toHeading, toBodyText} = require("./Heading");
-const { createPageDialog, createProjectDialog, createLiksDialog } = require("./Dialogs");
+const { createPageDialog, createProjectDialog, createLinksDialog } = require("./Dialogs");
 
 const tabGroup = new TabProvider();
 
@@ -362,6 +362,8 @@ async function showLinkNext() {
     return sbUrl.BASE_URL + path[0] + "/" + link.titleLc;
   })
   if (urls.length > 0) {
-    createLiksDialog(urls).showModal();
+    createLinksDialog(urls).showModal();
+  } else {
+    showStatusMessage("No links of this page");
   }
 }
