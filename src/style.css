@@ -143,12 +143,14 @@ dialog[open] {
   font-family: "serif";
 }
 
-.modal-webview {
-  width: 800px;
+.modal-pagetext {
+  width: 500px;
   height: 700px;
   padding: 3px;
   font-size: 16px;
   font-family: "serif";
+  overflow: auto;
+  word-wrap:break-all;
 }
 
 .modal-footer {

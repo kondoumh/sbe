@@ -358,11 +358,14 @@ async function showLinkNext() {
   if (path[1] === "") return;
   const res = await fetch(sbUrl.getPageUrl(path[0], path[1]));
   const data = await res.json();
-  const urls = data.relatedPages.links1hop.map(link => {
+  const apiUrls = data.relatedPages.links1hop.map(link => {
+    return sbUrl.getPageUrl(path[0], link.titleLc);
+  });
+  const pageUrls = data.relatedPages.links1hop.map(link => {
     return sbUrl.BASE_URL + path[0] + "/" + link.titleLc;
-  })
-  if (urls.length > 0) {
-    createLinksDialog(urls).showModal();
+  });
+  if (apiUrls.length > 0) {
+    createLinksDialog(apiUrls, pageUrls).showModal();
   } else {
     showStatusMessage("No links of this page");
   }

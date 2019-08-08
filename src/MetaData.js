@@ -1,3 +1,4 @@
+
 async function fetchPageInfo(pageUrl) {
   let content, image;
   const res = await fetch(pageUrl, { credentials: "include" });
@@ -15,7 +16,7 @@ async function fetchPageInfo(pageUrl) {
     content += "Views: " + data.views + ", Linked: " + data.linked + "<br>"
     image = data.image ? data.image : "";
   }
-  return { content: content, image: image }
+  return { content: content, image: image };
 }
 
 async function fetchProjectMetrics(pagesUrl, messageFunc) {
@@ -49,7 +50,23 @@ async function fetchPostCount(pagesUrl, messageFunc) {
   return parseInt(data.count);
 }
 
+async function fetchPageText(pageUrl) {
+  let title, author, content;
+  const res = await fetch(pageUrl, { credentials: "include" });
+  if (res.status === 200) {
+    const data = await res.json();
+    title = data.title;
+    author = data.user.displayName;
+    content = "";
+    data.lines.forEach(line => {
+      content += line.text + "<br>";
+    });
+  }
+  return { title: title, author: author, content: content };
+}
+
 module.exports = {
   fetchPageInfo,
-  fetchProjectMetrics
+  fetchProjectMetrics,
+  fetchPageText
 };
