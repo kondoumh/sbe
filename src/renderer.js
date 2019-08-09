@@ -75,6 +75,14 @@ const addTab = (url, closable = true, projectName, active=true) => {
                 && tabGroup.isPage(tab.webview.getURL()) && !inFavs(tab.webview.getURL())
             },
             {
+              label: "show links of this page",
+              click: () => {
+                showLinkNext();
+              },
+              visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
+                && tabGroup.isPage(tab.webview.getURL())
+            },
+            {
               label: "Search on Google \"" + params.selectionText + "\"",
               click: () => {
                 url = "https://www.google.com/search?q=" + params.selectionText;
