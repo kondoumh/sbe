@@ -145,7 +145,8 @@ dialog[open] {
 
 .modal-pageheader {
   text-align: center;
-  width: 600px;
+  margin: auto;
+  width: 95%;
   padding: 3px;
   font-size: 16px;
   background: #d7dbd8;
@@ -155,8 +156,8 @@ dialog[open] {
 }
 
 .modal-pagetext {
-  width: 600px;
-  height: 700px;
+  width: 500px;
+  height: 300px;
   padding: 3px;
   font-size: 16px;
   font-family: "serif";

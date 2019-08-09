@@ -1,4 +1,5 @@
 const { fetchPageText } = require("./MetaData");
+const Store = require("electron-store");
 
 let openUrl
 let modalPageInfo;
@@ -92,6 +93,13 @@ function createLinksDialog(urls, pUrls) {
       addTab(pageUrls[urlIdx], true, "", false);
     });
   }
+  const container = document.querySelector("#link-contents-container");
+  const store = new Store();
+  let {width, height} = store.get("bounds");
+  width = width ? Math.ceil(width * 0.7) : 400;
+  height = height ? Math.ceil(height * 0.6) : 300;
+  container.style.width = `${width}px`;
+  container.style.height = `${height}px`;
   fetchContent(linkUrls[urlIdx], titleHeader, contents);
   setLinkPaging(urlIdx, linkUrls.length);
   return modalLinks;
