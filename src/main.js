@@ -179,9 +179,9 @@ function initWindowMenu() {
           }
         },
         {
-          label: "links",
+          label: "Show linked pages",
           click() {
-            mainWindow.webContents.send("linkNext");
+            mainWindow.webContents.send("showLinkedpages");
           }
         },
         { type: "separator" },

@@ -74,10 +74,11 @@ const addTab = (url, closable = true, projectName, active=true) => {
               visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
                 && tabGroup.isPage(tab.webview.getURL()) && !inFavs(tab.webview.getURL())
             },
+            { type: "separator" },
             {
-              label: "show links of this page",
+              label: "Show linked pages",
               click: () => {
-                showLinkNext();
+                showLinkedPages();
               },
               visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
                 && tabGroup.isPage(tab.webview.getURL())
@@ -242,8 +243,8 @@ ipcRenderer.on("showPageList", () => {
   showPageList();
 });
 
-ipcRenderer.on("linkNext", () => {
-  showLinkNext();
+ipcRenderer.on("showLinkedpages", () => {
+  showLinkedPages();
 });
 
 ipcRenderer.on("showProjectActivities", () => {
@@ -361,7 +362,7 @@ async function showProjectActivities() {
   createProjectDialog(data).showModal();
 }
 
-async function showLinkNext() {
+async function showLinkedPages() {
   const path = tabGroup.getPath();
   if (path[1] === "") return;
   const res = await fetch(sbUrl.getPageUrl(path[0], path[1]));
