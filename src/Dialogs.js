@@ -106,13 +106,23 @@ function createLinksDialog(urls, pUrls) {
 }
 
 async function fetchContent(url, titleHeader, contents) {
+  disablePagingButtons(true);
   const { title, author, content } = await fetchPageText(url);
   titleHeader.innerHTML = title + " : " + author;
   contents.innerHTML = content;
+  disablePagingButtons(false);
 }
 
 function setLinkPaging(idx, length) {
   document.querySelector("#link-paging").innerHTML = `${idx + 1} / ${length}`;
+}
+
+function disablePagingButtons(disabled) {
+  document.querySelector("#link-begin").disabled = disabled;
+  document.querySelector("#link-prev").disabled = disabled;
+  document.querySelector("#link-next").disabled = disabled;
+  document.querySelector("#link-end").disabled = disabled;
+  document.querySelector("#open-link").disabled = disabled;
 }
 
 module.exports = {
