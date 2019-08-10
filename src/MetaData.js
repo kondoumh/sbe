@@ -5,14 +5,12 @@ async function fetchPageInfo(pageUrl) {
   if (res.status === 200) {
     const data = await res.json();
 
-    content = "[" + data.title + "] : by " + data.user.displayName;
+    content = data.title + " : by " + data.user.displayName;
     data.collaborators.forEach(collaborator => {
       content += ", " + collaborator.displayName;
     });
     content += "<hr>";
-    data.descriptions.forEach(description => {
-      content += description + "<br>";
-    });
+    content += renderLines(data.descriptions);
     content += "Views: " + data.views + ", Linked: " + data.linked + "<br>"
     image = data.image ? data.image : "";
   }
@@ -57,15 +55,16 @@ async function fetchPageText(pageUrl) {
     const data = await res.json();
     title = data.title;
     author = data.user.displayName;
-    content = render(data.lines);
+    const lines = data.lines.slice(1).map(line => { return line.text; });
+    content = renderLines(lines);
   }
   return { title: title, author: author, content: content };
 }
 
-function render(lines) {
+function renderLines(lines) {
   let content = "";
   lines.forEach(line => {
-    content += toHeadIfBold(line.text) + "<br>";
+    content += toHeadIfBold(line) + "<br>";
   });
   return content;
 }
@@ -92,5 +91,6 @@ function toHeadIfBold(text) {
 module.exports = {
   fetchPageInfo,
   fetchProjectMetrics,
-  fetchPageText
+  fetchPageText,
+  renderLines
 };

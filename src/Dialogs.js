@@ -1,4 +1,4 @@
-const { fetchPageText } = require("./MetaData");
+const { fetchPageText, renderLines } = require("./MetaData");
 const Store = require("electron-store");
 const sbUrl = require("./UrlHelper");
 
@@ -61,6 +61,9 @@ function createLinksDialog(data, path) {
   pageUrls = data.relatedPages.links1hop.map(link => {
     return sbUrl.BASE_URL + path[0] + "/" + link.titleLc.replace(/\//g, "%2F");
   });
+  descriptions = data.relatedPages.links1hop.map(link => {
+    return renderLines(link.descriptions) + "<h3>取得中・・・・</h3>";
+  });
 
   const contents = document.querySelector("#link-contents");
   const titleHeader = document.querySelector("#links-header");
@@ -73,12 +76,14 @@ function createLinksDialog(data, path) {
     });
     document.querySelector("#link-begin").addEventListener("click", () => {
       urlIdx = 0;
+      contents.innerHTML = descriptions[urlIdx];
       fetchContent(linkUrls[urlIdx], titleHeader, contents);
       setLinkPaging(urlIdx, linkUrls.length);
     });
     document.querySelector("#link-prev").addEventListener("click", () => {
       if (urlIdx > 0) {
         urlIdx--;
+        contents.innerHTML = descriptions[urlIdx];
         fetchContent(linkUrls[urlIdx], titleHeader, contents);
         setLinkPaging(urlIdx, linkUrls.length);
       }
@@ -86,12 +91,14 @@ function createLinksDialog(data, path) {
     document.querySelector("#link-next").addEventListener("click", () => {
       if (urlIdx < linkUrls.length - 1) {
         urlIdx++;
+        contents.innerHTML = descriptions[urlIdx];
         fetchContent(linkUrls[urlIdx], titleHeader, contents);
         setLinkPaging(urlIdx, linkUrls.length);
       }
     });
     document.querySelector("#link-end").addEventListener("click", () => {
       urlIdx = linkUrls.length - 1;
+      contents.innerHTML = descriptions[urlIdx];
       fetchContent(linkUrls[urlIdx], titleHeader, contents);
       setLinkPaging(urlIdx, linkUrls.length);
     });
@@ -99,6 +106,7 @@ function createLinksDialog(data, path) {
       addTab(pageUrls[urlIdx], true, "", false);
     });
   }
+  contents.innerHTML = descriptions[urlIdx];
   const container = document.querySelector("#link-contents-container");
   const store = new Store();
   let {width, height} = store.get("bounds");
