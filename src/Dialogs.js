@@ -1,5 +1,6 @@
 const { fetchPageText } = require("./MetaData");
 const Store = require("electron-store");
+const sbUrl = require("./UrlHelper");
 
 let openUrl
 let modalPageInfo;
@@ -52,10 +53,15 @@ function createProjectDialog(data) {
   return modalProjectInfo;
 }
 
-function createLinksDialog(urls, pUrls) {
+function createLinksDialog(data, path) {
   urlIdx = 0;
-  linkUrls = urls;
-  pageUrls = pUrls;
+  linkUrls = data.relatedPages.links1hop.map(link => {
+    return sbUrl.getPageUrl(path[0], link.titleLc.replace(/\//g, "%2F"));
+  });
+  pageUrls = data.relatedPages.links1hop.map(link => {
+    return sbUrl.BASE_URL + path[0] + "/" + link.titleLc.replace(/\//g, "%2F");
+  });
+
   const contents = document.querySelector("#link-contents");
   const titleHeader = document.querySelector("#links-header");
   if (!modalLinks) {
