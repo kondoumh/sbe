@@ -66,6 +66,15 @@ const addTab = (url, closable = true, projectName, active=true) => {
               visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && tabGroup.isPage(params.linkURL)
             },
             {
+              label: "Show linked pages",
+              click: () => {
+                showLinkedPages();
+              },
+              visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
+                && tabGroup.isPage(tab.webview.getURL())
+            },
+            { type: "separator" },
+            {
               label: "Add to fav",
               click: () => {
                 const favs = addToFavs(tab.webview.getURL());
@@ -73,15 +82,6 @@ const addTab = (url, closable = true, projectName, active=true) => {
               },
               visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
                 && tabGroup.isPage(tab.webview.getURL()) && !inFavs(tab.webview.getURL())
-            },
-            { type: "separator" },
-            {
-              label: "Show linked pages",
-              click: () => {
-                showLinkedPages();
-              },
-              visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
-                && tabGroup.isPage(tab.webview.getURL())
             },
             {
               label: "Search on Google \"" + params.selectionText + "\"",
