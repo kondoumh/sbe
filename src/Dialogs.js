@@ -9,6 +9,7 @@ let modalLinks;
 let urlIdx = 0;
 let linkUrls;
 let pageUrls;
+const cache = new Map();
 
 function createPageDialog(data) {
   openUrl = data.url;
@@ -55,6 +56,7 @@ function createProjectDialog(data) {
 
 function createLinksDialog(data, path) {
   urlIdx = 0;
+  cache.clear();
   linkUrls = data.relatedPages.links1hop.map(link => {
     return sbUrl.getPageUrl(path[0], link.titleLc.replace(/\//g, "%2F"));
   });
@@ -119,9 +121,21 @@ function updateContent(titleHeader, contents, urlIdx, totalCount) {
 
 async function fetchContent(url, titleHeader, contents) {
   disablePagingButtons(true);
-  const { title, author, content } = await fetchPageText(url);
-  titleHeader.innerHTML = title + " : " + author;
-  contents.innerHTML = content;
+  let page = {};
+  if (!cache.has(url)) {
+    const { title, author, content } = await fetchPageText(url);
+    cache.set(url, {title, author, content});
+    page.title = title;
+    page.author = author;
+    page.content = content;
+  } else {
+    const { title, author, content } = cache.get(url);
+    page.title = title;
+    page.author = author;
+    page.content = content;
+  }
+  titleHeader.innerHTML = page.title + " : " + page.author;
+  contents.innerHTML = page.content;
   disablePagingButtons(false);
 }
 
