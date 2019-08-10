@@ -76,37 +76,28 @@ function createLinksDialog(data, path) {
     });
     document.querySelector("#link-begin").addEventListener("click", () => {
       urlIdx = 0;
-      contents.innerHTML = descriptions[urlIdx];
-      fetchContent(linkUrls[urlIdx], titleHeader, contents);
-      setLinkPaging(urlIdx, linkUrls.length);
+      updateContent(titleHeader, contents, urlIdx, linkUrls.length);
     });
     document.querySelector("#link-prev").addEventListener("click", () => {
       if (urlIdx > 0) {
         urlIdx--;
-        contents.innerHTML = descriptions[urlIdx];
-        fetchContent(linkUrls[urlIdx], titleHeader, contents);
-        setLinkPaging(urlIdx, linkUrls.length);
+        updateContent(titleHeader, contents, urlIdx, linkUrls.length);
       }
     });
     document.querySelector("#link-next").addEventListener("click", () => {
       if (urlIdx < linkUrls.length - 1) {
         urlIdx++;
-        contents.innerHTML = descriptions[urlIdx];
-        fetchContent(linkUrls[urlIdx], titleHeader, contents);
-        setLinkPaging(urlIdx, linkUrls.length);
+        updateContent(titleHeader, contents, urlIdx, linkUrls.length);
       }
     });
     document.querySelector("#link-end").addEventListener("click", () => {
       urlIdx = linkUrls.length - 1;
-      contents.innerHTML = descriptions[urlIdx];
-      fetchContent(linkUrls[urlIdx], titleHeader, contents);
-      setLinkPaging(urlIdx, linkUrls.length);
+      updateContent(titleHeader, contents, urlIdx, linkUrls.length);
     });
     document.querySelector("#open-link").addEventListener("click", () => {
       addTab(pageUrls[urlIdx], true, "", false);
     });
   }
-  contents.innerHTML = descriptions[urlIdx];
   const container = document.querySelector("#link-contents-container");
   const store = new Store();
   let {width, height} = store.get("bounds");
@@ -114,9 +105,16 @@ function createLinksDialog(data, path) {
   height = height ? Math.ceil(height * 0.6) : 300;
   container.style.width = `${width}px`;
   container.style.height = `${height}px`;
-  fetchContent(linkUrls[urlIdx], titleHeader, contents);
-  setLinkPaging(urlIdx, linkUrls.length);
+  
+  updateContent(titleHeader, contents, urlIdx, linkUrls.length);
+
   return modalLinks;
+}
+
+function updateContent(titleHeader, contents, urlIdx, totalCount) {
+  contents.innerHTML = descriptions[urlIdx];
+  fetchContent(linkUrls[urlIdx], titleHeader, contents);
+  setLinkPaging(urlIdx, totalCount);
 }
 
 async function fetchContent(url, titleHeader, contents) {
