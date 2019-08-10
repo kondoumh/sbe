@@ -57,12 +57,36 @@ async function fetchPageText(pageUrl) {
     const data = await res.json();
     title = data.title;
     author = data.user.displayName;
-    content = "";
-    data.lines.forEach(line => {
-      content += line.text + "<br>";
-    });
+    content = render(data.lines);
   }
   return { title: title, author: author, content: content };
+}
+
+function render(lines) {
+  let content = "";
+  lines.forEach(line => {
+    content += toHeadIfBold(line.text) + "<br>";
+  });
+  return content;
+}
+
+function toHeadIfBold(text) {
+  const re = /^\[(\*+)\s(.+)\]$/;
+  let result = text;
+  if (re.test(text)) {
+    const ar = re.exec(text);
+    const count = ar[1].length;
+    if (count === 1) {
+      result = `<h4>${ar[2]}</h4>`;
+    } else if (count === 2) {
+      result = `<h3>${ar[2]}</h3>`;
+    } else if (count === 3) {
+      result = `<h2>${ar[2]}</h2>`;
+    } else if (count >= 4) {
+      result = `<h1>${ar[2]}</h1>`;
+    }
+  }
+  return result;
 }
 
 module.exports = {
