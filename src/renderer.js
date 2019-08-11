@@ -57,7 +57,6 @@ const addTab = (url, closable = true, projectName, active=true) => {
               click: () => { tabGroup.openUrl(params.linkURL); },
               visible: params.linkURL && (params.mediaType === "none" || params.mediaType === "image")
             },
-            { type: "separator" },
             {
               label: "Info",
               click: () => {
