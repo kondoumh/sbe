@@ -1,6 +1,7 @@
 const TabGroup = require("electron-tabs");
 const dragula = require("dragula");
 const sbUrl = require("./UrlHelper");
+const { shell } = require("electron");
 
 class TabProvider extends TabGroup {
   constructor() {

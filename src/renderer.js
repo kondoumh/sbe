@@ -1,4 +1,4 @@
-const { shell, ipcRenderer, clipboard } = require("electron");
+const { ipcRenderer, clipboard } = require("electron");
 const sbUrl = require("./UrlHelper");
 const TabProvider = require("./TabProvider");
 const ElectronSearchText = require("electron-search-text");
