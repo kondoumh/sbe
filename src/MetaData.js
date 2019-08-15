@@ -88,9 +88,21 @@ function toHeadIfBold(text) {
   return result;
 }
 
+async function fetchUserInfo(projectUrl) {
+  let userId, userName;
+  const res = await fetch(projectUrl + "/user", { credentials: "include" });
+  if (res.status === 200) {
+    const data = await res.json();
+    userId = data.user.id;
+    userName = data.user.displayName;
+  }
+  return { userId: userId, userName: userName };
+}
+
 module.exports = {
   fetchPageInfo,
   fetchProjectMetrics,
   fetchPageText,
+  fetchUserInfo,
   renderLines
 };

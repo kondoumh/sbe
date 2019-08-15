@@ -184,6 +184,12 @@ function initWindowMenu() {
             mainWindow.webContents.send("showLinkedpages");
           }
         },
+        {
+          label: "Show user info",
+          click() {
+            mainWindow.webContents.send("showUserInfo");
+          }
+        },
         { type: "separator" },
         {
           label: "Search in window",
