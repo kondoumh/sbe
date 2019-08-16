@@ -99,10 +99,22 @@ async function fetchUserInfo(projectUrl) {
   return { userId: userId, userName: userName };
 }
 
+async function fetchUserRelatedPage(projectUrl, userId, limit, pagination) {
+  const url = `${projectUrl}/?skip=${limit*pagination}&limit=${limit}&sort=updated`;
+  const res = await fetch(url, { credentials: "include" });
+  let pages = [];
+  if (res.status === 200) {
+    const data = await res.json();
+    pages = data.pages.filter(page => page.user.id === userId).map(page => page.title);
+  }
+  return pages;
+}
+
 module.exports = {
   fetchPageInfo,
   fetchProjectMetrics,
   fetchPageText,
   fetchUserInfo,
+  fetchUserRelatedPage,
   renderLines
 };
