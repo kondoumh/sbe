@@ -4,7 +4,7 @@ const TabProvider = require("./TabProvider");
 const ElectronSearchText = require("electron-search-text");
 const Store = require("electron-store");
 const getDate = require("./DateHelper");
-const { fetchPageInfo, fetchProjectMetrics, fetchUserInfo, fetchUserRelatedPage } = require("./MetaData");
+const { fetchPageInfo, fetchProjectMetrics, fetchUserInfo, fetchUserRelatedPages } = require("./MetaData");
 const { inFavs, addToFavs } = require("./Favs");
 const { toHeading, toBodyText} = require("./Heading");
 const { createPageDialog, createProjectDialog, createLinksDialog } = require("./Dialogs");
@@ -379,8 +379,8 @@ async function showLinkedPages() {
 
 async function showUserInfo() {
   const path = tabGroup.getPath();
-  const {userId, userName} = await fetchUserInfo(sbUrl.getPagesUrl(path[0]));
-  console.log(userId + " : " + userName);
-  const pages = await fetchUserRelatedPage(sbUrl.getPagesUrl(path[0]), userId, 100, 0);
+  const user = await fetchUserInfo(sbUrl.getPagesUrl(path[0]));
+  console.log(user.userId + " : " + user.name + " (" + user.displayName + ")");
+  const pages = await fetchUserRelatedPages(sbUrl.getPagesUrl(path[0]), user.userId, showStatusMessage);
   console.log(pages);
 }
