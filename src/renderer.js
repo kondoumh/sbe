@@ -7,7 +7,7 @@ const getDate = require("./DateHelper");
 const { fetchPageInfo, fetchProjectMetrics, fetchUserInfo, fetchUserRelatedPages } = require("./MetaData");
 const { inFavs, addToFavs } = require("./Favs");
 const { toHeading, toBodyText} = require("./Heading");
-const { createPageDialog, createProjectDialog, createLinksDialog } = require("./Dialogs");
+const { createPageDialog, createProjectDialog, createLinksDialog, createPersonalDialog } = require("./Dialogs");
 
 const tabGroup = new TabProvider();
 
@@ -380,7 +380,9 @@ async function showLinkedPages() {
 async function showUserInfo() {
   const path = tabGroup.getPath();
   const user = await fetchUserInfo(sbUrl.getPagesUrl(path[0]));
-  console.log(user.userId + " : " + user.name + " (" + user.displayName + ")");
+  let data = user.name + " (" + user.displayName + ")" + "<br>";
   const pages = await fetchUserRelatedPages(sbUrl.getPagesUrl(path[0]), user.userId, showStatusMessage);
+  data += "page created: " + pages.length + "<br>";
   console.log(pages);
+  createPersonalDialog(data).showModal();
 }

@@ -6,6 +6,7 @@ let openUrl
 let modalPageInfo;
 let modalProjectInfo;
 let modalLinks;
+let modalPersonal;
 let urlIdx = 0;
 let linkUrls;
 let pageUrls;
@@ -151,8 +152,26 @@ function disablePagingButtons(disabled) {
   document.querySelector("#open-link").disabled = disabled;
 }
 
+function createPersonalDialog(data) {
+  if (!modalPersonal) {
+    modalPersonal = document.querySelector("#personal-info");
+    modalPersonal.addEventListener("click", (event) => {
+      if (event.target === modalPersonal) {
+        modalPersonal.close("cancelled");
+      }
+    });
+    document.querySelector("#close-personal").addEventListener("click", () => {
+      modalPersonal.close();
+    });
+  }
+  let content = document.querySelector("#personal-contents");
+  content.innerHTML = data;
+  return modalPersonal;
+}
+
 module.exports = {
   createPageDialog,
   createProjectDialog,
-  createLinksDialog
+  createLinksDialog,
+  createPersonalDialog
 };
