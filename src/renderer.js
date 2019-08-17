@@ -384,5 +384,6 @@ async function showUserInfo() {
   const pages = await fetchUserRelatedPages(sbUrl.getPagesUrl(path[0]), user.userId, showStatusMessage);
   data += "page created: " + pages.length + "<br>";
   console.log(pages);
-  createPersonalDialog(data).showModal();
+  //createPersonalDialog(data).showModal();
+  addTab("user-info.html", true, path[0]);
 }
