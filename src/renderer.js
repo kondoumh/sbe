@@ -378,5 +378,7 @@ async function showLinkedPages() {
 }
 
 async function showUserInfo() {
-  addTab("user-info.html");
+  const path = tabGroup.getPath();
+  localStorage.setItem("projectName", path[0]);
+  addTab("user-info.html", true, path[0]);
 }
