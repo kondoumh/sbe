@@ -1,22 +1,27 @@
 hoge();
 
-function getPagesUrl(projectName) {
+function getPagesApiUrl(projectName) {
   return "https://scrapbox.io/api/pages/" + projectName;
 }
 
+function getPageLink(projectName, title) {
+  return `<a href="https://scrapbox.io/${projectName}/${title}" target="_blank">${title}</a>`;
+}
+
 async function hoge() {
-  const user = await fetchUserInfo(getPagesUrl("kondoumh"));
+  const content = document.querySelector("#hoge");
+  content.innerHTML = "Fetching...";
+
+  const user = await fetchUserInfo(getPagesApiUrl("kondoumh"));
   let data = user.name + " (" + user.displayName + ")" + "<br>";
-  const pages = await fetchUserRelatedPages(getPagesUrl("kondoumh"), user.userId);
-  data += "page created: " + pages.length + "<br>";
+  const pages = await fetchUserRelatedPages(getPagesApiUrl("kondoumh"), user.userId);
+  data += "page created: " + pages.length + "<br><hr>";
 
   pages.forEach(page => {
-    data += page + "<br>";
-  })
+    data += getDate(page.created) + " : " + getPageLink("kondoumh", page.title) + "<br>";
+  });
 
-  const content = document.querySelector("#hoge");
   content.innerHTML = data;
-  content.innerHTML += `<a href="https://scrapbox.io/kondoumh/Dev">Dev</a>`
 }
 
 async function fetchUserInfo(projectUrl) {
@@ -47,8 +52,19 @@ async function fetchUserRelatedPages(projectUrl, userId) {
   let result = [];
   for (page = 0; total + 100 > page * 100; page++) {
     const data = await fetchProjectInfo(projectUrl, 100, page);
-    const pages = data.pages.filter(page => page.user.id === userId).map(page => page.title);
+    const pages = data.pages.filter(page => page.user.id === userId);
     Array.prototype.push.apply(result, pages);
   }
   return result;
+}
+
+function getDate(timestamp) {
+  const date = new Date()
+  date.setTime(timestamp * 1000)
+  const options = {
+    weekday: "short", year: "numeric", month: "long", day: "numeric",
+    hour: "numeric", minute: "numeric", second: "numeric",
+    hour12: false
+  };
+  return date.toLocaleDateString(navigator.language, options);
 }
