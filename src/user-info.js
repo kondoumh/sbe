@@ -18,8 +18,16 @@ async function showUserInfo() {
 
   const user = await fetchUserInfo(getPagesApiUrl(projectName));
   let data = user.name + " (" + user.displayName + ")" + "<br>";
-  const pages = await fetchUserRelatedPages(getPagesApiUrl(projectName), user.userId, content);
-  data += "page created: " + pages.length + "<br><hr>";
+
+  let pages;
+  const localData = localStorage.getItem("projectName" + "_" + user.name);
+  if (localData) {
+    pages = JSON.parse(localData);
+  } else {
+    pages = await fetchUserRelatedPages(getPagesApiUrl(projectName), user.userId, content);
+    localStorage.setItem("projectName" + "_" + user.name, JSON.stringify(pages));
+  }
+  data += "page created: " + pages.length + "<br>updated: " + getDateNow() + "<br><hr>";
 
   pages.forEach(page => {
     data += getDate(page.created) + " : " + getPageLink(projectName, page.title) + "<br>";
@@ -77,5 +85,17 @@ function getDate(timestamp) {
   const month = (dt.getMonth() + 1).toString().padStart(2, "0");
   const date = dt.getDate().toString().padStart(2, "0");
   const formatted = `${year}.${month}.${date}`.replace(/\n|\r/g, "");
+  return formatted;
+}
+
+function getDateNow() {
+  const dt = new Date();
+  const year = dt.getFullYear();
+  const month = (dt.getMonth() + 1).toString().padStart(2, "0");
+  const date = dt.getDate().toString().padStart(2, "0");
+  const hour = dt.getHours().toString().padStart(2, "0");
+  const minute = dt.getMinutes().toString().padStart(2, "0");
+  const second = dt.getSeconds().toString().padStart(2, "0");
+  const formatted = `${year}.${month}.${date} ${hour}:${minute}:${second}`.replace(/\n|\r/g, "");
   return formatted;
 }
