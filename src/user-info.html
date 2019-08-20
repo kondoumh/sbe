@@ -2,13 +2,23 @@
 <html>
   <head>
     <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css">
     <style>
       .dummy-area {
         min-height: 70px;
       }
+      .right-top {
+        position: absolute;
+        top: 3px;
+        right: 3px;
+      }
     </style>
   </head>
   <body>
+    <div id="refresh" class="right-top">
+      <label id="fetched"></label>
+      <button type="submit" id="btn_refresh" class="toolbutton" title="reload"><i class="fas fa-sync-alt"></i></button>
+    </div>
     <div id="user-info"></div>
     <div class="dummy-area"></div>
     <script src="user-info.js"></script>

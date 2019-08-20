@@ -5,27 +5,37 @@ window.onload = () => {
     sessionStorage.setItem("projectName", projectName)
     localStorage.removeItem("projectName")
   }
+  document.querySelector("#btn_refresh").addEventListener("click", () => {
+    showUserInfo(projectName, true);
+  });
   showUserInfo(projectName);
 };
 
-async function showUserInfo(projectName) {
+async function showUserInfo(projectName, forceRefresh = false) {
   const content = document.querySelector("#user-info");
   content.innerHTML = "Fetching...";
 
   const user = await fetchUserInfo(getPagesApiUrl(projectName));
   let data = user.name + " (" + user.displayName + ")" + "<br>";
 
+  const infoKey = projectName + "_" + user.name;
+
+  if (forceRefresh) {
+    localStorage.removeItem(infoKey);
+  }
+
   let userInfo = {};
-  const localData = localStorage.getItem(projectName + "_" + user.name);
+  const localData = localStorage.getItem(infoKey);
   if (localData) {
     userInfo = JSON.parse(localData);
   } else {
     pages = await fetchUserRelatedPages(getPagesApiUrl(projectName), user.userId, content);
     userInfo.fetched = getDateNow();
     userInfo.pages = pages;
-    localStorage.setItem(projectName + "_" + user.name, JSON.stringify(userInfo));
+    localStorage.setItem(infoKey, JSON.stringify(userInfo));
   }
-  data += "page created: " + userInfo.pages.length + "<br>updated: " + userInfo.fetched + "<br><hr>";
+  data += "page created: " + userInfo.pages.length + "<hr>";
+  document.querySelector("#fetched").innerHTML = "updated: " + userInfo.fetched;
 
   userInfo.pages.forEach(page => {
     data += getDate(page.created) + " : " + getPageLink(projectName, page.title) + "<br>";
