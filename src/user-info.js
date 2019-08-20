@@ -19,17 +19,20 @@ async function showUserInfo() {
   const user = await fetchUserInfo(getPagesApiUrl(projectName));
   let data = user.name + " (" + user.displayName + ")" + "<br>";
 
-  let pages;
+  let userInfo = {};
   const localData = localStorage.getItem("projectName" + "_" + user.name);
+  console.log("projectName" + "_" + user.name);
   if (localData) {
-    pages = JSON.parse(localData);
+    userInfo = JSON.parse(localData);
   } else {
     pages = await fetchUserRelatedPages(getPagesApiUrl(projectName), user.userId, content);
-    localStorage.setItem("projectName" + "_" + user.name, JSON.stringify(pages));
+    userInfo.fetched = getDateNow();
+    userInfo.pages = pages;
+    localStorage.setItem("projectName" + "_" + user.name, JSON.stringify(userInfo));
   }
-  data += "page created: " + pages.length + "<br>updated: " + getDateNow() + "<br><hr>";
+  data += "page created: " + userInfo.pages.length + "<br>updated: " + userInfo.fetched + "<br><hr>";
 
-  pages.forEach(page => {
+  userInfo.pages.forEach(page => {
     data += getDate(page.created) + " : " + getPageLink(projectName, page.title) + "<br>";
   });
   content.innerHTML = data;
