@@ -65,11 +65,18 @@ class TabProvider extends TabGroup {
   }
 
   updateTab(tab, url, projectName) {
-    if (sbUrl.listPage(tab.webview.getURL())) {
+    if (sbUrl.isPageList(tab.webview.getURL())) {
       if (!projectName) {
         projectName = tab.projectName;
       }
       tab.setTitle("page list - " + projectName);
+      return;
+    }
+    if (sbUrl.isUserPage(tab.webview.getURL())) {
+      if (!projectName) {
+        projectName = tab.projectName;
+      }
+      tab.setTitle("user info - " + projectName);
       return;
     }
     const path = this.getPath(url);

@@ -35,7 +35,7 @@ const addTab = (url, closable = true, projectName, active=true) => {
         showTargetPageTitle(e.url);
       });
       tab.webview.addEventListener("load-commit", e => {
-        if (sbUrl.inScrapbox(e.url) || sbUrl.listPage(e.url)) {
+        if (sbUrl.inScrapbox(e.url) || sbUrl.isPageList(e.url) || sbUrl.isUserPage(e.url)) {
           updateNavButtons(tab.webview);
           tabGroup.updateTab(tab, e.url, localStorage.getItem("projectName"));
         }
@@ -306,7 +306,8 @@ function showPageList() {
 }
 
 function duplicateTab() {
-  if (!sbUrl.listPage(tabGroup.getActiveWebView().getURL())) {
+  const url = tabGroup.getActiveWebView().getURL();
+  if (!sbUrl.isPageList(url) && !sbUrl.isUserPage(url)) {
     addTab(tabGroup.getActiveWebView().getURL());
   }
 }
