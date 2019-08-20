@@ -1,18 +1,14 @@
-let projectName;
-
 window.onload = () => {
+  let projectName = sessionStorage.getItem("projectName")
   if (!projectName) {
-    projectName = sessionStorage.getItem("projectName")
-    if (!projectName) {
-      projectName = localStorage.getItem("projectName")
-      sessionStorage.setItem("projectName", projectName)
-      localStorage.removeItem("projectName")
-    }
+    projectName = localStorage.getItem("projectName")
+    sessionStorage.setItem("projectName", projectName)
+    localStorage.removeItem("projectName")
   }
-  showUserInfo();
+  showUserInfo(projectName);
 };
 
-async function showUserInfo() {
+async function showUserInfo(projectName) {
   const content = document.querySelector("#user-info");
   content.innerHTML = "Fetching...";
 
@@ -20,15 +16,14 @@ async function showUserInfo() {
   let data = user.name + " (" + user.displayName + ")" + "<br>";
 
   let userInfo = {};
-  const localData = localStorage.getItem("projectName" + "_" + user.name);
-  console.log("projectName" + "_" + user.name);
+  const localData = localStorage.getItem(projectName + "_" + user.name);
   if (localData) {
     userInfo = JSON.parse(localData);
   } else {
     pages = await fetchUserRelatedPages(getPagesApiUrl(projectName), user.userId, content);
     userInfo.fetched = getDateNow();
     userInfo.pages = pages;
-    localStorage.setItem("projectName" + "_" + user.name, JSON.stringify(userInfo));
+    localStorage.setItem(projectName + "_" + user.name, JSON.stringify(userInfo));
   }
   data += "page created: " + userInfo.pages.length + "<br>updated: " + userInfo.fetched + "<br><hr>";
 
