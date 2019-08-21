@@ -1,6 +1,6 @@
 {
   "name": "sbe",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "description": "An unofficial Scrapbox desktop app by Electron",
   "main": "src/main.js",
   "config": {
@@ -20,7 +20,7 @@
   "author": "kondoumh",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^6.0.2",
+    "electron": "^6.0.3",
     "electron-packager": "^14.0.4"
   },
   "dependencies": {
