@@ -34,7 +34,7 @@ async function showUserInfo(projectName, forceRefresh = false) {
     userInfo.pages = pages;
     localStorage.setItem(infoKey, JSON.stringify(userInfo));
   }
-  data += "page created: " + userInfo.pages.length + "<hr>";
+  data += "pages created: " + userInfo.pages.length + "<hr>";
   document.querySelector("#fetched").innerHTML = "updated: " + userInfo.fetched;
 
   userInfo.pages.forEach(page => {
