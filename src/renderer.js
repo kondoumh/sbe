@@ -182,14 +182,9 @@ ipcRenderer.on("domReady", () => {
     const url = document.querySelector("#favorite").value;
 
     if (!sbUrl.inScrapbox(url)) return;
-    let opened = false;
-    tabGroup.eachTab(currentTab => {
-      if (currentTab.webview.getURL() === url) {
-        currentTab.activate();
-        opened = true;
-      }
-    });
-    if (!opened) tabGroup.openUrl(url);
+    if (!tabGroup.activateIfOpened(url)) {
+      tabGroup.openUrl(url);
+    }
     selectFav.selectedIndex = 0;
   });
 
@@ -301,8 +296,10 @@ ipcRenderer.on("openDevToolsForTab", () => {
 
 function showPageList() {
   const path = tabGroup.getPath();
-  localStorage.setItem("projectName", path[0]);
-  addTab(sbUrl.LIST_PAGE, true, path[0]);
+  if (!tabGroup.activateIfViewOpened(sbUrl.LIST_PAGE, path[0])) {
+    localStorage.setItem("projectName", path[0]);
+    addTab(sbUrl.LIST_PAGE, true, path[0]);
+  }
 }
 
 function duplicateTab() {
@@ -380,6 +377,8 @@ async function showLinkedPages() {
 
 async function showUserInfo() {
   const path = tabGroup.getPath();
-  localStorage.setItem("projectName", path[0]);
-  addTab("user-info.html", true, path[0]);
+  if (!tabGroup.activateIfViewOpened(sbUrl.USER_PAGE, path[0])) {
+    localStorage.setItem("projectName", path[0]);
+    addTab("user-info.html", true, path[0]);
+  }
 }

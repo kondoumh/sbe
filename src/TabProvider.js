@@ -100,7 +100,29 @@ class TabProvider extends TabGroup {
       tab.setIcon(sbUrl.DEFAULT_ICON_URL);
       tab.setTitle(sbUrl.toTitle(path[0]));
     }
-  }  
+  }
+
+  activateIfOpened(url) {
+    let opened = false;
+    this.eachTab(tab => {
+      if (tab.webview.getURL() === url) {
+        tab.activate();
+        opened = true;
+      }
+    });
+    return opened;
+  }
+
+  activateIfViewOpened(pageName, projectName) {
+    let opened = false;
+    this.eachTab(tab => {
+      if (tab.webview.getURL().endsWith(pageName) && projectName === tab.projectName) {
+        tab.activate();
+        opened = true;
+      }
+    });
+    return opened;
+  }
 }
 
 module.exports = TabProvider;
