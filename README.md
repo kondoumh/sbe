@@ -10,7 +10,7 @@ An unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 - Paste external link with `[url title]` format
 - Show pages-list that can be sorted by updated / views / linked with pagination
 - Add pages to fav list
-- Preview page info (author, colaborators, descriptions)
+- Preview page info (author, collaborators, descriptions)
 - Preview 1-hop links of current page
 - Show project activities (total pages created, total views and linked)
 - Show user's activities (page created)
