@@ -2,19 +2,18 @@
 An unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 
 ## Features
-- Open page in new tab via context menu or Ctrl(Cmd) + click
-- Open top page in new tab
-- Duplicate current page in new tab
-- Open url with default web browser
+- Open Scrapbox pages in tabs
+- Open external url with default web browser
 - Search within the page
-- Copy page url to the clipboard
 - Cut, copy and paste widh accelerator keys
-- History back / forward
-- Open page from url
-- Show pages list that can be sorted by updated / views / linked
-- Paste link with `[url title]` format
-- Add page to fav list
-- Preview page info
+- Text box that can open Scrapbox page from url, and also search with key-words
+- Paste external link with `[url title]` format
+- Show pages-list that can be sorted by updated / views / linked with pagination
+- Add pages to fav list
+- Preview page info (author, colaborators, descriptions)
+- Preview 1-hop links of current page
+- Show project activities (total pages created, total views and linked)
+- Show user's activities (page created)
 
 ![Screenshot](https://user-images.githubusercontent.com/2092183/50725987-ceb89980-1149-11e9-9017-fb7186ce00b1.gif)
 
