@@ -3,22 +3,22 @@ An unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 
 ## Features
 ### Tabs
-- Open Scrapbox pages in tabs
+- View and edit Scrapbox pages in tabs (not possible with PWA)
 ### Editing
 - Paste external link with `[url title]` format
 - Cut, copy and paste with accelerator keys
 - Context menu for changing font size of selected text
 ### Meta view
-- Page-list can be sorted by updated / views / linked with pagination
+- Provide Page-list that can be sorted by updated / views / linked with pagination
 - Preview page info (author, collaborators, descriptions)
 - Preview 1-hop links of current page
 - Show project activities (total pages created, total views and linked)
 - Show user's activities (pages created)
 ### Utilities
 - In-page search
-- Text box to open page by url / search project by keywords
+- Text box to open page by url and search with in project
 - Open external url with web browser
-- Search selected text on Google
+- Search selected text on Google with web browser
 - Add pages to fav list
 
 ![Screenshot](https://user-images.githubusercontent.com/2092183/50725987-ceb89980-1149-11e9-9017-fb7186ce00b1.gif)
