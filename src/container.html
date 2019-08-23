@@ -2,83 +2,91 @@
 <html>
 
 <head>
-    <meta charset="UTF-8" />
-    <title>sbe - Scrapbox in Electron</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="../node_modules/electron-tabs/electron-tabs.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css">
-    <link rel="stylesheet" href="../node_modules/dragula/dist/dragula.min.css">
+  <meta charset="UTF-8" />
+  <title>sbe - Scrapbox in Electron</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="../node_modules/electron-tabs/electron-tabs.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css">
+  <link rel="stylesheet" href="../node_modules/dragula/dist/dragula.min.css">
 </head>
 
 <body>
-    <header>
-        <div class="toolbar">
-            <button type="submit" id="btn_back" class="toolbutton" title="back"><i class="fas fa-angle-left"></i></button>
-            <button type="submit" id="btn_forward" class="toolbutton" title="foward"><i class="fas fa-angle-right"></i></button>
-            <button type="submit" id="btn_newtab" class="toolbutton" title="new tab"><i class="fas fa-plus"></i></i></button>
-            <button type="submit" id="btn_duplicate" class="toolbutton" title="duplicate tab"><i class="far fa-clone"></i></button>
-            <button type="button" id="btn_copyurl" class="toolbutton" title="copy url"><i class="far fa-copy"></i></button>
-            <button type="submit" id="btn_reload" class="toolbutton" title="reload"><i class="fas fa-sync-alt"></i></button>
-            <button type="submit" id="btn_titles" class="toolbutton" title="titles"><i class="fas fa-list-alt"></i></button>
-            <input type="text" id="open_url" class="url-input" placeholder="page url or search words" />
-            <select id="favorite" class="dropdwon"><option>favs:</option></select>
-        </div>
-    </header>
-    <div class="search-box">
-        <input type="text" id="search-input" class="search-input" />
-        <span id="search-count" class="search-count"></span>
+  <header>
+    <div class="toolbar">
+      <button type="submit" id="btn_back" class="toolbutton" title="back"><i class="fas fa-angle-left"></i></button>
+      <button type="submit" id="btn_forward" class="toolbutton" title="foward"><i
+          class="fas fa-angle-right"></i></button>
+      <button type="submit" id="btn_newtab" class="toolbutton" title="new tab"><i class="fas fa-plus"></i></i></button>
+      <button type="submit" id="btn_duplicate" class="toolbutton" title="duplicate tab"><i
+          class="far fa-clone"></i></button>
+      <button type="button" id="btn_copyurl" class="toolbutton" title="copy url"><i class="far fa-copy"></i></button>
+      <button type="submit" id="btn_reload" class="toolbutton" title="reload"><i class="fas fa-sync-alt"></i></button>
+      <button type="submit" id="btn_titles" class="toolbutton" title="titles"><i class="fas fa-list-alt"></i></button>
+      <input type="text" id="open_url" class="url-input" placeholder="page url or search words" />
+      <select id="favorite" class="dropdwon">
+        <option>favs:</option>
+      </select>
     </div>
-    <main>
-        <div id="tabgroup" class="etabs-tabgroup">
-            <div class="etabs-tabs"></div>
-            <div class="etabs-buttons"></div>
-        </div>
-        <div id="main" class="etabs-views"></div>
-    </main>
-    <footer><span id="statusbar" class="statusbar">status</span></footer>
-    <script src="renderer.js"></script>
+  </header>
+  <div class="search-box">
+    <input type="text" id="search-input" class="search-input" />
+    <span id="search-count" class="search-count"></span>
+  </div>
+  <main>
+    <div id="tabgroup" class="etabs-tabgroup">
+      <div class="etabs-tabs"></div>
+      <div class="etabs-buttons"></div>
+    </div>
+    <div id="main" class="etabs-views"></div>
+  </main>
+  <footer><span id="statusbar" class="statusbar">status</span></footer>
+  <script src="renderer.js"></script>
 
-    <dialog id="page-info">
-        <div class="modal-body">
-          <p id="dialog-contents"></p>
-          <img id="contents-image" src="" width="200" height="auto"/>
-        </div>
-        <div class="modal-footer">
-            <button id="open-it" type="button" class="modal-button" title="Open in tab"><i class="fas fa-share-square"></i></button>
-        </div>
-    </dialog>
+  <dialog id="page-info">
+    <div class="modal-body">
+      <p id="dialog-contents"></p>
+      <img id="contents-image" src="" width="200" height="auto" />
+    </div>
+    <div class="modal-footer">
+      <button id="open-it" type="button" class="modal-button" title="Open in tab"><i
+          class="fas fa-share-square"></i></button>
+    </div>
+  </dialog>
 
-    <dialog id="project-info">
-        <div class="modal-body">
-          <p id="project-dialog-contents"></p>
-        </div>
-        <div class="modal-footer">
-            <button id="copy-content" type="button">copy</button>
-        </div>
-    </dialog>
+  <dialog id="project-info">
+    <div class="modal-body">
+      <p id="project-dialog-contents"></p>
+    </div>
+    <div class="modal-footer">
+      <button id="copy-content" type="button">copy</button>
+    </div>
+  </dialog>
 
-    <dialog id="hop1-links">
-        <div id = "links-header" class="modal-pageheader"></div>
-        <div id="link-contents-container" class="modal-pagetext">
-            <p id="link-contents"></p>
-        </div>
-        <div class="modal-footer">
-            <button id="link-begin" type="button" class="modal-button" title="begin"><i class="fas fa-step-backward"></i></button>
-            <button id="link-prev" type="button" class="modal-button" title="prev"><i class="fas fa-caret-left"></i></button>
-            <button id="link-next" type="button" class="modal-button" title="next"><i class="fas fa-caret-right"></i></button>
-            <button id="link-end" type="button" class="modal-button" title="end"><i class="fas fa-step-forward"></i></button>
-            <button id="open-link" type="button" class="modal-button" title="Open in tab"><i class="fas fa-share-square"></i></button>
-            <label id="link-paging"></label>
-        </div>
-    </dialog>
+  <dialog id="hop1-links">
+    <div id="links-header" class="modal-pageheader"></div>
+    <div id="link-contents-container" class="modal-pagetext">
+      <p id="link-contents"></p>
+    </div>
+    <div class="modal-footer">
+      <button id="link-begin" type="button" class="modal-button" title="begin"><i
+          class="fas fa-step-backward"></i></button>
+      <button id="link-prev" type="button" class="modal-button" title="prev"><i class="fas fa-caret-left"></i></button>
+      <button id="link-next" type="button" class="modal-button" title="next"><i class="fas fa-caret-right"></i></button>
+      <button id="link-end" type="button" class="modal-button" title="end"><i class="fas fa-step-forward"></i></button>
+      <button id="open-link" type="button" class="modal-button" title="Open in tab"><i
+          class="fas fa-share-square"></i></button>
+      <label id="link-paging"></label>
+    </div>
+  </dialog>
 
-    <dialog id="personal-info">
-        <div class="modal-body">
-          <p id="personal-contents"></p>
-        </div>
-        <div class="modal-footer">
-            <button id="close-personal" type="button" class="modal-button" title="Open in tab">close</button>
-        </div>
-    </dialog>
+  <dialog id="personal-info">
+    <div class="modal-body">
+      <p id="personal-contents"></p>
+    </div>
+    <div class="modal-footer">
+      <button id="close-personal" type="button" class="modal-button" title="Open in tab">close</button>
+    </div>
+  </dialog>
 </body>
+
 </html>
