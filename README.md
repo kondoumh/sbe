@@ -21,7 +21,8 @@ An unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 - Search selected text on Google with web browser
 - Add pages to fav list
 
-![Screenshot](https://user-images.githubusercontent.com/2092183/50725987-ceb89980-1149-11e9-9017-fb7186ce00b1.gif)
+![Screenshot](https://user-images.githubusercontent.com/2092183/63644879-904e0a00-c72d-11e9-96d2-64e4727e64c6.gif)
+
 
 ## How to run
 ### requirement
