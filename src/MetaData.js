@@ -64,28 +64,21 @@ async function fetchPageText(pageUrl) {
 function renderLines(lines) {
   let content = "";
   lines.forEach(line => {
-    content += toHeadIfBold(line) + "<br>";
+    content += decorateLine(line) + "<br>";
   });
   return content;
 }
 
-function toHeadIfBold(text) {
-  const re = /^\[(\*+)\s(.+)\]$/;
-  let result = text;
-  if (re.test(text)) {
-    const ar = re.exec(text);
-    const count = ar[1].length;
-    if (count === 1) {
-      result = `<h4>${ar[2]}</h4>`;
-    } else if (count === 2) {
-      result = `<h3>${ar[2]}</h3>`;
-    } else if (count === 3) {
-      result = `<h2>${ar[2]}</h2>`;
-    } else if (count >= 4) {
-      result = `<h1>${ar[2]}</h1>`;
-    }
+function decorateLine(line) {
+  const reStrong = /\[(\*+)\s(.+)\]/g;
+  const reIndent = /^(\s+)([^\s].+)/;
+  let replaced = line.replace(reStrong, "<strong>$2</strong>");
+  if (reIndent.test(replaced)) {
+    const ar = reIndent.exec(replaced);
+    const indent = "&ensp;".repeat(ar[1].length - 1);
+    replaced = indent + "・" + ar[2];
   }
-  return result;
+  return replaced;
 }
 
 module.exports = {
