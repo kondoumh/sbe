@@ -20,13 +20,13 @@
   "author": "kondoumh",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^6.0.4",
-    "electron-packager": "^14.0.4"
+    "electron": "^6.0.7",
+    "electron-packager": "^14.0.5"
   },
   "dependencies": {
     "about-window": "^1.13.1",
     "dragula": "^3.7.2",
-    "electron-context-menu": "^0.14.0",
+    "electron-context-menu": "^0.15.0",
     "electron-search-text": "^0.3.0",
     "electron-store": "^4.0.0",
     "electron-tabs": "^0.9.5"
