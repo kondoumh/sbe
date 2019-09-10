@@ -34,7 +34,7 @@ async function showUserInfo(projectName, forceRefresh = false) {
     }
   } else {
     pages = await fetchUserRelatedPages(getPagesApiUrl(projectName), user.userId, content);
-    userInfo.fetched = getDateNow();
+    userInfo.fetched = getDate();
     userInfo.pages = pages;
     localStorage.setItem(infoKey, JSON.stringify(userInfo));
   }
@@ -68,7 +68,7 @@ async function fetchUserInfo(projectUrl) {
 }
 
 async function fetchProjectInfo(projectUrl, limit, pagination) {
-  const url = `${projectUrl}/?skip=${limit*pagination}&limit=${limit}&sort=updated`;
+  const url = `${projectUrl}/?skip=${limit*pagination}&limit=${limit}&sort=created`;
   const res = await fetch(url, { credentials: "include" });
   let data = {}
   if (res.status === 200) {
@@ -92,16 +92,9 @@ async function fetchUserRelatedPages(projectUrl, userId, content) {
 
 function getDate(timestamp) {
   const dt = new Date();
-  dt.setTime(timestamp * 1000);
-  const year = dt.getFullYear();
-  const month = (dt.getMonth() + 1).toString().padStart(2, "0");
-  const date = dt.getDate().toString().padStart(2, "0");
-  const formatted = `${year}.${month}.${date}`.replace(/\n|\r/g, "");
-  return formatted;
-}
-
-function getDateNow() {
-  const dt = new Date();
+  if (timestamp) {
+    dt.setTime(timestamp * 1000);
+  }
   const year = dt.getFullYear();
   const month = (dt.getMonth() + 1).toString().padStart(2, "0");
   const date = dt.getDate().toString().padStart(2, "0");
