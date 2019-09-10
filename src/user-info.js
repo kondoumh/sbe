@@ -26,18 +26,19 @@ async function showUserInfo(projectName, forceRefresh = false) {
 
   let userInfo = {};
   const localData = localStorage.getItem(infoKey);
+  let lastCreated;
   if (localData) {
     userInfo = JSON.parse(localData);
     if (userInfo.pages.length > 0) {
       lastCreated = userInfo.pages.reduce((a, b) => a.created > b.created ? a : b);
       console.log(getDate(lastCreated.created) + " : " + lastCreated.title);
     }
-  } else {
-    pages = await fetchUserRelatedPages(getPagesApiUrl(projectName), user.userId, content);
-    userInfo.fetched = getDate();
-    userInfo.pages = pages;
-    localStorage.setItem(infoKey, JSON.stringify(userInfo));
   }
+  pages = await fetchUserRelatedPages(getPagesApiUrl(projectName), user.userId, content, lastCreated);
+  userInfo.fetched = getDate();
+  userInfo.pages = pages;
+  localStorage.setItem(infoKey, JSON.stringify(userInfo));
+  
   data += "pages created: " + userInfo.pages.length + "<hr>";
   document.querySelector("#fetched").innerHTML = "updated: " + userInfo.fetched;
 
@@ -77,7 +78,7 @@ async function fetchProjectInfo(projectUrl, limit, pagination) {
   return data;
 }
 
-async function fetchUserRelatedPages(projectUrl, userId, content) {
+async function fetchUserRelatedPages(projectUrl, userId, content, lastCreated) {
   const single = await fetchProjectInfo(projectUrl, 1, 0);
   const total = single.count;
   let result = [];
