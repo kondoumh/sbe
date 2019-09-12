@@ -36,7 +36,9 @@ async function showUserInfo(projectName, forceRefresh = false) {
   }
   pages = await fetchUserRelatedPages(getPagesApiUrl(projectName), user.userId, content, lastCreated);
   userInfo.fetched = getDate();
-  userInfo.pages = pages;
+  if (pages.length > 0) {
+    userInfo.pages = pages.concat(userInfo.pages);
+  }
   localStorage.setItem(infoKey, JSON.stringify(userInfo));
   
   data += "pages created: " + userInfo.pages.length + "<hr>";
@@ -84,10 +86,14 @@ async function fetchUserRelatedPages(projectUrl, userId, content, lastCreated) {
   let result = [];
   for (page = 0; total + 100 > page * 100; page++) {
     const data = await fetchProjectInfo(projectUrl, 100, page);
-    const pages = data.pages.filter(page => page.user.id === userId && page.created > lastCreated.created);
+    const pages = data.pages.filter(page => 
+      page.user.id === userId &&
+      !lastCreated ? true : page.created > lastCreated.created);
     Array.prototype.push.apply(result, pages);
     content.innerHTML = "Fetching... " + page * 100 + " / " + total + "<br>Found : " + result.length;
-    const already = data.pages.filter(page => page.user.id === userId && page.created <= lastCreated.created);
+    const already = data.pages.filter(page => 
+      page.user.id === userId &&
+      !lastCreated ? false : page.created <= lastCreated.created);
     if (already.length > 0) {
       return result;
     }
