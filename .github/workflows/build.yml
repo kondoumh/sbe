@@ -5,7 +5,7 @@ on: [push]
 jobs:
   build:
 
-    runs-on: macos-latest # ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
@@ -16,7 +16,7 @@ jobs:
     - name: build app
       uses: actions/setup-node@v1
       with:
-        node-version: 12.x
+        node-version: 10.x
     - name: npm install, package for macOS
       if: matrix.os == 'macos-latest'
       run: |
