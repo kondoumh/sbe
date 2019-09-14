@@ -33,10 +33,12 @@ async function showUserInfo(projectName, forceRefresh = false) {
       lastCreated = userInfo.pages.reduce((a, b) => a.created > b.created ? a : b);
       console.log(getDate(lastCreated.created) + " : " + lastCreated.title);
     }
+  } else {
+    userInfo.fetched = getDate();
   }
   pages = await fetchUserRelatedPages(getPagesApiUrl(projectName), user.userId, content, lastCreated);
-  userInfo.fetched = getDate();
   if (pages.length > 0) {
+    userInfo.fetched = getDate();
     userInfo.pages = userInfo.pages ? pages.concat(userInfo.pages) : pages;
   }
   localStorage.setItem(infoKey, JSON.stringify(userInfo));
