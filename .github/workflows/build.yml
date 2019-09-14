@@ -5,7 +5,7 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ${{ matrix.os }}
+    runs-on: macos-latest # ${{ matrix.os }}
 
     strategy:
       matrix:
@@ -20,8 +20,13 @@ jobs:
     - name: npm install, package for macOS
       if: matrix.os == 'macos-latest'
       run: |
+        ls -l
+        node -v
+        npm -v
         npm install
+        ls -l node_modules
         npm run package-macos
+        ls -l sbe-darwin-x64/sbe.app
         zip -r sbe-darwin-x64/sbe-master-macos.zip sbe-darwin-x64/sbe.app
         ls -l sbe-darwin-x64
       env:
