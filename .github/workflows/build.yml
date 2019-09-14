@@ -31,3 +31,15 @@ jobs:
         npm run package-win32
       env:
         CI: true
+    - name: archive package for macOS
+      if: matrix.os == 'macos-latest'
+      uses: actions/upload-artifact@master
+      with:
+        name: sbe-master-macos.zip
+        path: ./sbe-darwin-x64/sbe.app
+    - name: archive package for Windows
+      if: matrix.os == 'windows-latest'
+      uses: actions/upload-artifact@master
+      with:
+        name: sbe-master-windows.zip
+        path: ./sbe-win32-x64
