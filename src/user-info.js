@@ -86,16 +86,18 @@ async function fetchUserRelatedPages(projectUrl, userId, content, lastCreated) {
   let result = [];
   for (page = 0; total + 100 > page * 100; page++) {
     const data = await fetchProjectInfo(projectUrl, 100, page);
-    const pages = data.pages.filter(page => 
-      page.user.id === userId &&
-      lastCreated ? page.created > lastCreated.created : true);
+    let pages = data.pages.filter(page => page.user.id === userId);
+    if (lastCreated) {
+      pages = pages.filter(page => page.created > lastCreated.created);
+    }
     Array.prototype.push.apply(result, pages);
     content.innerHTML = "Fetching... " + page * 100 + " / " + total + "<br>Found : " + result.length;
-    const already = data.pages.filter(page => 
-      page.user.id === userId &&
-      lastCreated ? page.created <= lastCreated.created : false);
-    if (already.length > 0) {
-      return result;
+    if (lastCreated) {
+      const already = data.pages.filter(page =>
+        page.user.id === userId && page.created <= lastCreated.created);
+      if (already.length > 0) {
+        return result;
+      }
     }
   }
   return result;
