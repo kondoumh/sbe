@@ -22,6 +22,7 @@ jobs:
       run: |
         npm install
         npm run package-macos
+        zip -r sbe-darwin-x64/sbe-master-macos.zip sbe-darwin-x64/sbe.app
       env:
         CI: true
     - name: npm install, package for Windows
@@ -29,17 +30,18 @@ jobs:
       run: |
         npm install
         npm run package-win32
+        powershell Compress-Archive -Path sbe-win32-x64 -DestinationPath sbe-master-win32.zip
       env:
         CI: true
     - name: archive package for macOS
       if: matrix.os == 'macos-latest'
       uses: actions/upload-artifact@master
       with:
-        name: sbe-master-macos.zip
-        path: ./sbe-darwin-x64/sbe.app
+        name: sbe-master-macos
+        path: ./sbe-darwin-x64/sbe-master-macos.zip
     - name: archive package for Windows
       if: matrix.os == 'windows-latest'
       uses: actions/upload-artifact@master
       with:
-        name: sbe-master-windows.zip
-        path: ./sbe-win32-x64
+        name: sbe-master-windows
+        path: sbe-master-win32.zip
