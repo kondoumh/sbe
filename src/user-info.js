@@ -12,11 +12,10 @@ window.onload = () => {
 };
 
 async function showUserInfo(projectName, forceRefresh = false) {
-  const content = document.querySelector("#user-info");
-  content.innerHTML = "Fetching...";
+  const contentUser = document.querySelector("#user-info");
+  contentUser.innerHTML = "Fetching...";
 
   const user = await fetchUserInfo(getPagesApiUrl(projectName));
-  let data = user.name + " (" + user.displayName + ")" + "<br>";
 
   const infoKey = projectName + "_" + user.name;
 
@@ -36,20 +35,28 @@ async function showUserInfo(projectName, forceRefresh = false) {
   } else {
     userInfo.fetched = getDate();
   }
-  pages = await fetchUserRelatedPages(getPagesApiUrl(projectName), user.userId, content, lastCreated);
+  pages = await fetchUserRelatedPages(getPagesApiUrl(projectName), user.userId, contentUser, lastCreated);
   if (pages.length > 0) {
     userInfo.fetched = getDate();
     userInfo.pages = userInfo.pages ? pages.concat(userInfo.pages) : pages;
   }
   localStorage.setItem(infoKey, JSON.stringify(userInfo));
   
-  data += "pages created: " + userInfo.pages.length + "<hr>";
+  contentUser.innerHTML = user.name + " (" + user.displayName + ")" + "<br>";
+  contentUser.innerHTML += "pages created: " + userInfo.pages.length + "<br>";
   document.querySelector("#fetched").innerHTML = "updated: " + userInfo.fetched;
 
+  const contentPages = document.querySelector("#created-pages");
+  let views = 0;
+  let linked = 0;
   userInfo.pages.forEach(page => {
-    data += getDate(page.created) + " : " + getPageLink(projectName, page.title) + "<br>";
+    const pageInfo = getDate(page.created) + " : " + getPageLink(projectName, page.title) + "<br>";
+    contentPages.innerHTML += pageInfo;
+    views += parseInt(page.views);
+    linked += parseInt(page.linked);
   });
-  content.innerHTML = data;
+  contentUser.innerHTML += "views: " + views + "<br>";
+  contentUser.innerHTML += "linkded: " + linked;
 }
 
 function getPagesApiUrl(projectName) {
