@@ -29,11 +29,11 @@ jobs:
     - name: npm install, package for Windows
       if: matrix.os == 'windows-latest'
       run: |
+        cd
+        node version
         npm install
         ls node_modules
-        node version
         npm run package-win32
-        cd
 #        powershell Compress-Archive -Path sbe-win32-x64 -DestinationPath sbe-master-win32.zip
       env:
         CI: true
