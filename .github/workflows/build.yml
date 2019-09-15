@@ -17,6 +17,9 @@ jobs:
         os: [windows-latest, macos-latest]
 
     steps:
+    - name: show trigger
+      run: echo ${GITHUB_REF}
+
     - uses: actions/checkout@v1
     - name: build app
       uses: actions/setup-node@v1
@@ -34,7 +37,7 @@ jobs:
       if: matrix.os == 'macos-latest'
       uses: actions/upload-artifact@master
       with:
-        name: sbe-master-macos
+        name: sbe-v-macos
         path: ./sbe-darwin-x64/sbe-macos.zip
 
     - name: package for Windows
@@ -47,5 +50,5 @@ jobs:
       if: matrix.os == 'windows-latest'
       uses: actions/upload-artifact@master
       with:
-        name: sbe-master-windows
+        name: sbe-v-windows
         path: sbe-windows.zip
