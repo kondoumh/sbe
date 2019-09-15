@@ -1,6 +1,8 @@
-name: Build Electron app
+name: Build sbe binaries
 
 on: [push]
+  branches:
+    - refs/tags/*
 
 jobs:
   build:
@@ -24,23 +26,23 @@ jobs:
       if: matrix.os == 'macos-latest'
       run: |
         npm run package-macos
-        zip -ry sbe-darwin-x64/sbe-master-macos.zip sbe-darwin-x64/sbe.app
+        zip -ry sbe-darwin-x64/sbe-macos.zip sbe-darwin-x64/sbe.app
     - name: archive package for macOS
       if: matrix.os == 'macos-latest'
       uses: actions/upload-artifact@master
       with:
         name: sbe-master-macos
-        path: ./sbe-darwin-x64/sbe-master-macos.zip
+        path: ./sbe-darwin-x64/sbe-macos.zip
 
     - name: package for Windows
       if: matrix.os == 'windows-latest'
       run: npm run package-win32
     - name: zip package for Windows
       if: matrix.os == 'windows-latest'
-      run: powershell Compress-Archive -Path sbe-win32-x64 -DestinationPath sbe-master-win32.zip
+      run: powershell Compress-Archive -Path sbe-win32-x64 -DestinationPath sbe-windows.zip
     - name: archive package for Windows
       if: matrix.os == 'windows-latest'
       uses: actions/upload-artifact@master
       with:
         name: sbe-master-windows
-        path: sbe-master-win32.zip
+        path: sbe-windows.zip
