@@ -1,6 +1,11 @@
-name: Build Electron app
+name: Build sbe binaries
 
-on: [push]
+on:
+  push:
+    branches:
+      - "!*"
+    tags:
+      - "v*"
 
 jobs:
   build:
@@ -13,39 +18,38 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: build app
+    - name: setup nodejs
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name: npm install, package for macOS
+    - name: install dependencies
+      run: npm install
+
+    - name: package for macOS
       if: matrix.os == 'macos-latest'
       run: |
-        npm install
+        echo ${GITHUB_REF}
         npm run package-macos
-        zip -r sbe-darwin-x64/sbe-master-macos.zip sbe-darwin-x64/sbe.app
-        ls -l sbe-darwin-x64
-      env:
-        CI: true
-    - name: npm install, package for Windows
+        zip -ry sbe-darwin-x64/sbe-macos.zip sbe-darwin-x64/sbe.app
+    - name: archive package for macOS
+      if: matrix.os == 'macos-latest'
+      uses: actions/upload-artifact@master
+      with:
+        name: sbe-v-macos
+        path: ./sbe-darwin-x64/sbe-macos.zip
+
+    - name: show ref tags
       if: matrix.os == 'windows-latest'
-      run: |
-        npm install
-        ls node_modules
-        node version
-        npm run package-win32
-        cd
-#        powershell Compress-Archive -Path sbe-win32-x64 -DestinationPath sbe-master-win32.zip
-      env:
-        CI: true
-#    - name: archive package for macOS
-#      if: matrix.os == 'macos-latest'
-#      uses: actions/upload-artifact@master
-#      with:
-#        name: sbe-master-macos
-#        path: ./sbe-darwin-x64/sbe-master-macos.zip
-#    - name: archive package for Windows
-#      if: matrix.os == 'windows-latest'
-#      uses: actions/upload-artifact@master
-#      with:
-#        name: sbe-master-windows
-#        path: sbe-master-win32.zip
+      run: echo %GITHUB_REF%
+    - name: package for Windows
+      if: matrix.os == 'windows-latest'
+      run: npm run package-win32
+    - name: zip package for Windows
+      if: matrix.os == 'windows-latest'
+      run: powershell Compress-Archive -Path sbe-win32-x64 -DestinationPath sbe-windows.zip
+    - name: archive package for Windows
+      if: matrix.os == 'windows-latest'
+      uses: actions/upload-artifact@master
+      with:
+        name: sbe-v-windows
+        path: sbe-windows.zip
