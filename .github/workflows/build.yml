@@ -1,8 +1,11 @@
 name: Build sbe binaries
 
-on: [push]
-  branches:
-    - refs/tags/*
+on:
+  push:
+    branches:
+      - "!*"
+    tags:
+      - "v*"
 
 jobs:
   build:
