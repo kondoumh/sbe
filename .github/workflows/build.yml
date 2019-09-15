@@ -17,10 +17,12 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name: npm install, package for macOS
+    - name: install dependencies
+      run: npm install
+
+    - name: package for macOS
       if: matrix.os == 'macos-latest'
       run: |
-        npm install
         npm run package-macos
         zip -ry sbe-darwin-x64/sbe-master-macos.zip sbe-darwin-x64/sbe.app
     - name: archive package for macOS
@@ -29,9 +31,7 @@ jobs:
       with:
         name: sbe-master-macos
         path: ./sbe-darwin-x64/sbe-master-macos.zip
-    - name: npm install for Windows
-      if: matrix.os == 'windows-latest'
-      run: npm install
+
     - name: package for Windows
       if: matrix.os == 'windows-latest'
       run: npm run package-win32
