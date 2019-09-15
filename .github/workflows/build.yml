@@ -16,10 +16,6 @@ jobs:
       matrix:
         os: [windows-latest, macos-latest]
 
-    steps:
-    - name: show trigger
-      run: echo ${GITHUB_REF}
-
     - uses: actions/checkout@v1
     - name: build app
       uses: actions/setup-node@v1
@@ -31,6 +27,7 @@ jobs:
     - name: package for macOS
       if: matrix.os == 'macos-latest'
       run: |
+        echo ${GITHUB_REF}
         npm run package-macos
         zip -ry sbe-darwin-x64/sbe-macos.zip sbe-darwin-x64/sbe.app
     - name: archive package for macOS
@@ -40,6 +37,9 @@ jobs:
         name: sbe-v-macos
         path: ./sbe-darwin-x64/sbe-macos.zip
 
+    - name: show ref tags
+      if: matrix.os == 'windows-latest'
+      run: echo %GITHUB_REF%
     - name: package for Windows
       if: matrix.os == 'windows-latest'
       run: npm run package-win32
