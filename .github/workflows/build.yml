@@ -23,16 +23,22 @@ jobs:
         npm install
         npm run package-macos
         zip -ry sbe-darwin-x64/sbe-master-macos.zip sbe-darwin-x64/sbe.app
-        ls -l sbe-darwin-x64
       env:
         CI: true
-    - name: npm install, package for Windows
+    - name: npm install for Windows
       if: matrix.os == 'windows-latest'
       run: |
         npm install
-        dir node_modules
 #        npm run package-win32
 #        powershell Compress-Archive -Path sbe-win32-x64 -DestinationPath sbe-master-win32.zip
+      env:
+        CI: true
+    - name: package for Windows
+      if: matrix.os == 'windows-latest'
+      run: |
+        dir node_modules
+        npm run package-win32
+        powershell Compress-Archive -Path sbe-win32-x64 -DestinationPath sbe-master-win32.zip
       env:
         CI: true
     - name: archive package for macOS
