@@ -20,8 +20,8 @@
   "author": "kondoumh",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^6.0.7",
-    "electron-packager": "^14.0.5"
+    "electron": "^6.0.9",
+    "electron-packager": "^14.0.6"
   },
   "dependencies": {
     "about-window": "^1.13.1",
