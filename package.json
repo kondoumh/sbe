@@ -21,7 +21,8 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^6.0.9",
-    "electron-packager": "^14.0.6"
+    "electron-packager": "^14.0.6",
+    "spectron": "^8.0.0"
   },
   "dependencies": {
     "about-window": "^1.13.1",
