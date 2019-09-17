@@ -18,6 +18,10 @@ app.start().then(() => {
 }).then(isVisible => {
   assert.equal(isVisible, true);
 }).then(() => {
+  return app.client.getTitle();
+}).then((title) => {
+  assert.equal(title, "sbe - Scrapbox in Electron");
+}).then(() => {
   console.log("Test succeed.");
   return app.stop();
 }).catch(error => {
