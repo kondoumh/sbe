@@ -5,6 +5,8 @@ let appPath;
 
 if (process.platform == "darwin") {
   appPath = "sbe-darwin-x64/sbe.app/Contents/MacOS/sbe";  
+} else if (process.platform == "win32") {
+  appPath = "sbe-win32-x64/sbe.exe"
 }
 
 const app = new Application({
