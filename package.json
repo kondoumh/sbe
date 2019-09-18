@@ -6,11 +6,23 @@
   "config": {
     "proxy": "your.proxy.host:port"
   },
+  "build": {
+    "productName": "sbe",
+    "appId": "sbe",
+    "mac": {
+      "icon": "icons/mac/sbe.icns"
+    },
+    "win": {
+      "icon": "icons/win/sbe.ico"
+    }
+  },
   "scripts": {
     "start": "electron .",
     "proxy": "electron . --proxy-server=%npm_package_config_proxy%",
     "package-macos": "electron-packager . sbe --platform=darwin --arch=x64 --overwrite --icon=icons/mac/sbe.icns",
     "package-win32": "electron-packager . sbe --platform=win32 --arch=x64 --overwrite --icon=icons/win/sbe.ico",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
     "test": "node test/test-start.js"
   },
   "repository": "https://github.com/kondoumh/sbe",
@@ -22,6 +34,7 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^6.0.9",
+    "electron-builder": "^21.2.0",
     "electron-packager": "^14.0.6",
     "spectron": "^8.0.0"
   },
