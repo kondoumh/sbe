@@ -69,3 +69,4 @@ jspm_packages
 
 # Directories for packages
 sbe-*
+dist
