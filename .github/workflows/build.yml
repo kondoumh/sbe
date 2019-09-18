@@ -35,8 +35,14 @@ jobs:
       if: matrix.os == 'macos-latest'
       uses: actions/upload-artifact@master
       with:
-        name: sbe-v-macos
+        name: sbe-macos
         path: ./sbe-darwin-x64/sbe-macos.zip
+    - name: release package for macOS
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ./sbe-darwin-x64/sbe-macos.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.RL_TOKEN }}
 
     - name: show ref tags
       if: matrix.os == 'windows-latest'
@@ -51,5 +57,11 @@ jobs:
       if: matrix.os == 'windows-latest'
       uses: actions/upload-artifact@master
       with:
-        name: sbe-v-windows
+        name: sbe-windows
         path: sbe-windows.zip
+    - name: release package for Windows
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ./sbe-darwin-x64/sbe-windows.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.RL_TOKEN }}
