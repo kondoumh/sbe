@@ -24,44 +24,18 @@ jobs:
         node-version: 12.x
     - name: install dependencies
       run: npm install
-
-    - name: package for macOS
-      if: matrix.os == 'macos-latest'
-      run: |
-        echo ${GITHUB_REF}
-        npm run package-macos
-        zip -ry sbe-darwin-x64/sbe-macos.zip sbe-darwin-x64/sbe.app
-    - name: archive package for macOS
-      if: matrix.os == 'macos-latest'
-      uses: actions/upload-artifact@master
+    - name: package
+      run: npm run dist
+    - name: clean
+      run: npx rimraf "dist/!(*.exe|*.AppImage|*.dmg|*.zip)"
+    - name: archive
+      uses: actions/upload-artifact@v1
       with:
-        name: sbe-macos
-        path: ./sbe-darwin-x64/sbe-macos.zip
-    - name: release package for macOS
+        name: ${{ matrix.os }}
+        path: dist
+    - name: release
       uses: softprops/action-gh-release@v1
       with:
-        files: ./sbe-darwin-x64/sbe-macos.zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.RL_TOKEN }}
-
-    - name: show ref tags
-      if: matrix.os == 'windows-latest'
-      run: echo %GITHUB_REF%
-    - name: package for Windows
-      if: matrix.os == 'windows-latest'
-      run: npm run package-win32
-    - name: zip package for Windows
-      if: matrix.os == 'windows-latest'
-      run: powershell Compress-Archive -Path sbe-win32-x64 -DestinationPath sbe-windows.zip
-    - name: archive package for Windows
-      if: matrix.os == 'windows-latest'
-      uses: actions/upload-artifact@master
-      with:
-        name: sbe-windows
-        path: sbe-windows.zip
-    - name: release package for Windows
-      uses: softprops/action-gh-release@v1
-      with:
-        files: ./sbe-darwin-x64/sbe-windows.zip
+        files: "dist/**"
       env:
         GITHUB_TOKEN: ${{ secrets.RL_TOKEN }}
