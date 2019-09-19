@@ -37,16 +37,12 @@ $ npm install
 $ npm start
 ```
 
-if you are in proxy environment,
-
-```
-$ npm run proxy --sbe:proxy=your.proxy.host:port
-```
-
 ## How to build package
+
+Currently Windows and macOS only.
 
 ```
 $ npm run dist
 ```
 
-binaries (setup modules, zip archive, etc) will be generated in ./dist
+Setup modules(exe / dmg), and zip will be generated in ./dist
