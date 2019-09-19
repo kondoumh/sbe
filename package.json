@@ -19,8 +19,6 @@
   "scripts": {
     "start": "electron .",
     "proxy": "electron . --proxy-server=%npm_package_config_proxy%",
-    "package-macos": "electron-packager . sbe --platform=darwin --arch=x64 --overwrite --icon=icons/mac/sbe.icns",
-    "package-win32": "electron-packager . sbe --platform=win32 --arch=x64 --overwrite --icon=icons/win/sbe.ico",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "test": "node test/test-start.js"

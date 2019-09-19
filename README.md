@@ -26,7 +26,7 @@ An unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 
 ## How to run
 ### requirement
-Node.js v10
+Node.js v10 or later
 
 ### run
 git clone or download zip.
@@ -43,24 +43,10 @@ if you are in proxy environment,
 $ npm run proxy --sbe:proxy=your.proxy.host:port
 ```
 
-## How to build binary
-
-### for macOS
-```
-$ npm run package-macos
-```
-
-binary will be generated in ./mtwe-darwin-x64
-
-### for Windows
-```
-$ npm run package-win32
-```
-
-binary will be generated in ./mtwe-win32-x64
-
-if you run binary in proxy. you have to add argument (via shortcut link) as below
+## How to build package
 
 ```
-sbe.exe --proxy-server=your.proxy.host:port
+$ npm run dist
 ```
+
+binaries (setup modules, zip archive, etc) will be generated in ./dist
