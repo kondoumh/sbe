@@ -18,7 +18,6 @@
   },
   "scripts": {
     "start": "electron .",
-    "proxy": "electron . --proxy-server=%npm_package_config_proxy%",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "test": "node test/test-start.js"
