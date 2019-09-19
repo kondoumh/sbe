@@ -26,6 +26,8 @@ jobs:
       run: npm install
     - name: package
       run: npm run dist
+    - name: clean
+      run: npx rimraf "dist/!(*.exe|*.AppImage|*.dmg|*.zip)"
     - name: archive
       uses: actions/upload-artifact@v1
       with:
