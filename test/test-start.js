@@ -10,7 +10,8 @@ if (process.platform == "darwin") {
 }
 
 const app = new Application({
-  path: appPath
+  path: appPath,
+  startTimeout: 10000
 });
 
 app.start().then(() => {
