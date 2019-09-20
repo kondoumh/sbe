@@ -37,6 +37,21 @@ $ npm install
 $ npm start
 ```
 
+### How to run test
+
+You need to build runtime module before running test.
+
+```
+$ npm run pack
+$ npm test
+```
+
+Under proxy server, `no_proxy` setting may be required.
+
+```
+$ export {no_proxy,NO_PROXY}="127.0.0.1,localhost"
+```
+
 ## How to build package
 
 Currently Windows and macOS only.
