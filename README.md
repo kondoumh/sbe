@@ -24,7 +24,13 @@ An unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 ![Screenshot](https://user-images.githubusercontent.com/2092183/63644879-904e0a00-c72d-11e9-96d2-64e4727e64c6.gif)
 
 
-## How to run
+## How to install
+Download installer for each platform from Releases and execute.
+
+- macOS: sbe-<version>-mac.zip
+- Windows: sbe.Setup.<version>.exe
+
+## How to run with Electron
 ### requirement
 Node.js v10 or later
 
