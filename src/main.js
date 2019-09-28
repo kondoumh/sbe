@@ -62,6 +62,8 @@ const createWindow = () => {
 
 app.on("ready", createWindow);
 
+app.setAsDefaultProtocolClient("sbe");
+
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
@@ -72,6 +74,10 @@ app.on("activate", () => {
   if (mainWindow === null) {
     createWindow();
   }
+});
+
+app.on("open-url", (e, url) => {
+  console.log(url);
 });
 
 ipcMain.on("updateFavs", (e, arg) => {
