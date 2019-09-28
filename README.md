@@ -25,9 +25,9 @@ An unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 
 
 ## How to install
-Download installer for each platform from Releases and execute.
+Download installer for each platform from [Releases](https://github.com/kondoumh/sbe/releases) and execute.
 
-- macOS: sbe-version-mac.zip
+- macOS: sbe-version.dmg
 - Windows: sbe.Setup.version.exe
 
 ## How to run with Electron
