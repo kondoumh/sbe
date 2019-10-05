@@ -30,7 +30,7 @@
   "author": "kondoumh",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^6.0.10",
+    "electron": "^6.0.11",
     "electron-builder": "^21.2.0",
     "rimraf": "^3.0.0",
     "spectron": "^8.0.0"
@@ -41,6 +41,6 @@
     "electron-context-menu": "^0.15.0",
     "electron-search-text": "^0.3.0",
     "electron-store": "^5.0.0",
-    "electron-tabs": "^0.9.5"
+    "electron-tabs": "^0.10.0"
   }
 }
