@@ -77,7 +77,7 @@ app.on("activate", () => {
 });
 
 app.on("open-url", (e, url) => {
-  console.log(url);
+  mainWindow.webContents.send("openUrlScheme", url.replace("sbe://", ""));
 });
 
 ipcMain.on("updateFavs", (e, arg) => {

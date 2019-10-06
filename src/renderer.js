@@ -249,6 +249,10 @@ ipcRenderer.on("showUserInfo", () => {
   showUserInfo();
 });
 
+ipcRenderer.on("openUrlScheme", (event, url) => {
+  tabGroup.openUrl(url);
+});
+
 ipcRenderer.on("pasteUrlTitle", async () => {
   const text = clipboard.readText("selection");
   if (!sbUrl.isUrl(text)) {
