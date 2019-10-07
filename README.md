@@ -67,3 +67,9 @@ $ npm run dist
 ```
 
 Setup modules(exe / dmg), and zip will be generated in ./dist
+
+## Open from web browser
+
+Since sbe is registered as a client of URL Scheme, it is possible to open the corresponding page with sbe by adding prefix `sbe://` to the url. It can be done by browser extension such as bookmarklet.
+
+e.g. `https://scrapbox.io/foo/bar` ==> `sbe://https://scrapbox.io/foo/bar`
