@@ -80,14 +80,13 @@ app.on("open-url", (e, url) => {
   mainWindow.webContents.send("openUrlScheme", url.replace("sbe://", ""));
 });
 
-const gotTheLock = app.requestSingleInstanceLock();
-if (!gotTheLock) {
+if (!app.requestSingleInstanceLock()) {
   app.quit();
 } else {
-  app.on('second-instance', (event, commandLine) => {
-    commandLine.forEach(cmd => {
-      if (/sbe:\/\//.test(cmd)) {
-        mainWindow.webContents.send("openUrlScheme", cmd.replace("sbe://", ""));
+  app.on('second-instance', (e, args) => {
+    args.forEach(arg => {
+      if (/sbe:\/\//.test(arg)) {
+        mainWindow.webContents.send("openUrlScheme", arg.replace("sbe://", ""));
       }
     });
 
