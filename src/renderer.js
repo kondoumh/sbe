@@ -250,6 +250,10 @@ ipcRenderer.on("showUserInfo", () => {
 });
 
 ipcRenderer.on("openUrlScheme", (event, url) => {
+  if (!sbUrl.inScrapbox(url)) {
+    showStatusMessage("Requested url is not scrapbox page.");
+    return;
+  }
   tabGroup.openUrl(url);
 });
 
