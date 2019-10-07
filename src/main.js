@@ -80,6 +80,26 @@ app.on("open-url", (e, url) => {
   mainWindow.webContents.send("openUrlScheme", url.replace("sbe://", ""));
 });
 
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on('second-instance', (event, commandLine) => {
+    commandLine.forEach(cmd => {
+      if (/sbe:\/\//.test(cmd)) {
+        mainWindow.webContents.send("openUrlScheme", cmd.replace("sbe://", ""));
+      }
+    });
+
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) {
+        mainWindow.restore();
+      }
+      mainWindow.focus();
+    }
+  });
+}
+
 ipcMain.on("updateFavs", (e, arg) => {
   store.set("favs", arg);
 });
