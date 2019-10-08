@@ -70,6 +70,12 @@ Setup modules(exe / dmg), and zip will be generated in ./dist
 
 ## Open from web browser
 
-Since sbe is registered as a client of URL Scheme, it is possible to open the corresponding page with sbe by adding prefix `sbe://` to the url. It can be done by browser extension such as bookmarklet.
+Since sbe is registered as a client of URL Scheme, it is possible to open the corresponding page with sbe by adding prefix `sbe://` to the url. 
 
 e.g. `https://scrapbox.io/foo/bar` ==> `sbe://https://scrapbox.io/foo/bar`
+
+This conversion can be done by following script which executed by bookmarklet or browser extensions such as [SurfingKeys](https://github.com/brookhong/Surfingkeys).
+
+```javascript
+javascript:(function(){location.href=`sbe://${window.top.location.href}`})();
+```
