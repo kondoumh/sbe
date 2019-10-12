@@ -77,7 +77,9 @@ app.on("activate", () => {
 });
 
 app.on("open-url", (e, url) => {
-  mainWindow.webContents.send("openUrlScheme", url.replace("sbe://", ""));
+  if (mainWindow != null) {
+    mainWindow.webContents.send("openUrlScheme", url.replace("sbe://", ""));
+  }
 });
 
 if (!app.requestSingleInstanceLock()) {
