@@ -1,4 +1,12 @@
 const app = new Vue({
+  vuetify: new Vuetify({
+    icons : {
+      iconfont: 'mdi'
+    },
+    theme: {
+      dark: false
+    }
+  }),
   el: '#app',
   async mounted () {
     if (!this.projectName) {
@@ -14,24 +22,28 @@ const app = new Vue({
   },
   methods: {
     async fetchData () {
-      const skip = (this.pagination.page - 1) * this.pagination.rowsPerPage
-      let url = `https://scrapbox.io/api/pages/${this.projectName}?skip=${skip}&limit=${this.pagination.rowsPerPage}&sort=${this.pagination.sortBy}`
+      const { sortBy, sortDesc, page, itemsPerPage } = this.options
+      const skip = (page - 1) * itemsPerPage
+      let url = `https://scrapbox.io/api/pages/${this.projectName}?skip=${skip}&limit=${itemsPerPage}&sort=${sortBy}`
+      console.log(url)
       const res = await fetch(url)
       const data = await res.json()
       this.items = await data.pages
-      this.pagination.totalItems = data.count
+      console.log(data.count)
+      this.pageCount = data.count
+      this.length = Math.ceil(this.pageCount / itemsPerPage)
     },
     formatDate (timestamp) {
       let date = new Date()
       date.setTime(timestamp * 1000)
-      const options = {
+      const params = {
         year: "numeric", month: "numeric", day: "numeric",
         hour: "numeric", minute: "numeric", second: "numeric",
         hour12: false
       }
-      return date.toLocaleString(navigator.language, options)
+      return date.toLocaleString(navigator.language, params)
     },
-    input (page) {
+    input () {
       this.fetchData()
     },
     onFocus () {
@@ -41,28 +53,22 @@ const app = new Vue({
       return encodeURIComponent(title)
     }
   },
-  computed: {
-    page () {
-      if (this.pagination.rowsPerPage == null || this.pagination.totalItems == null ) return 0
-      return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
-    }
-  },
   watch: {
-    pagination: {
+    options: {
       handler () {
-        this.pagination.descending = false
         this.fetchData()
-      }
+      },
+      deep: true
     }
   },
   data: () => ({
+    page: 1,
+    pageCount: 0,
+    length: 1,
     items: [],
     ptojectName: '',
-    rowsPerPageItems: [15, 20, 25, 50, 75, 100],
-    pagination: {
-      sortBy: 'updated',
-      rowsPerPage: 50,
-      totalItems: 0
+    options: {
+      itemsPerPage: 50,
     },
     headers: [
       { text: 'pin', value: 'pin', sortable: false, width: '25px' },

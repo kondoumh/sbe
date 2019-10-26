@@ -3,19 +3,21 @@
   <head>
     <meta charset="UTF-8">
     <title>Scrapbox page list</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@1.5.16/dist/vuetify.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@1.5.16/dist/vuetify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.1.7/dist/vuetify.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.1.7/dist/vuetify.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons">
     <style>
       tr:nth-child(even) {
         background-color: #f2f2f2
       }
-      table.v-table tbody td,
-      table.v-table tbody th,
-      table.v-table thead td,
-      table.v-table thead th,
-      table.v-table thead th:not(:first-child) {
+      .v-data-table tbody td,
+      .v-data-table tbody th,
+      .v-data-table thead td,
+      .v-data-table thead th,
+      .v-data-table thead th:not(:first-child) {
         height: 35px;
         font-size: medium;
         white-space: nowrap;
@@ -49,30 +51,35 @@
         <div>
           <div class="text-xs-center pt-2">
             <v-pagination
-              v-model="pagination.page"
-              :length="page"
-              @input="input"
+              v-model="page"
+              :length="length"
             ></v-pagination>
           </div>
           <v-data-table
-          :headers="headers"
-          :items="items"
-          :rows-per-page-items="rowsPerPageItems"
-          :pagination.sync="pagination"
-          :total-items="pagination.totalItems"
-          class="elevation-1">
-            <template v-slot:items="props">
-              <td class="text-xs-left">{{ props.item.pin != 0 ? "&#128204;" : "" }}</td>
-              <td class="text-xs-left">{{ props.item.views }}</td>
-              <td class="text-xs-left">{{ props.item.linked }}</td>
-              <td class="text-xs-left">{{ formatDate(props.item.updated) }}</td>
-              <td class="text-xs-left">
-                <a
-                  :href="'https://scrapbox.io/'+ projectName + '/' + encodeTitle(props.item.title)"
-                  target="_blank"
-                >{{ props.item.title }}</a>
-              </td>
-              <td><img :src="props.item.image" style="width: auto; height: 25px"></td>
+            :headers="headers"
+            :items="items"
+            :options.sync="options"
+            :server-items-length="pageCount"
+            :page.sync="page"
+            :items-per-page="options.itemsPerPage"
+            :sort-desc="[false, false, false]"
+            :footer-props="{
+              'items-per-page-options': [15, 20, 25, 50, 75]
+            }"
+            class="elevation-1">
+            <template v-slot:item.pin="{item}">
+              {{ item.pin != 0 ? "&#128204;" : "" }}
+            </template>
+            <template v-slot:item.updated="{item}">
+              {{ formatDate(item.updated) }}
+            </template>
+            <template v-slot:item.title="{item}">
+              <a
+              :href="'https://scrapbox.io/'+ projectName + '/' + encodeTitle(item.title)"
+              target="_blank">{{ item.title }}</a>
+            </template>
+            <template v-slot:item.image="{item}">
+              <img :src="item.image" style="width: auto; height: 25px">
             </template>
           </v-data-table>
           <div class="dummy-area"></div>
