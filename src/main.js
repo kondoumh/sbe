@@ -254,7 +254,7 @@ function initWindowMenu() {
 
   if (process.platform === "darwin") {
     template.unshift({
-      label: app.getName(),
+      label: app.name,
       submenu: [
         {
           label: "about sbe",
