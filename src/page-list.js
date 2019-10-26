@@ -4,7 +4,7 @@ const app = new Vue({
       iconfont: 'mdi'
     },
     theme: {
-      dark: false
+      dark: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
     }
   }),
   el: '#app',
