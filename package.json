@@ -30,8 +30,8 @@
   "author": "kondoumh",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^7.0.0",
-    "electron-builder": "^21.2.0",
+    "electron": "^7.0.1",
+    "electron-builder": "^22.1.0",
     "spectron": "^9.0.0"
   },
   "dependencies": {
@@ -39,7 +39,7 @@
     "dragula": "^3.7.2",
     "electron-context-menu": "^0.15.0",
     "electron-search-text": "^0.3.0",
-    "electron-store": "^5.0.0",
+    "electron-store": "^5.1.0",
     "electron-tabs": "^0.10.0"
   }
 }
