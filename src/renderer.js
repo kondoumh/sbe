@@ -85,8 +85,8 @@ const addTab = (url, closable = true, projectName, active=true) => {
             {
               label: "Search on Google \"" + params.selectionText + "\"",
               click: () => {
-                url = "https://www.google.com/search?q=" + params.selectionText;
-                tabGroup.openUrl(url);
+                const searchUrl = "https://www.google.com/search?q=" + params.selectionText;
+                tabGroup.openUrl(searchUrl);
               },
               visible: params.selectionText !== ""
             },
