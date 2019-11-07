@@ -11,7 +11,7 @@ function initializeHistory() {
     if (!tabGroup.activateIfOpened(url)) {
       tabGroup.openUrl(url);
     }
-    selectFav.selectedIndex = 0;
+    select.selectedIndex = 0;
   });
   histories = ["https://scrapbox.io/kondoumh/Dev", "https://scrapbox.io/kondoumh/Portfolio"]; //localStorage.getItem(HISTORY_KEY);
   histories.forEach(item => {
