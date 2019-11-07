@@ -8,6 +8,7 @@ const { fetchPageInfo, fetchProjectMetrics } = require("./MetaData");
 const { inFavs, addToFavs } = require("./Favs");
 const { toHeading, toBodyText} = require("./Heading");
 const { createPageDialog, createProjectDialog, createLinksDialog, createPersonalDialog } = require("./Dialogs");
+const {initializeHistory} = require("./History");
 
 const tabGroup = new TabProvider();
 
@@ -202,6 +203,7 @@ ipcRenderer.on("domReady", () => {
     option.value = item.url;
     selectFav.append(option);
   });
+  initializeHistory();
 });
 
 ipcRenderer.on("toggleSearch", () => {
