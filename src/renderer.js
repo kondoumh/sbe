@@ -142,9 +142,6 @@ const addTab = (url, closable = true, projectName, active=true) => {
           resetSearchBoxCount();
         }
       });
-      tab.on("closing", tab => {
-        console.log(tab.webview.getURL());
-      })
     }
   });
   return tab;
