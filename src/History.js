@@ -13,10 +13,8 @@ function initializeHistory() {
     }
     select.selectedIndex = 0;
   });
-  histories = [
-    {url : "https://scrapbox.io/kondoumh/Dev", title: "Dev - kondoumh"},
-    {url : "https://scrapbox.io/kondoumh/Portfolio", title: "Portfolio - kondoumh"}
-  ]; //localStorage.getItem(HISTORY_KEY);
+  const data = localStorage.getItem(HISTORY_KEY);
+  histories = data ? JSON.parse(data) : [];
   histories.forEach(item => {
     const option = document.createElement("option");
     option.value = item.url;
@@ -28,10 +26,7 @@ function initializeHistory() {
 function addHistory(url, title) {
   if (!sbUrl.inScrapbox(url)) return;
   const newitem = {url: url, title: title};
-  const idx = histories.findIndex(item => item.url === newitem.url);
-  if (idx != -1) {
-    histories.splice(idx, 1);
-  }
+  histories = histories.filter(item => item.url != newitem.url);
   if (histories.length >= MAX_HISTORY) {
     histories.splice(MAX_HISTORY - 1, 1);
   }
@@ -48,6 +43,7 @@ function addHistory(url, title) {
     option.text = item.title;
     select.append(option);
   });
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(histories));
 }
 
 module.exports = {
