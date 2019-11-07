@@ -8,7 +8,7 @@ const { fetchPageInfo, fetchProjectMetrics } = require("./MetaData");
 const { inFavs, addToFavs } = require("./Favs");
 const { toHeading, toBodyText} = require("./Heading");
 const { createPageDialog, createProjectDialog, createLinksDialog, createPersonalDialog } = require("./Dialogs");
-const {initializeHistory} = require("./History");
+const { initializeHistory, addHistory } = require("./History");
 
 const tabGroup = new TabProvider();
 
@@ -130,7 +130,7 @@ const addTab = (url, closable = true, projectName, active=true) => {
         });
         tab.ready = true;
         if (tabGroup.isPage(tab.webview.getURL())) {
-          console.log(tab.webview.getURL());
+          addHistory(tab.webview.getURL(), tab.title);
         }
         if (projectName) {
           tab.projectName = projectName;
