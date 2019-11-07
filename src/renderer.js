@@ -8,6 +8,7 @@ const { fetchPageInfo, fetchProjectMetrics } = require("./MetaData");
 const { inFavs, addToFavs } = require("./Favs");
 const { toHeading, toBodyText} = require("./Heading");
 const { createPageDialog, createProjectDialog, createLinksDialog, createPersonalDialog } = require("./Dialogs");
+const { initializeHistory, addHistory } = require("./History");
 
 const tabGroup = new TabProvider();
 
@@ -38,6 +39,9 @@ const addTab = (url, closable = true, projectName, active=true) => {
         if (sbUrl.inScrapbox(e.url) || sbUrl.isPageList(e.url) || sbUrl.isUserPage(e.url)) {
           updateNavButtons(tab.webview);
           tabGroup.updateTab(tab, e.url, localStorage.getItem("projectName"));
+        }
+        if (tabGroup.isPage(tab.webview.getURL())) {
+          addHistory(tab.webview.getURL(), tab.title);
         }
       });
       tab.on("webview-ready", tab => {
@@ -138,6 +142,9 @@ const addTab = (url, closable = true, projectName, active=true) => {
           resetSearchBoxCount();
         }
       });
+      tab.on("closing", tab => {
+        console.log(tab.webview.getURL());
+      })
     }
   });
   return tab;
@@ -196,6 +203,7 @@ ipcRenderer.on("domReady", () => {
     option.value = item.url;
     selectFav.append(option);
   });
+  initializeHistory();
 });
 
 ipcRenderer.on("toggleSearch", () => {
