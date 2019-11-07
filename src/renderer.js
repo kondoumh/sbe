@@ -40,6 +40,9 @@ const addTab = (url, closable = true, projectName, active=true) => {
           updateNavButtons(tab.webview);
           tabGroup.updateTab(tab, e.url, localStorage.getItem("projectName"));
         }
+        if (tabGroup.isPage(tab.webview.getURL())) {
+          addHistory(tab.webview.getURL(), tab.title);
+        }
       });
       tab.on("webview-ready", tab => {
         tab.searcher = new ElectronSearchText({
@@ -129,9 +132,6 @@ const addTab = (url, closable = true, projectName, active=true) => {
           ]
         });
         tab.ready = true;
-        if (tabGroup.isPage(tab.webview.getURL())) {
-          addHistory(tab.webview.getURL(), tab.title);
-        }
         if (projectName) {
           tab.projectName = projectName;
         }

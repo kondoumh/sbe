@@ -26,6 +26,7 @@ function initializeHistory() {
 }
 
 function addHistory(url, title) {
+  if (!sbUrl.inScrapbox(url)) return;
   const newitem = {url: url, title: title};
   const idx = histories.findIndex(item => item.url === newitem.url);
   if (idx != -1) {
@@ -36,10 +37,10 @@ function addHistory(url, title) {
   }
   histories.unshift(newitem);
   const select = document.querySelector("#history");
-  while (select.childNodes.length > 0) {
-     select.removeChild(select.firstChild);
-  }
-  select.append({url: "", title: "history:"});
+  select.options.length = 0;
+  const top = document.createElement("option");
+  top.text = "history:"
+  select.append(top);
   select.selectedIndex = 0;
   histories.forEach(item => {
     const option = document.createElement("option");
