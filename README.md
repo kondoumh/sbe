@@ -20,6 +20,8 @@ An unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 - Open external url with web browser
 - Search selected text on Google with web browser
 - Add pages to fav list
+- Open scrapbox page from web browser via url-scheme
+- Open page from browsing history
 
 ![Screenshot](https://user-images.githubusercontent.com/2092183/63644879-904e0a00-c72d-11e9-96d2-64e4727e64c6.gif)
 
