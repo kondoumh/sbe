@@ -1,5 +1,26 @@
 const MAX_FAV = 10;
 
+function initializeFavs() {
+  const selectFav = document.querySelector("#favorite");
+  selectFav.addEventListener("change", e => {
+    const url = document.querySelector("#favorite").value;
+
+    if (!sbUrl.inScrapbox(url)) return;
+    if (!tabGroup.activateIfOpened(url)) {
+      tabGroup.openUrl(url);
+    }
+    selectFav.selectedIndex = 0;
+  });
+
+  const favs = new Store().get("favs");
+  favs.forEach(item => {
+    const option = document.createElement("option");
+    option.text = item.text;
+    option.value = item.url;
+    selectFav.append(option);
+  });
+}
+
 function inFavs(url) {
   const select = document.querySelector("#favorite");
 
@@ -34,6 +55,7 @@ function addToFavs(url) {
 }
 
 module.exports = {
+  initializeFavs,
   inFavs,
   addToFavs
 }

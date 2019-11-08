@@ -5,7 +5,7 @@ const ElectronSearchText = require("electron-search-text");
 const Store = require("electron-store");
 const getDate = require("./DateHelper");
 const { fetchPageInfo, fetchProjectMetrics } = require("./MetaData");
-const { inFavs, addToFavs } = require("./Favs");
+const { initializeFavs, inFavs, addToFavs } = require("./Favs");
 const { toHeading, toBodyText} = require("./Heading");
 const { createPageDialog, createProjectDialog, createLinksDialog, createPersonalDialog } = require("./Dialogs");
 const { initializeHistory, addHistory } = require("./History");
@@ -182,24 +182,7 @@ ipcRenderer.on("domReady", () => {
       tabGroup.openUrl(e.target.value);
     }
   });
-  document.querySelector("#favorite").addEventListener("change", e => {
-    const url = document.querySelector("#favorite").value;
-
-    if (!sbUrl.inScrapbox(url)) return;
-    if (!tabGroup.activateIfOpened(url)) {
-      tabGroup.openUrl(url);
-    }
-    selectFav.selectedIndex = 0;
-  });
-
-  const selectFav = document.querySelector("#favorite");
-  const favs = new Store().get("favs");
-  favs.forEach(item => {
-    const option = document.createElement("option");
-    option.text = item.text;
-    option.value = item.url;
-    selectFav.append(option);
-  });
+  initializeFavs();
   initializeHistory();
 });
 
