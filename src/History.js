@@ -1,7 +1,7 @@
 const MAX_HISTORY = 20;
 const HISTORY_KEY = "histories"
 
-let histories
+let histories = [];
 
 function initializeHistory() {
   const select = document.querySelector("#history");
@@ -26,7 +26,7 @@ function initializeHistory() {
 function addHistory(url, title) {
   if (!sbUrl.inScrapbox(url)) return;
   const newitem = {url: url, title: title};
-  histories = histories.filter(item => item.url != newitem.url);
+  histories = histories.filter(item => item.title !== newitem.title);
   if (histories.length >= MAX_HISTORY) {
     histories.splice(MAX_HISTORY - 1, 1);
   }

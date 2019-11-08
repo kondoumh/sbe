@@ -39,9 +39,10 @@ const addTab = (url, closable = true, projectName, active=true) => {
         if (sbUrl.inScrapbox(e.url) || sbUrl.isPageList(e.url) || sbUrl.isUserPage(e.url)) {
           updateNavButtons(tab.webview);
           tabGroup.updateTab(tab, e.url, localStorage.getItem("projectName"));
-        }
-        if (tabGroup.isPage(tab.webview.getURL())) {
-          addHistory(tab.webview.getURL(), tab.title);
+          if (tabGroup.isPage(tab.webview.getURL())) {
+            console.log("add history");
+            addHistory(tab.webview.getURL(), tab.title);
+          }
         }
       });
       tab.on("webview-ready", tab => {
