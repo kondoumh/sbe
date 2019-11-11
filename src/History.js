@@ -25,6 +25,9 @@ function initializeHistory() {
 
 function addHistory(url, title) {
   if (!sbUrl.inScrapbox(url)) return;
+  if (title.startsWith("new -")) return;
+  if (title.indexOf("(copy)") !== -1) return;
+
   const newitem = {url: url, title: title};
   histories = histories.filter(item => item.title.toLowerCase() !== newitem.title.toLowerCase());
   if (histories.length >= MAX_HISTORY) {
