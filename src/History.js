@@ -23,7 +23,8 @@ function initializeHistory() {
   });
 }
 
-function addHistory(url, title) {
+function addHistory(url, title, id) {
+  console.log(id);
   if (!sbUrl.inScrapbox(url)) return;
   if (title.startsWith("new -")) return;
   if (title.indexOf("(copy)") !== -1) return;

@@ -81,9 +81,21 @@ function decorateLine(line) {
   return replaced;
 }
 
+async function fetchPageData(pageUrl) {
+  console.log(pageUrl);
+  const res = await fetch(url, { credentials: "include" });
+  if (res.status === 200) {
+    const data = await res.json();
+    console.log(data);
+    return data;
+  }
+  return "";
+}
+
 module.exports = {
   fetchPageInfo,
   fetchProjectMetrics,
   fetchPageText,
-  renderLines
+  renderLines,
+  fetchPageData,
 };

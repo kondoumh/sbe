@@ -4,7 +4,7 @@ const TabProvider = require("./TabProvider");
 const ElectronSearchText = require("electron-search-text");
 const Store = require("electron-store");
 const getDate = require("./DateHelper");
-const { fetchPageInfo, fetchProjectMetrics } = require("./MetaData");
+const { fetchPageInfo, fetchProjectMetrics, fetchPageData } = require("./MetaData");
 const { initializeFavs, inFavs, addToFavs } = require("./Favs");
 const { toHeading, toBodyText} = require("./Heading");
 const { createPageDialog, createProjectDialog, createLinksDialog, createPersonalDialog } = require("./Dialogs");
@@ -35,13 +35,17 @@ const addTab = (url, closable = true, projectName, active=true) => {
       tab.webview.addEventListener("update-target-url", e => {
         showTargetPageTitle(e.url);
       });
-      tab.webview.addEventListener("load-commit", e => {
+      tab.webview.addEventListener("load-commit", async e => {
         if (sbUrl.inScrapbox(e.url) || sbUrl.isPageList(e.url) || sbUrl.isUserPage(e.url)) {
           updateNavButtons(tab.webview);
           tabGroup.updateTab(tab, e.url, localStorage.getItem("projectName"));
           if (tabGroup.isPage(tab.webview.getURL())) {
-            console.log("add history");
-            addHistory(tab.webview.getURL(), tab.title);
+            const path = tabGroup.getPath(tab.webview.getURL());
+            const pageUrl = sbUrl.getPageUrl(path[0], path[1]);
+            const page = await fetchPageData(pageUrl);
+            if (page) {
+              addHistory(tab.webview.getURL(), tab.title, page.id);
+            }
           }
         }
       });
