@@ -37,7 +37,7 @@
   "dependencies": {
     "about-window": "^1.13.1",
     "dragula": "^3.7.2",
-    "electron-context-menu": "^0.15.0",
+    "electron-context-menu": "^0.15.1",
     "electron-search-text": "^0.3.0",
     "electron-store": "^5.1.0",
     "electron-tabs": "^0.10.0"
