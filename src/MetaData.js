@@ -82,11 +82,9 @@ function decorateLine(line) {
 }
 
 async function fetchPageData(pageUrl) {
-  console.log(pageUrl);
-  const res = await fetch(url, { credentials: "include" });
+  const res = await fetch(pageUrl, { credentials: "include" });
   if (res.status === 200) {
     const data = await res.json();
-    console.log(data);
     return data;
   }
   return "";

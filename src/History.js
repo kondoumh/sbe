@@ -24,13 +24,11 @@ function initializeHistory() {
 }
 
 function addHistory(url, title, id) {
-  console.log(id);
   if (!sbUrl.inScrapbox(url)) return;
   if (title.startsWith("new -")) return;
-  if (title.indexOf("(copy)") !== -1) return;
 
-  const newitem = {url: url, title: title};
-  histories = histories.filter(item => item.title.toLowerCase() !== newitem.title.toLowerCase());
+  const newitem = {url: url, title: title, id: id};
+  histories = histories.filter(item => item.id !== newitem.id);
   if (histories.length >= MAX_HISTORY) {
     histories.splice(MAX_HISTORY - 1, 1);
   }
