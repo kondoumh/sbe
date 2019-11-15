@@ -35,7 +35,7 @@
     "spectron": "^9.0.0"
   },
   "dependencies": {
-    "about-window": "^1.13.1",
+    "about-window": "^1.13.2",
     "dragula": "^3.7.2",
     "electron-context-menu": "^0.15.1",
     "electron-search-text": "^0.3.0",
