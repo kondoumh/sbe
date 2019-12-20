@@ -1,5 +1,6 @@
 const electron = require("electron");
 const {app, Menu, BrowserWindow, ipcMain} = require("electron");
+const fetch = require("node-fetch");
 
 const path = require("path");
 const url = require("url");
@@ -17,7 +18,7 @@ const store = new Store({
 
 let mainWindow;
 
-const createWindow = () => {
+const createWindow = async () => {
   let {width, height, x, y} = store.get("bounds");
   const displays = electron.screen.getAllDisplays();
   const activeDisplay = displays.find((display) => {
@@ -58,6 +59,13 @@ const createWindow = () => {
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
+  const res = await fetch("https://api.github.com/repos/kondoumh/sbe/releases/latest");
+  if (res.status === 200) {
+    const data = await res.json();
+    if (data.name !== "v" + app.getVersion()) {
+      mainWindow.webContents.send("appUpdated");
+    }
+  }
 };
 
 app.on("ready", createWindow);

@@ -191,6 +191,14 @@ ipcRenderer.on("domReady", () => {
   initializeHistory();
 });
 
+ipcRenderer.on("appUpdated", () => {
+  new Notification("Scrapbox in Electron (sbe)", {
+    body: "New release available!"
+  }).onclick = () => {
+    tabGroup.openUrl("https://github.com/kondoumh/sbe/releases/latest");
+  };
+});
+
 ipcRenderer.on("toggleSearch", () => {
   const tab = tabGroup.getActiveTab();
   if (tab.searcher) {
