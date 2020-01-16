@@ -25,6 +25,10 @@ function createPageDialog(data) {
       modalPageInfo.close();
       addTab(openUrl);
     });
+    document.querySelector("#open-detail").addEventListener("click", () => {
+      modalPageInfo.close();
+      createPageDetailDialog(openUrl)
+    });
   }
   let content = document.querySelector("#dialog-contents");
   content.innerHTML = data.content;
@@ -33,6 +37,38 @@ function createPageDialog(data) {
     document.querySelector("#contents-image").src = data.image;
   }
   return modalPageInfo;
+}
+
+function createPageDetailDialog(url) {
+  const contents = document.querySelector("#page-contents");
+  const titleHeader = document.querySelector("#page-header");
+  const pageDetail = document.querySelector("#page-detail");
+  pageDetail.addEventListener("click", (event) => {
+    if (event.target === pageDetail) {
+      pageDetail.close("cancelled");
+    }
+  });
+  document.querySelector("#open-page").addEventListener("click", () => {
+    modalPageInfo.close();
+    addTab(url);
+  });
+
+  const container = document.querySelector("#page-contents-container");
+  const store = new Store();
+  let {width, height} = store.get("bounds");
+  width = width ? Math.ceil(width * 0.7) : 400;
+  height = height ? Math.ceil(height * 0.6) : 300;
+  container.style.width = `${width}px`;
+  container.style.height = `${height}px`;
+  
+  renderDetail(titleHeader, contents, url);
+
+  return pageDetail;
+}
+
+function renderDetail(titleHeader, contents, url) {
+  contents.innerHTML = "hoge";
+  fetchContent(url, titleHeader, contents);
 }
 
 function createProjectDialog(data) {
