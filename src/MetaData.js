@@ -55,10 +55,11 @@ async function fetchPageText(pageUrl) {
     const data = await res.json();
     title = data.title;
     author = data.user.displayName;
+    collaborators = data.collaborators;
     const lines = data.lines.slice(1).map(line => { return line.text; });
     content = renderLines(lines);
   }
-  return { title: title, author: author, content: content };
+  return { title: title, author: author, content: content, collaborators: collaborators };
 }
 
 function renderLines(lines) {
