@@ -69,14 +69,18 @@ function createPageDetailDialog(apiUrl, url) {
 }
 
 async function renderDetail(titleHeader, contents, url) {
-  contents.innerHTML = "hoge";
   let page = {};
   const { title, author, content, collaborators } = await fetchPageText(url);
   page.title = title;
   page.author = author;
-  page.content = content;
-  console.log(collaborators);
-  titleHeader.innerHTML = page.title + " : " + page.author;
+  page.content = page.author;
+  collaborators.forEach(collaborator => {
+    page.content += ", " + collaborator.displayName;
+  });
+  page.content += "<hr>"
+  page.content += content;
+
+  titleHeader.innerHTML = page.title;
   contents.innerHTML = page.content;
 }
 
