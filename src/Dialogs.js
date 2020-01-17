@@ -27,7 +27,9 @@ function createPageDialog(data) {
     });
     document.querySelector("#open-detail").addEventListener("click", () => {
       modalPageInfo.close();
-      createPageDetailDialog(openUrl)
+      const path = tabGroup.getPath(openUrl);
+      const urlDetail = sbUrl.getPageUrl(path[0], path[1]);
+      createPageDetailDialog(urlDetail, openUrl).showModal();
     });
   }
   let content = document.querySelector("#dialog-contents");
@@ -39,7 +41,7 @@ function createPageDialog(data) {
   return modalPageInfo;
 }
 
-function createPageDetailDialog(url) {
+function createPageDetailDialog(apiUrl, url) {
   const contents = document.querySelector("#page-contents");
   const titleHeader = document.querySelector("#page-header");
   const pageDetail = document.querySelector("#page-detail");
@@ -49,7 +51,7 @@ function createPageDetailDialog(url) {
     }
   });
   document.querySelector("#open-page").addEventListener("click", () => {
-    modalPageInfo.close();
+    pageDetail.close();
     addTab(url);
   });
 
@@ -61,14 +63,20 @@ function createPageDetailDialog(url) {
   container.style.width = `${width}px`;
   container.style.height = `${height}px`;
   
-  renderDetail(titleHeader, contents, url);
+  renderDetail(titleHeader, contents, apiUrl);
 
   return pageDetail;
 }
 
-function renderDetail(titleHeader, contents, url) {
+async function renderDetail(titleHeader, contents, url) {
   contents.innerHTML = "hoge";
-  fetchContent(url, titleHeader, contents);
+  let page = {};
+  const { title, author, content } = await fetchPageText(url);
+  page.title = title;
+  page.author = author;
+  page.content = content;
+  titleHeader.innerHTML = page.title + " : " + page.author;
+  contents.innerHTML = page.content;
 }
 
 function createProjectDialog(data) {
