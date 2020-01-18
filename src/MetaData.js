@@ -49,13 +49,16 @@ async function fetchPostCount(pagesUrl, messageFunc) {
 }
 
 async function fetchPageText(pageUrl) {
-  let title, author, content;
+  let title, author, content, collaborators;
   const res = await fetch(pageUrl, { credentials: "include" });
   if (res.status === 200) {
     const data = await res.json();
     title = data.title;
     author = data.user.displayName;
-    collaborators = data.collaborators;
+    collaborators = "";
+    data.collaborators.forEach(collaborator => {
+      collaborators += ", " + collaborator.displayName;
+    });
     const lines = data.lines.slice(1).map(line => { return line.text; });
     content = renderLines(lines);
   }

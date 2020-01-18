@@ -74,9 +74,7 @@ async function renderDetail(titleHeader, contents, url) {
   page.title = title;
   page.author = author;
   page.content = page.author;
-  collaborators.forEach(collaborator => {
-    page.content += ", " + collaborator.displayName;
-  });
+  page.content += collaborators;
   page.content += "<hr>"
   page.content += content;
 
