@@ -56,16 +56,19 @@ function createPageDetailDialog(apiUrl, url) {
   });
 
   const container = document.querySelector("#page-contents-container");
+  adjustSize(container);
+
+  renderDetail(titleHeader, contents, apiUrl);
+  return pageDetail;
+}
+
+function adjustSize(container) {
   const store = new Store();
   let {width, height} = store.get("bounds");
   width = width ? Math.ceil(width * 0.7) : 400;
   height = height ? Math.ceil(height * 0.6) : 300;
   container.style.width = `${width}px`;
   container.style.height = `${height}px`;
-  
-  renderDetail(titleHeader, contents, apiUrl);
-
-  return pageDetail;
 }
 
 async function renderDetail(titleHeader, contents, url) {
@@ -149,15 +152,9 @@ function createLinksDialog(data, path) {
     });
   }
   const container = document.querySelector("#link-contents-container");
-  const store = new Store();
-  let {width, height} = store.get("bounds");
-  width = width ? Math.ceil(width * 0.7) : 400;
-  height = height ? Math.ceil(height * 0.6) : 300;
-  container.style.width = `${width}px`;
-  container.style.height = `${height}px`;
-  
-  updateContent(titleHeader, contents, urlIdx, linkUrls.length);
+  adjustSize(container);
 
+  updateContent(titleHeader, contents, urlIdx, linkUrls.length);
   return modalLinks;
 }
 
