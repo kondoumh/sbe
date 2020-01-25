@@ -30,9 +30,9 @@
   "author": "kondoumh",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^7.1.9",
+    "electron": "^7.1.10",
     "electron-builder": "^22.2.0",
-    "spectron": "^9.0.0"
+    "spectron": "^10.0.0"
   },
   "dependencies": {
     "about-window": "^1.13.2",
