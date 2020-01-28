@@ -92,6 +92,14 @@ const addTab = (url, closable = true, projectName, active=true) => {
                 && tabGroup.isPage(tab.webview.getURL()) && !inFavs(tab.webview.getURL())
             },
             {
+              label: "Copy as Markdown to clipboard",
+              click: () => {
+                showStatusMessage("copy markdown to clipboard");
+              },
+              visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
+                && tabGroup.isPage(tab.webview.getURL())
+            },
+            {
               label: "Search on Google \"" + params.selectionText + "\"",
               click: () => {
                 const searchUrl = "https://www.google.com/search?q=" + params.selectionText;
