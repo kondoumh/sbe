@@ -4,11 +4,12 @@ const TabProvider = require("./TabProvider");
 const ElectronSearchText = require("electron-search-text");
 const Store = require("electron-store");
 const getDate = require("./DateHelper");
-const { fetchPageInfo, fetchProjectMetrics, fetchPageData } = require("./MetaData");
+const { fetchPageInfo, fetchProjectMetrics, fetchPageData, fetchPageRawData } = require("./MetaData");
 const { initializeFavs, inFavs, addToFavs } = require("./Favs");
 const { toHeading, toBodyText} = require("./Heading");
 const { createPageDialog, createProjectDialog, createLinksDialog, createPersonalDialog } = require("./Dialogs");
 const { initializeHistory, addHistory } = require("./History");
+const { toMarkdown } = require("./Markdown");
 
 const tabGroup = new TabProvider();
 
@@ -94,7 +95,7 @@ const addTab = (url, closable = true, projectName, active=true) => {
             {
               label: "Copy as Markdown to clipboard",
               click: () => {
-                showStatusMessage("copy markdown to clipboard");
+                copyAsMarkdown();
               },
               visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
                 && tabGroup.isPage(tab.webview.getURL())
@@ -398,4 +399,14 @@ async function showUserInfo() {
     localStorage.setItem("projectName", path[0]);
     addTab("user-info.html", true, path[0]);
   }
+}
+
+async function copyAsMarkdown() {
+  const path = tabGroup.getPath();
+  if (path[1] === "") return;
+  const lines = await fetchPageRawData(sbUrl.getPageUrl(path[0], path[1]));
+  const text = toMarkdown(lines);
+  console.log(text);
+  clipboard.writeText(text);
+  showStatusMessage("Copied markdown to clipboard.");
 }

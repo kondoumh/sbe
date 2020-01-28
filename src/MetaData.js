@@ -65,6 +65,16 @@ async function fetchPageText(pageUrl) {
   return { title: title, author: author, content: content, collaborators: collaborators };
 }
 
+async function fetchPageRawData(pageUrl) {
+  const res = await fetch(pageUrl, { credentials: "include" });
+  if (res.status == 200) {
+    const data = await res.json();
+    const lines = data.lines.slice(1).map(line => { return line.text; });
+    return lines;
+  }
+  return null;
+}
+
 function renderLines(lines) {
   let content = "";
   lines.forEach(line => {
@@ -100,4 +110,5 @@ module.exports = {
   fetchPageText,
   renderLines,
   fetchPageData,
+  fetchPageRawData
 };
