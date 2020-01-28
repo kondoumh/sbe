@@ -1,4 +1,7 @@
 # sbe - Scrapbox in Electron
+
+![GitHub Actions](https://github.com/kondoumh/sbe/workflows/Build%20sbe%20binaries/badge.svg)
+
 An unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 
 ## Features
