@@ -1,5 +1,6 @@
 let codeblock = false;
 let table = false;
+let renderTalbleHeader = false;
 
 function toMarkdown(lines) {
   let content = "";
@@ -10,8 +11,8 @@ function toMarkdown(lines) {
 }
 
 function convert(line) {
-  const rgxCodeBlock = /^code:([^.]*)(\.([^.]*))?/
-  const rgxTable = /^table:(.*)$/
+  const rgxCodeBlock = /^code:([^.]*)(\.([^.]*))?/;
+  const rgxTable = /^table:(.*)$/;
   const rgxHeading = /^\[(\*+)\s([^\]]+)\]/;
   const rgxIndent = /^(\s+)([^\s].+)/;
   const rgxStrong = /\[(\*+)\s(.+)\]/g;
@@ -29,14 +30,18 @@ function convert(line) {
       result = "end table\n";
       table = false;
     } else {
-      result = line;
+      tr = line.trim().split("\t");
+      if (!renderTalbleHeader) {
+        // TODO result = header;
+        renderTalbleHeader = true;
+      }
+      result += line;
       return result;
     }
   }
   if (!codeblock && !table) {
     if (rgxCodeBlock.test(line)) {
       const ar = rgxCodeBlock.exec(line);
-      console.log(ar);
       codeblock = true;
       result = ar[1] + (ar[2] ? ar[2] : "") + "\n```" + (ar[3] ? ar[3] : "");
       return result;
