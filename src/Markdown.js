@@ -27,15 +27,15 @@ function convert(line) {
     }
   } else if (table) {
     if (!line.startsWith(" ")) {
-      result = "end table\n";
       table = false;
+      renderTalbleHeader = false;
     } else {
-      tr = line.trim().split("\t");
+      tr = line.replace(/\t/gi, "$\t").trim(" ").split("$\t");
+      result = "| " + tr.join(" | ") + " |";
       if (!renderTalbleHeader) {
-        // TODO result = header;
+        result += "\n" + "|:--".repeat(tr.length) + "|";
         renderTalbleHeader = true;
       }
-      result += line;
       return result;
     }
   }
@@ -49,7 +49,6 @@ function convert(line) {
     if (rgxTable.test(line)) {
       const ar = rgxTable.exec(line);
       table = true;
-      result = "start table";
       return result;
     }
     if (rgxHeading.test(line)) {
