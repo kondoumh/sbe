@@ -1,3 +1,13 @@
+const rgxCodeBlock = /^code:([^.]*)(\.([^.]*))?/;
+const rgxTable = /^table:(.*)$/;
+const rgxHeading = /^\[(\*+)\s([^\]]+)\]/;
+const rgxIndent = /^(\s+)([^\s].+)/;
+const rgxStrong = /\[(\*+)\s(.+)\]/g;
+const rgxLink = /\[https?:\/\/[^\s]*\s[^\]]*]/g;
+const rgxLinkInside = /\[(https?:\/\/[^\s]*)\s([^\]]*)]/;
+const rgxGazo = /\[https:\/\/gyazo.com\/[^\]]*\]/;
+const rgxGazoInside = /\[(https:\/\/gyazo.com\/[^\]]*)\]/;
+
 let codeblock = false;
 let table = false;
 let renderTalbleHeader = false;
@@ -11,11 +21,6 @@ function toMarkdown(lines) {
 }
 
 function convert(line) {
-  const rgxCodeBlock = /^code:([^.]*)(\.([^.]*))?/;
-  const rgxTable = /^table:(.*)$/;
-  const rgxHeading = /^\[(\*+)\s([^\]]+)\]/;
-  const rgxIndent = /^(\s+)([^\s].+)/;
-  const rgxStrong = /\[(\*+)\s(.+)\]/g;
   let result = "";
   if (codeblock) {
     if (!line.startsWith(" ")) {
@@ -47,7 +52,6 @@ function convert(line) {
       return result;
     }
     if (rgxTable.test(line)) {
-      const ar = rgxTable.exec(line);
       table = true;
       return result;
     }
@@ -57,9 +61,10 @@ function convert(line) {
     } else if (rgxIndent.test(line)) {
       const ar = rgxIndent.exec(line);
       const indent = "  ".repeat(ar[1].length - 1);
-      result += indent + "- " + ar[2].replace(rgxStrong, "**$2**");
+      result += indent + "- " + replaceGazoImage(replaceMdLink(ar[2]).replace(rgxStrong, "**$2**"));
     } else {
-      result += line.replace(rgxStrong, "**$2**");
+      const replaced = replaceGazoImage(replaceMdLink(line));
+      result += replaced.replace(rgxStrong, "**$2**");
     }
   }
   return result;
@@ -71,6 +76,34 @@ function decideLevel(length) {
   } else {
     return 5 - length;
   }
+}
+
+function replaceMdLink(str) {
+  let result = str;
+  if (rgxLink.test(str)) {
+    const links = str.match(rgxLink);
+    links.forEach(link => {
+      result = result.replace(link, (link) => {
+        const ar = rgxLinkInside.exec(link);
+        return `[${ar[2]}](${ar[1]})`;
+      });
+    })
+  }
+  return result;
+}
+
+function replaceGazoImage(str) {
+  let result = str;
+  if (rgxGazo.test(str)) {
+    const gazolinks = str.match(rgxGazo);
+    gazolinks.forEach(link => {
+      result = result.replace(link, (link) => {
+        const ar = rgxGazoInside.exec(link);
+        return `![](${ar[1]}.png)`
+      });
+    })
+  }
+  return result;
 }
 
 module.exports = {
