@@ -406,7 +406,6 @@ async function copyAsMarkdown() {
   if (path[1] === "") return;
   const lines = await fetchPageRawData(sbUrl.getPageUrl(path[0], path[1]));
   const text = toMarkdown(lines);
-  console.log(text);
   clipboard.writeText(text);
   showStatusMessage("Copied markdown to clipboard.");
 }
