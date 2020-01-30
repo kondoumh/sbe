@@ -64,7 +64,7 @@ function convert(line) {
       result += indent + "- " + replaceGazoImage(replaceMdLink(ar[2]).replace(rgxStrong, "**$2**"));
     } else {
       const replaced = replaceGazoImage(replaceMdLink(line));
-      result += replaced.replace(rgxStrong, "**$2**");
+      result += replaced.replace(rgxStrong, " **$2** ");
     }
   }
   return result;
