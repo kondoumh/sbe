@@ -54,7 +54,7 @@ function convert(line) {
     if (rgxTable.test(line)) {
       table = true;
       const ar = rgxTable.exec(line);
-      result = ar[1];
+      result = ar[1] + "\n";
       return result;
     }
     if (rgxHeading.test(line)) {
