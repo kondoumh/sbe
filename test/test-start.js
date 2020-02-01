@@ -4,7 +4,7 @@ const assert = require("assert");
 let appPath;
 
 if (process.platform == "darwin") {
-  appPath = "dist/mac/sbe.app/Contents/MacOS/sbe";  
+  appPath = "dist/mac/sbe.app/Contents/MacOS/sbe";
 } else if (process.platform == "win32") {
   appPath = "dist/win-unpacked/sbe.exe"
 }
