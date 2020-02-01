@@ -53,6 +53,8 @@ function convert(line) {
     }
     if (rgxTable.test(line)) {
       table = true;
+      const ar = rgxTable.exec(line);
+      result = ar[1];
       return result;
     }
     if (rgxHeading.test(line)) {
