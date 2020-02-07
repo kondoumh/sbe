@@ -11,9 +11,11 @@ const rgxGazoInside = /\[(https:\/\/gyazo.com\/[^\]]*)\]/;
 let codeblock = false;
 let table = false;
 let renderTalbleHeader = false;
+let hatenaMarkdown = false;
 
-function toMarkdown(lines) {
+function toMarkdown(lines, hatena) {
   let content = "";
+  hatenaMarkdown = hatena;
   lines.forEach(line => {
     content += convert(line) + "\n";
   });
@@ -87,7 +89,11 @@ function replaceMdLink(str) {
     links.forEach(link => {
       result = result.replace(link, (link) => {
         const ar = rgxLinkInside.exec(link);
-        return `[${ar[2]}](${ar[1]})`;
+        if (hatenaMarkdown) {
+          return `[${ar[1]}:embed:cite]`
+        } else {
+          return `[${ar[2]}](${ar[1]})`;
+        }
       });
     })
   }
@@ -109,5 +115,5 @@ function replaceGazoImage(str) {
 }
 
 module.exports = {
-  toMarkdown
+  toMarkdown,
 }

@@ -9,7 +9,7 @@ const { initializeFavs, inFavs, addToFavs } = require("./Favs");
 const { toHeading, toBodyText} = require("./Heading");
 const { createPageDialog, createProjectDialog, createLinksDialog, createPersonalDialog } = require("./Dialogs");
 const { initializeHistory, addHistory } = require("./History");
-const { toMarkdown } = require("./Markdown");
+let { toMarkdown, hatenaBlogNotation } = require("./Markdown");
 
 const tabGroup = new TabProvider();
 
@@ -95,7 +95,15 @@ const addTab = (url, closable = true, projectName, active=true) => {
             {
               label: "Copy as Markdown to clipboard",
               click: () => {
-                copyAsMarkdown();
+                copyAsMarkdown(false);
+              },
+              visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
+                && tabGroup.isPage(tab.webview.getURL())
+            },
+            {
+              label: "Copy as Hatena Markdown to clipboard",
+              click: () => {
+                copyAsMarkdown(true);
               },
               visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
                 && tabGroup.isPage(tab.webview.getURL())
@@ -401,11 +409,11 @@ async function showUserInfo() {
   }
 }
 
-async function copyAsMarkdown() {
+async function copyAsMarkdown(hatena) {
   const path = tabGroup.getPath();
   if (path[1] === "") return;
   const lines = await fetchPageRawData(sbUrl.getPageUrl(path[0], path[1]));
-  const text = toMarkdown(lines);
+  const text = toMarkdown(lines, hatena);
   clipboard.writeText(text);
   showStatusMessage("Copied markdown to clipboard.");
 }
