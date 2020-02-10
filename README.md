@@ -25,6 +25,7 @@ An unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 - Add pages to fav list
 - Open scrapbox page from web browser via url-scheme
 - Open page from browsing history
+- Copy article to clipboard as Markdown format
 
 ![Screenshot](https://user-images.githubusercontent.com/2092183/63644879-904e0a00-c72d-11e9-96d2-64e4727e64c6.gif)
 
@@ -32,8 +33,8 @@ An unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 ## How to install
 Download installer for each platform from [Releases](https://github.com/kondoumh/sbe/releases) and execute.
 
-- macOS: sbe-version.dmg
-- Windows: sbe.Setup.version.exe
+- macOS: sbe-`version`.dmg
+- Windows: sbe.Setup.`version`.exe
 
 ## How to run with Electron
 ### requirement
@@ -57,7 +58,7 @@ $ npm run pack
 $ npm test
 ```
 
-Under proxy server, `no_proxy` setting may be required.
+Under proxy environment, `no_proxy` setting may be required.
 
 ```
 $ export {no_proxy,NO_PROXY}="127.0.0.1,localhost"
