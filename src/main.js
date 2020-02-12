@@ -59,12 +59,16 @@ const createWindow = async () => {
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
-  const res = await fetch("https://api.github.com/repos/kondoumh/sbe/releases/latest");
-  if (res.status === 200) {
-    const data = await res.json();
-    if (data.name !== "v" + app.getVersion()) {
-      mainWindow.webContents.send("appUpdated");
+  try {
+    const res = await fetch("https://api.github.com/repos/kondoumh/sbe/releases/latest");
+    if (res.status === 200) {
+      const data = await res.json();
+      if (data.name !== "v" + app.getVersion()) {
+        mainWindow.webContents.send("appUpdated");
+      }
     }
+  } catch (err) {
+    console.error("request failed: " + err.message);
   }
 };
 
