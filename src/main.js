@@ -72,6 +72,8 @@ const createWindow = async () => {
   }
 };
 
+app.allowRendererProcessReuse = false; // default value in Electron 9
+
 app.on("ready", createWindow);
 
 app.setAsDefaultProtocolClient("sbe");
