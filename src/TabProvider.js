@@ -29,7 +29,7 @@ class TabProvider extends TabGroup {
     const styleTag = document.createElement("style");
     styleTag.innerHTML = styles;
     const targetStyle = document.getElementsByTagName("head")[0].lastChild;
-    document.getElementsByTagName("head")[0].replaceChild(styleTag, targetStyle)
+    document.getElementsByTagName("head")[0].replaceChild(styleTag, targetStyle);
   }
 
   getPath(url) {
