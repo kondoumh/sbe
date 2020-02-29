@@ -40,7 +40,7 @@
     "electron-context-menu": "^0.16.0",
     "electron-search-text": "^0.3.0",
     "electron-store": "^5.1.1",
-    "electron-tabs": "^0.10.0",
+    "electron-tabs": "^0.13.0",
     "node-fetch": "^2.6.0"
   }
 }

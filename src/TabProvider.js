@@ -12,6 +12,24 @@ class TabProvider extends TabGroup {
         });
       }
     });
+    const styles = `
+      webview {
+          width: 0px;
+          height: 0px;
+      }
+      webview.visible {
+          width: 100%;
+          height: 100%;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+      }
+    `;
+    const styleTag = document.createElement("style");
+    styleTag.innerHTML = styles;
+    const targetStyle = document.getElementsByTagName("head")[0].lastChild;
+    document.getElementsByTagName("head")[0].replaceChild(styleTag, targetStyle)
   }
 
   getPath(url) {

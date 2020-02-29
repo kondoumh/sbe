@@ -32,8 +32,8 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     webPreferences: {
-      webviewTag: true,
       nodeIntegration: true,
+      webviewTag: true
     },
     width: width, height: height, x: x, y: y
   });
