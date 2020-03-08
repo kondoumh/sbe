@@ -13,17 +13,20 @@ let table = false;
 let renderTalbleHeader = false;
 let hatenaMarkdown = false;
 
-function toMarkdown(lines, hatena) {
+function toMarkdown(lines, hatena, tabIndent) {
   let content = "";
   hatenaMarkdown = hatena;
   lines.forEach(line => {
-    content += convert(line) + "\n";
+    content += convert(line, tabIndent) + "\n";
   });
   return content;
 }
 
-function convert(line) {
+function convert(line, tabIndent) {
   let result = "";
+  if (tabIndent) {
+    result = "\t";
+  }
   if (codeblock) {
     if (!line.startsWith(" ")) {
       result = "```\n"

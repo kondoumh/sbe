@@ -95,15 +95,23 @@ const addTab = (url, closable = true, projectName, active=true) => {
             {
               label: "Copy as Markdown to clipboard",
               click: () => {
-                copyAsMarkdown(false);
+                copyAsMarkdown();
               },
               visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
                 && tabGroup.isPage(tab.webview.getURL())
             },
             {
-              label: "Copy as Hatena Markdown to clipboard",
+              label: "Copy as Markdown (Hatena blog notation) to clipboard",
               click: () => {
                 copyAsMarkdown(true);
+              },
+              visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
+                && tabGroup.isPage(tab.webview.getURL())
+            },
+            {
+              label: "Copy as Markdown (tab indent) to clipboard",
+              click: () => {
+                copyAsMarkdown(false, true);
               },
               visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
                 && tabGroup.isPage(tab.webview.getURL())
@@ -409,11 +417,11 @@ async function showUserInfo() {
   }
 }
 
-async function copyAsMarkdown(hatena) {
+async function copyAsMarkdown(hatena = false, tabIndent = false) {
   const path = tabGroup.getPath();
   if (path[1] === "") return;
   const lines = await fetchPageRawData(sbUrl.getPageUrl(path[0], path[1]));
-  const text = toMarkdown(lines, hatena);
+  const text = toMarkdown(lines, hatena, tabIndent);
   clipboard.writeText(text);
   showStatusMessage("Copied markdown to clipboard.");
 }
