@@ -109,14 +109,6 @@ const addTab = (url, closable = true, projectName, active=true) => {
                 && tabGroup.isPage(tab.webview.getURL())
             },
             {
-              label: "Copy as Markdown (tab indent) to clipboard",
-              click: () => {
-                copyAsMarkdown(false, true);
-              },
-              visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
-                && tabGroup.isPage(tab.webview.getURL())
-            },
-            {
               label: "Search on Google \"" + params.selectionText + "\"",
               click: () => {
                 const searchUrl = "https://www.google.com/search?q=" + params.selectionText;
@@ -417,11 +409,11 @@ async function showUserInfo() {
   }
 }
 
-async function copyAsMarkdown(hatena = false, tabIndent = false) {
+async function copyAsMarkdown(hatena = false) {
   const path = tabGroup.getPath();
   if (path[1] === "") return;
   const lines = await fetchPageRawData(sbUrl.getPageUrl(path[0], path[1]));
-  const text = toMarkdown(lines, hatena, tabIndent);
+  const text = toMarkdown(lines, hatena);
   clipboard.writeText(text);
   showStatusMessage("Copied markdown to clipboard.");
 }
