@@ -32,6 +32,7 @@
   "devDependencies": {
     "electron": "^8.1.1",
     "electron-builder": "^22.4.1",
+    "minimist": ">=1.2.2",
     "spectron": "^10.0.1"
   },
   "dependencies": {
@@ -41,7 +42,6 @@
     "electron-search-text": "^0.3.0",
     "electron-store": "^5.1.1",
     "electron-tabs": "^0.10.0",
-    "minimist": ">=1.2.2",
     "node-fetch": "^2.6.0"
   }
 }
