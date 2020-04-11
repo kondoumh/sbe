@@ -26,6 +26,8 @@ jobs:
       run: npm install
     - name: package
       run: npm run dist
+      env:
+        GH_TOKEN: ${{ secrets.RL_TOKEN }}
     - name: release for macOS
       if: matrix.os == 'macos-latest'
       uses: softprops/action-gh-release@v1
