@@ -44,9 +44,9 @@ Node.js v10 or later
 git clone or download zip.
 
 ```
-$ cd sbe
-$ npm install
-$ npm start
+cd sbe
+npm install
+npm start
 ```
 
 ### How to run test
@@ -54,25 +54,42 @@ $ npm start
 You need to build runtime module before running test.
 
 ```
-$ npm run pack
-$ npm test
+npm install
+npm run pack
+npm test
 ```
 
 Under proxy environment, `no_proxy` setting may be required.
 
 ```
-$ export {no_proxy,NO_PROXY}="127.0.0.1,localhost"
+export {no_proxy,NO_PROXY}="127.0.0.1,localhost"
 ```
 
-## How to build package
+## How to build exectable binary
+
+```
+npm install
+npm run pack
+```
+
+Binary will be created.
+
+- macOS: `./dist/mac/sbe.app`
+- Windows: `./dis/win-unpacked/sbe.exe`
+
+
+## How to build installer
 
 Currently Windows and macOS only.
 
 ```
-$ npm run dist
+npm install
+npm run dist
 ```
 
-Setup modules(exe / dmg), and zip will be generated in ./dist
+Setup modules wil be created.
+- macOS: `./dist/mac/sbe-<version>.dmg`
+- Windows: `./dist/win-unpacked/sbe.Setup.<version>.exe`
 
 ## Open from web browser
 
