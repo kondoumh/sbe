@@ -37,7 +37,7 @@ function convert(line) {
       table = false;
       renderTalbleHeader = false;
     } else {
-      tr = line.replace(/\t/gi, "$\t").trim(" ").split("$\t");
+      const tr = line.replace(/\t/gi, "$\t").trim(" ").split("$\t");
       result = "| " + tr.join(" | ") + " |";
       if (!renderTalbleHeader) {
         result += "\n" + "|:--".repeat(tr.length) + "|";
