@@ -32,6 +32,17 @@ function inFavs(url) {
   return false;
 }
 
+function findUrl(url) {
+  const select = document.querySelector("#favorite");
+
+  for (i = 0; i < select.length; i++) {
+    if (select.options[i].value === url) {
+      return i;
+    };
+  }
+  return -1;
+}
+
 function addToFavs(url) {
   const select = document.querySelector("#favorite");
   const option = document.createElement("option");
@@ -44,7 +55,20 @@ function addToFavs(url) {
       select.remove(i);
     }
   }
+  return extractFavs(select)
+}
 
+function removeFromFavs(url) {
+  const index = findUrl(url)
+  if (index === -1) {
+    return null
+  }
+  const select = document.querySelector("#favorite");
+  select.remove(index)
+  return extractFavs(select)
+}
+
+function extractFavs(select) {
   const favs = [];
   for (i = 0; i < select.options.length; i++) {
     if (!sbUrl.inScrapbox(select.options[i].value)) continue;
@@ -57,5 +81,6 @@ function addToFavs(url) {
 module.exports = {
   initializeFavs,
   inFavs,
-  addToFavs
+  addToFavs,
+  removeFromFavs
 }
