@@ -21,18 +21,7 @@ function initializeFavs() {
   });
 }
 
-function inFavs(url) {
-  const select = document.querySelector("#favorite");
-
-  for (i = 0; i < select.length; i++) {
-    if (select.options[i].value === url) {
-      return true;
-    };
-  }
-  return false;
-}
-
-function findUrl(url) {
+function findInFavs(url) {
   const select = document.querySelector("#favorite");
 
   for (i = 0; i < select.length; i++) {
@@ -59,7 +48,7 @@ function addToFavs(url) {
 }
 
 function removeFromFavs(url) {
-  const index = findUrl(url)
+  const index = findInFavs(url)
   if (index === -1) {
     return null
   }
@@ -80,7 +69,7 @@ function extractFavs(select) {
 
 module.exports = {
   initializeFavs,
-  inFavs,
+  findInFavs,
   addToFavs,
   removeFromFavs
 }

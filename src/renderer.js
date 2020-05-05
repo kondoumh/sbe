@@ -5,7 +5,7 @@ const ElectronSearchText = require("electron-search-text");
 const Store = require("electron-store");
 const getDate = require("./DateHelper");
 const { fetchPageInfo, fetchProjectMetrics, fetchPageData, fetchPageRawData } = require("./MetaData");
-const { initializeFavs, inFavs, addToFavs, removeFromFavs } = require("./Favs");
+const { initializeFavs, findInFavs, addToFavs, removeFromFavs } = require("./Favs");
 const { toHeading, toBodyText} = require("./Heading");
 const { createPageDialog, createProjectDialog, createLinksDialog, createPersonalDialog } = require("./Dialogs");
 const { initializeHistory, addHistory } = require("./History");
@@ -90,7 +90,7 @@ const addTab = (url, closable = true, projectName, active=true) => {
                 ipcRenderer.send("updateFavs", favs);
               },
               visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
-                && tabGroup.isPage(tab.webview.getURL()) && !inFavs(tab.webview.getURL())
+                && tabGroup.isPage(tab.webview.getURL()) && findInFavs(tab.webview.getURL()) === -1
             },
             {
               label: "Remove from favs",
@@ -101,7 +101,7 @@ const addTab = (url, closable = true, projectName, active=true) => {
                 }
               },
               visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
-                && tabGroup.isPage(tab.webview.getURL()) && inFavs(tab.webview.getURL())
+                && tabGroup.isPage(tab.webview.getURL()) && findInFavs(tab.webview.getURL()) != -1
             },
             {
               label: "Copy as Markdown to clipboard",
