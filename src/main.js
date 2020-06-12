@@ -33,7 +33,8 @@ const createWindow = async () => {
   mainWindow = new BrowserWindow({
     webPreferences: {
       nodeIntegration: true,
-      webviewTag: true
+      webviewTag: true,
+      enableRemoteModule: true
     },
     width: width, height: height, x: x, y: y
   });
