@@ -307,8 +307,8 @@ function initWindowMenu() {
 
 function showAboutWindow() {
   openAboutWindow({
-    icon_path: __dirname + path.sep + ".." + path.sep + "icons/png/512x512.png",
+    icon_path: path.join(__dirname, "../icons/png/512x512.png"),
     copyright: 'Copyright (c) 2019 kondoumh',
-    package_json_dir: __dirname + path.sep + ".." + path.sep,
+    package_json_dir: path.join(__dirname, "../")
   });
 }
