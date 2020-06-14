@@ -18,24 +18,26 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: setup nodejs
+    - name: Setup nodejs
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name: install dependencies
+    - name: Install dependencies
       run: npm install
-    - name: package
+    - name: Apply patch 
+      run: npm run patch
+    - name: Package
       run: npm run dist
       env:
         GH_TOKEN: ${{ secrets.RL_TOKEN }}
-    - name: release for macOS
+    - name: Release for macOS
       if: matrix.os == 'macos-latest'
       uses: softprops/action-gh-release@v1
       with:
         files: "dist/*.dmg"
       env:
         GITHUB_TOKEN: ${{ secrets.RL_TOKEN }}
-    - name: release for Windows
+    - name: Release for Windows
       if: matrix.os == 'windows-latest'
       uses: softprops/action-gh-release@v1
       with:
