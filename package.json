@@ -20,8 +20,7 @@
     "start": "electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "test": "node test/test-start.js",
-    "patch": "cpx patch/index.js node_modules/electron-context-menu/"
+    "test": "node test/test-start.js"
   },
   "repository": "https://github.com/kondoumh/sbe",
   "keywords": [
