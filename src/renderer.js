@@ -70,7 +70,8 @@ const addTab = (url, closable = true, projectName, active=true) => {
             {
               label: "Open in background",
               click: () => { addTab(params.linkURL, true, "", false); },
-              visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && tabGroup.isPage(params.linkURL)            },
+              visible: params.linkURL && sbUrl.inScrapbox(params.linkURL)
+            },
             {
               label: "Info",
               click: () => {
