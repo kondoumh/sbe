@@ -26,6 +26,8 @@ jobs:
       run: npm install
     - name: Package
       run: npm run dist
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Cleanup artifacts
       run: npx rimraf "dist/!(*.exe|*.deb|*.AppImage|*.dmg)"
     - name: Release
