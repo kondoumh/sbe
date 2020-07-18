@@ -27,7 +27,7 @@ jobs:
     - name: Package
       run: npm run dist
     - name: Cleanup artifacts
-    - run: npx rimraf "dist/!(*.exe|*.deb|*.AppImage|*.dmg)"
+      run: npx rimraf "dist/!(*.exe|*.deb|*.AppImage|*.dmg)"
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
