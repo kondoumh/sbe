@@ -26,19 +26,11 @@ jobs:
       run: npm install
     - name: Package
       run: npm run dist
-      env:
-        GH_TOKEN: ${{ secrets.RL_TOKEN }}
-    - name: Release for macOS
-      if: matrix.os == 'macos-latest'
+    - name: Cleanup artifacts
+    - run: npx rimraf "dist/!(*.exe|*.deb|*.AppImage|*.dmg)"
+    - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: "dist/*.dmg"
+        files: "dist/**"
       env:
-        GITHUB_TOKEN: ${{ secrets.RL_TOKEN }}
-    - name: Release for Windows
-      if: matrix.os == 'windows-latest'
-      uses: softprops/action-gh-release@v1
-      with:
-        files: "dist/*.exe"
-      env:
-        GITHUB_TOKEN: ${{ secrets.RL_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
