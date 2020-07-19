@@ -28,8 +28,12 @@ jobs:
       run: npm run dist
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Cleanup artifacts
-      run: npx rimraf "dist/!(*.exe|*.deb|*.AppImage|*.dmg)"
+    - name: Cleanup artifacts (Windows)
+      if: matrix.os == 'windows-latest'
+      run: npx rimraf "dis/!(*.exe)"
+    - name: Cleanup artifacts (except Windows)
+      if: matrix.os != 'windows-latest'
+      run: npx rimraf "dist/!(*.deb|*.AppImage|*.dmg)"
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
