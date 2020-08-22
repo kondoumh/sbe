@@ -31,8 +31,8 @@
   "license": "MIT",
   "devDependencies": {
     "braces": ">=2.3.1",
-    "electron": "^9.1.0",
-    "electron-builder": "^22.7.0",
+    "electron": "^9.2.1",
+    "electron-builder": "^22.8.0",
     "minimist": ">=1.2.2",
     "rimraf": "^3.0.2",
     "spectron": "^11.1.0"
@@ -40,7 +40,7 @@
   "dependencies": {
     "about-window": "^1.13.4",
     "dragula": "^3.7.2",
-    "electron-context-menu": "^2.2.0",
+    "electron-context-menu": "^2.3.0",
     "electron-search-text": "^0.3.0",
     "electron-store": "^5.2.0",
     "electron-tabs": "^0.10.0",
