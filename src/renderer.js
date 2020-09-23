@@ -9,6 +9,7 @@ const { initializeFavs, findInFavs, addToFavs, removeFromFavs } = require("./Fav
 const { toHeading, toBodyText} = require("./Heading");
 const { createPageDialog, createProjectDialog, createLinksDialog, createPersonalDialog } = require("./Dialogs");
 const { initializeHistory, addHistory } = require("./History");
+const { initializeProjects, addProject } = require("./Projects");
 let { toMarkdown, hatenaBlogNotation } = require("./Markdown");
 
 const tabGroup = new TabProvider();
@@ -40,14 +41,15 @@ const addTab = (url, closable = true, projectName, active=true) => {
         if (sbUrl.inScrapbox(e.url) || sbUrl.isPageList(e.url) || sbUrl.isUserPage(e.url)) {
           updateNavButtons(tab.webview);
           tabGroup.updateTab(tab, e.url, localStorage.getItem("projectName"));
+          const path = tabGroup.getPath(tab.webview.getURL());
           if (tabGroup.isPage(tab.webview.getURL())) {
-            const path = tabGroup.getPath(tab.webview.getURL());
             const pageUrl = sbUrl.getPageUrl(path[0], path[1]);
             const page = await fetchPageData(pageUrl);
             if (page) {
               addHistory(tab.webview.getURL(), tab.title, page.id);
             }
           }
+          addProject(path[0]);
         }
       });
       tab.on("webview-ready", tab => {
@@ -221,6 +223,7 @@ ipcRenderer.on("domReady", () => {
     }
   });
   initializeFavs();
+  initializeProjects();
   initializeHistory();
 });
 
