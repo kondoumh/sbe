@@ -31,18 +31,18 @@
   "license": "MIT",
   "devDependencies": {
     "braces": ">=2.3.1",
-    "electron": "^10.1.2",
-    "electron-builder": "^22.8.1",
+    "electron": "^10.1.4",
+    "electron-builder": "^22.9.1",
     "minimist": ">=1.2.2",
     "rimraf": "^3.0.2",
     "spectron": "^11.1.0"
   },
   "dependencies": {
     "about-window": "^1.13.4",
-    "dragula": "^3.7.2",
+    "dragula": "^3.7.3",
     "electron-context-menu": "^2.3.0",
     "electron-search-text": "^0.3.0",
-    "electron-store": "^6.0.0",
+    "electron-store": "^6.0.1",
     "electron-tabs": "^0.10.0",
     "node-fetch": "^2.6.1"
   }
