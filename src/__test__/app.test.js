@@ -43,3 +43,11 @@ test("Applicaiton audit accessibility", async () => {
     });
   expect(audit.failed).toBe(false);
 });
+
+test("Open public project", async () => {
+  const inputUrl = await app.client.$("#open_url");
+  await inputUrl.setValue("https://scrapbox.io/kondoumh");
+  await app.client.keys("Enter");
+  await new Promise(r => setTimeout(r, 10000));
+  captureScreen("public_page.png");
+});
