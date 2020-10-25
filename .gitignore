@@ -70,3 +70,6 @@ jspm_packages
 # Directories for packages
 sbe-*
 dist
+
+# Directories for test
+screenshot
