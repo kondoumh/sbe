@@ -1,9 +1,9 @@
-name: Matrix Test
+name: OS Matrix
 
 on: [workflow_dispatch]
 
 jobs:
-  start:
+  build:
 
     runs-on: ${{ matrix.os }}
   
