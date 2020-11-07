@@ -1,4 +1,4 @@
-name: Build sbe binaries
+name: Release
 
 on:
   push:
@@ -34,7 +34,7 @@ jobs:
     - name: Cleanup artifacts (except Windows)
       if: matrix.os != 'windows-latest'
       run: npx rimraf "dist/!(*.deb|*.AppImage|*.dmg)"
-    - name: Release
+    - name: Publish
       uses: softprops/action-gh-release@v1
       with:
         files: "dist/**"
