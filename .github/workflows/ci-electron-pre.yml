@@ -24,10 +24,10 @@ jobs:
         node-version: 12.x
     - name: Replace electron version
       if: matrix.os != 'macos-latest'
-      run: sed -i 's|\^10.1.4|$ELECTRON_VERSION|' package.json
+      run: sed -i 's|\^10.1.4|${ELECTRON_VERSION}|' package.json
     - name: Replace electron version(macOS)
       if: matrix.os == 'macos-latest'
-      run: sed -i '' 's|\^10.1.4|$ELECTRON_VERSION|' package.json
+      run: sed -i '' 's|\^10.1.4|${ELECTRON_VERSION}|' package.json
     - name: Install dependencies
       run: npm install
     - name: Run Test
