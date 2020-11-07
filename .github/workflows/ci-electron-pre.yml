@@ -27,7 +27,9 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: Install Electron pre-release
-      run: npm install electron@{{ github.event.inputs.electronVersion }}
+      run: npm install electron@$VERSION
+      env:
+        VERSION: ${{ github.event.inputs.electronVersion }}
     - name: Run Test
       run: npm test
     - name: Upload screenshots
