@@ -1,6 +1,12 @@
-name: OS Matrix
+name: Electron pre-release
 
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+    inputs:
+      electronVersion:
+        description: "Version of Electron"
+        required: true
+        default: "11.0.0-beta.20"
 
 jobs:
   build:
@@ -20,6 +26,8 @@ jobs:
         node-version: 12.x
     - name: Install dependencies
       run: npm install
+    - name: Install Electron pre-release
+      run: npm install electron@{{ github.event.inputs.electronVersion }}
     - name: Run Test
       run: npm test
     - name: Upload screenshots
