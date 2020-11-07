@@ -1,0 +1,31 @@
+name: OS Matrix
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup nodejs
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: Replace electron version
+      run: sed -i 's|^10.1.4|11.0.0-beta.20|' package.json
+    - name: Install dependencies
+      run: npm install
+    - name: Run Test
+      run: npm test
+    - name: Upload screenshots
+      uses: actions/upload-artifact@v2
+      with:
+        name: screenshots_${{ matrix.os }}
+        path: src/__test__/screenshot
