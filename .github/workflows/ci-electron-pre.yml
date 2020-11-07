@@ -18,6 +18,9 @@ jobs:
       matrix:
         os: [windows-latest, macos-latest]
 
+    env:
+      ELECTRON_VERSION: ${{ github.event.inputs.electronVersion }}
+
     steps:
     - uses: actions/checkout@v2
     - name: Setup nodejs
@@ -27,9 +30,11 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: Install Electron pre-release
-      run: npm install electron@${ELECTRON_VERSION}
-      env:
-        ELECTRON_VERSION: ${{ github.event.inputs.electronVersion }}
+      if: matrix.os == 'windows-latest'
+      run: npm install electron@%ELECTRON_VERSION%
+    - name: Install Electron pre-release
+      if: matrix.os != 'windows-latest'
+      run: npm install electron@$ELECTRON_VERSION
     - name: Run Test
       run: npm test
     - name: Upload screenshots
