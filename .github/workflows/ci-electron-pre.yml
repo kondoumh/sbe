@@ -1,7 +1,6 @@
-name: OS Matrix
+name: Electron pre-release
 
-on: [push, workflow_dispatch]
-
+on: [workflow_dispatch]
 
 jobs:
   build:
@@ -13,23 +12,16 @@ jobs:
       matrix:
         os: [windows-latest, macos-latest]
 
-    env:
-      ELECTRON_VERSION: 11.0.0-beta.20
-
     steps:
     - uses: actions/checkout@v2
     - name: Setup nodejs
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name: Replace electron version
-      if: matrix.os != 'macos-latest'
-      run: sed -i 's|\^10.1.4|11.0.0-beta.20|' package.json
-    - name: Replace electron version(macOS)
-      if: matrix.os == 'macos-latest'
-      run: sed -i '' 's|\^10.1.4|11.0.0-beta.20|' package.json
     - name: Install dependencies
       run: npm install
+    - name: Install Electron pre-release
+      run: npm install electron@11.0.0-beta.20
     - name: Run Test
       run: npm test
     - name: Upload screenshots
