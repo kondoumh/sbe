@@ -1,6 +1,12 @@
 name: Electron pre-release
 
-on: [push, workflow_dispatch]
+on:
+  workflow_dispatch:
+    inputs:
+      electronVersion:
+        description: "Version of Electron"
+        required: true
+        default: "11.0.0-beta.20"
 
 jobs:
   build:
@@ -21,7 +27,7 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: Install Electron pre-release
-      run: npm install electron@11.0.0-beta.20
+      run: npm install electron@{{ github.event.inputs.electronVersion }}
     - name: Run Test
       run: npm test
     - name: Upload screenshots
