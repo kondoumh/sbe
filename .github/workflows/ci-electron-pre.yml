@@ -2,6 +2,7 @@ name: OS Matrix
 
 on: [push, workflow_dispatch]
 
+
 jobs:
   build:
 
@@ -12,6 +13,9 @@ jobs:
       matrix:
         os: [windows-latest, macos-latest]
 
+    env:
+      ELECTRON_VERSION: 11.0.0-beta.20
+
     steps:
     - uses: actions/checkout@v2
     - name: Setup nodejs
@@ -19,7 +23,11 @@ jobs:
       with:
         node-version: 12.x
     - name: Replace electron version
-      run: sed -i 's|^10.1.4|11.0.0-beta.20|' package.json
+      if: matrix.os != 'macos-latest'
+      run: sed -i 's|\^10.1.4|$ELECTRON_VERSION|' package.json
+    - name: Replace electron version(macOS)
+      if: matrix.os == 'macos-latest'
+      run: sed -i '' 's|\^10.1.4|$ELECTRON_VERSION|' package.json
     - name: Install dependencies
       run: npm install
     - name: Run Test
