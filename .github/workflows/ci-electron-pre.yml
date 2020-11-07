@@ -27,12 +27,13 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: Install Electron pre-release
-      run: npm install electron@$VERSION
+      run: npm install electron@${ELECTRON_VERSION}
       env:
-        VERSION: ${{ github.event.inputs.electronVersion }}
+        ELECTRON_VERSION: ${{ github.event.inputs.electronVersion }}
     - name: Run Test
       run: npm test
     - name: Upload screenshots
+      if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
         name: screenshots_${{ matrix.os }}
