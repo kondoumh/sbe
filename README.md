@@ -36,6 +36,7 @@ Download installer for each platform from [Releases](https://github.com/kondoumh
 
 - macOS: sbe-`version`.dmg
 - Windows: sbe.Setup.`version`.exe
+- Linux: sbe-`version`.AppImage
 
 ## How to run with Electron
 ### requirement
