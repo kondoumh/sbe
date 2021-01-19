@@ -30,7 +30,7 @@ const createWindow = async () => {
     x = 0; y = 0; width = 1024, height = 800;
   }
 
-  mainWindow = new BrowserWindow({
+  let options = {
     webPreferences: {
       nodeIntegration: true,
       webviewTag: true,
@@ -38,7 +38,13 @@ const createWindow = async () => {
       contextIsolation: false
     },
     width: width, height: height, x: x, y: y
-  });
+  };
+  if (process.platform === "linux") {
+    options = Object.assign({}, options, {
+      icon: path.join(__dirname, "../icons/png/512x512.png"),
+    });
+  }
+  mainWindow = new BrowserWindow(options);
   mainWindow.setBounds({x: x, y: y, width: width, height: height});
 
   mainWindow.loadURL(
