@@ -278,12 +278,13 @@ function initWindowMenu() {
     template.unshift({
       label: app.name,
       submenu: [
-        {
-          label: "about sbe",
-          click() {
-            showAboutWindow();
-          }
-        },
+        { role: "about"},
+        // {
+        //   label: "about sbe",
+        //   click() {
+        //     showAboutWindow();
+        //   }
+        // },
         { type: "separator" },
         { role: "services", submenu: [] },
         { type: "separator" },
@@ -298,12 +299,13 @@ function initWindowMenu() {
     template.push({
       label: "help",
       submenu: [
-        {
-          label: "about sbe",
-          click() {
-            showAboutWindow();
-          }
-        }
+        { role: "about"}
+        // {
+        //   label: "about sbe",
+        //   click() {
+        //     showAboutWindow();
+        //   }
+        // }
       ]
     })
   }
