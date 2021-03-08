@@ -356,7 +356,7 @@ function duplicateTab() {
 
 function copyUrl() {
   const url = tabGroup.getActiveWebView().getURL();
-  clipboard.writeText(url);
+  clipboard.writeText(decodeURIComponent(url));
 }
 
 function updateNavButtons(webview) {
