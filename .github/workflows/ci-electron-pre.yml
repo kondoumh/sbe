@@ -6,7 +6,7 @@ on:
       electronVersion:
         description: "Version of Electron"
         required: true
-        default: "11.0.0-beta.20"
+        default: "13.0.0-beta.3"
 
 jobs:
   build:
@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
 
     env:
       ELECTRON_VERSION: ${{ github.event.inputs.electronVersion }}
@@ -24,9 +24,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup nodejs
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
-        node-version: 12.x
+        node-version: '14'
     - name: Install dependencies
       run: npm install
     - name: Install Electron pre-release
