@@ -1,4 +1,4 @@
-name: Electron pre-release
+name: Electron beta
 
 on:
   workflow_dispatch:
