@@ -2,11 +2,6 @@ name: Electron pre-release
 
 on:
   workflow_dispatch:
-    inputs:
-      electronVersion:
-        description: "Version of Electron"
-        required: true
-        default: "13.0.0-beta.3"
 
 jobs:
   build:
@@ -18,9 +13,6 @@ jobs:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
 
-    env:
-      ELECTRON_VERSION: ${{ github.event.inputs.electronVersion }}
-
     steps:
     - uses: actions/checkout@v2
     - name: Setup nodejs
@@ -29,17 +21,20 @@ jobs:
         node-version: '14'
     - name: Install dependencies
       run: npm install
-    - name: Install Electron pre-release
-      if: matrix.os != 'windows-latest'
-      run: npm install electron@$ELECTRON_VERSION
-    - name: Install Electron pre-release (Windows)
+    - name: Install Electron beta
+      run: npm install electron@beta
+    - name: Package
+      run: npm run dist
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Cleanup artifacts (Windows)
       if: matrix.os == 'windows-latest'
-      run: npm install electron@%ELECTRON_VERSION%
-    - name: Run Test
-      run: npm test
-    - name: Upload screenshots
-      if: ${{ always() }}
+      run: npx rimraf "dist/!(*.exe)"
+    - name: Cleanup artifacts (except Windows)
+      if: matrix.os != 'windows-latest'
+      run: npx rimraf "dist/!(*.deb|*.AppImage|*.dmg)"
+    - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: screenshots_${{ matrix.os }}
-        path: src/__test__/screenshot
+        name: package-${{ matrix.os }}
+        path: dist/**
