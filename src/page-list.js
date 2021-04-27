@@ -47,6 +47,7 @@ const app = new Vue({
       this.fetchData()
     },
     onFocus () {
+      this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
       this.fetchData()
     },
     encodeTitle(title) {
