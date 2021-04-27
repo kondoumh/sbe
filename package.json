@@ -33,7 +33,7 @@
   "devDependencies": {
     "braces": ">=2.3.1",
     "cpx": "^1.2.1",
-    "electron": "^12.0.2",
+    "electron": "^12.0.5",
     "electron-builder": "^22.10.5",
     "jest": "^26.6.3",
     "minimist": ">=1.2.2",
@@ -45,7 +45,7 @@
     "dragula": "^3.7.3",
     "electron-context-menu": "^2.5.0",
     "electron-search-text": "^0.3.0",
-    "electron-store": "^7.0.2",
+    "electron-store": "^8.0.0",
     "electron-tabs": "^0.10.0",
     "node-fetch": "^2.6.1"
   }
