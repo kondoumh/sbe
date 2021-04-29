@@ -2,6 +2,11 @@ name: Build binaries
 
 on:
   workflow_dispatch:
+    inputs:
+      beta:
+        description: 'Build with Electron beta'
+        required: true
+        default: 'true'
 
 jobs:
   build:
@@ -22,17 +27,12 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: Install Electron beta
+      if: github.event.inputs.beta == 'true'
       run: npm install electron@beta
     - name: Package
-      run: npm run dist
+      run: npm run pack
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Cleanup artifacts (Windows)
-      if: matrix.os == 'windows-latest'
-      run: npx rimraf "dist/!(*.exe)"
-    - name: Cleanup artifacts (except Windows)
-      if: matrix.os != 'windows-latest'
-      run: npx rimraf "dist/!(*.deb|*.AppImage|*.dmg)"
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
