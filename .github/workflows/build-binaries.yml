@@ -1,4 +1,4 @@
-name: Electron beta
+name: Build binaries
 
 on:
   workflow_dispatch:
