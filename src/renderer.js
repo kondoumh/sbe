@@ -288,8 +288,6 @@ ipcRenderer.on("body", (event, text) => {
 ipcRenderer.on("openVersionsDialog", () => {
   const packageinfo = require('../package.json');
   let data = {
-    app: "sbe(Scrapbox in Electron)",
-    description: packageinfo.description,
     version: packageinfo.version,
     copyright: 'Copyright (c) 2019 kondoumh',
     electronVersion: process.versions.electron,
