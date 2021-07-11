@@ -305,6 +305,25 @@ ipcRenderer.on("searchWithGoogle", (event, text) => {
   tabGroup.openUrl("https://www.google.com/search?q=" + text);
 });
 
+ipcRenderer.on("heading1", (event, text) => {
+  tabGroup.getActiveWebView().insertText(toHeading(text, 1));
+});
+
+ipcRenderer.on("heading2", (event, text) => {
+  tabGroup.getActiveWebView().insertText(toHeading(text, 2));
+});
+
+ipcRenderer.on("heading3", (event, text) => {
+  tabGroup.getActiveWebView().insertText(toHeading(text, 3));
+});
+
+ipcRenderer.on("heading4", (event, text) => {
+  tabGroup.getActiveWebView().insertText(toHeading(text, 4));
+});
+
+ipcRenderer.on("body", (event, text) => {
+  tabGroup.getActiveWebView().insertText(toBodyText(text));
+});
 // end of IPC event handlers
 /////////////////////////////////////////////////
 

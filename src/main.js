@@ -371,11 +371,34 @@ ipcMain.on("tab-ready", (e, url) => {
       },
       {
         label: 'Search Google for “{selection}”',
-        click: () => {
-          mainWindow.webContents.send("searchWithGoogle", params.selectionText.trim());
-        },
+        click: () => { mainWindow.webContents.send("searchWithGoogle", params.selectionText.trim()); },
         visible: params.selectionText.trim().length > 0
       },
+      {
+        label: "Heading1",
+        click: () => { mainWindow.webContents.send("heading1", params.selectionText); },
+        visible: params.selectionText && !params.linkURL
+      },
+      {
+        label: "Heading2",
+        click: () => { mainWindow.webContents.send("heading2", params.selectionText); },
+        visible: params.selectionText && !params.linkURL
+      },
+      {
+        label: "Heading3",
+        click: () => { mainWindow.webContents.send("heading3", params.selectionText); },
+        visible: params.selectionText && !params.linkURL
+      },
+      {
+        label: "Heading4",
+        click: () => { mainWindow.webContents.send("heading4", params.selectionText); },
+        visible: params.selectionText && !params.linkURL
+      },
+      {
+        label: "body",
+        click: () => { mainWindow.webContents.send("body", params.selectionText); },
+        visible: params.selectionText && !params.linkURL
+      }
     ]
   });
 });
