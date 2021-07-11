@@ -65,30 +65,6 @@ const addTab = (url, closable = true, projectName, active=true) => {
         //   window: tab.webview,
         //   prepend: (actions, params, webview) => [
         //     {
-        //       label: "Copy as Markdown to clipboard",
-        //       click: () => {
-        //         copyAsMarkdown();
-        //       },
-        //       visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
-        //         && tabGroup.isPage(tab.webview.getURL())
-        //     },
-        //     {
-        //       label: "Copy as Markdown (Hatena blog notation) to clipboard",
-        //       click: () => {
-        //         copyAsMarkdown(true);
-        //       },
-        //       visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
-        //         && tabGroup.isPage(tab.webview.getURL())
-        //     },
-        //     {
-        //       label: "Search on Google \"" + params.selectionText + "\"",
-        //       click: () => {
-        //         const searchUrl = "https://www.google.com/search?q=" + params.selectionText;
-        //         tabGroup.openUrl(searchUrl);
-        //       },
-        //       visible: params.selectionText !== ""
-        //     },
-        //     {
         //       label: "Heading1",
         //       click: () => {
         //         tabGroup.getActiveWebView().insertText(toHeading(params.selectionText, 1));
@@ -315,6 +291,18 @@ ipcRenderer.on("addToFavs", (event, url) => {
 ipcRenderer.on("removeFromFavs", (event, url) => {
   const favs = removeFromFavs(url);
   ipcRenderer.send("updateFavs", favs);
+});
+
+ipcRenderer.on("copyAsMarkdown", () => {
+  copyAsMarkdown();
+});
+
+ipcRenderer.on("copyAsHatenaMarkdown", () => {
+  copyAsMarkdown(true);
+});
+
+ipcRenderer.on("searchWithGoogle", (event, text) => {
+  tabGroup.openUrl("https://www.google.com/search?q=" + text);
 });
 
 // end of IPC event handlers

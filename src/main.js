@@ -348,24 +348,34 @@ ipcMain.on("tab-ready", (e, url) => {
         click: () => { mainWindow.webContents.send("showLinkedPages", params.linkURL); },
         visible: !params.linkURL && sbUrl.isScrapboxPage(content.getURL())
       },
-      {
-        label: 'Search Google for “{selection}”',
-        visible: params.selectionText.trim().length > 0,
-        click: () => {
-          shell.openExternal(`https://google.com/search?q=${encodeURIComponent(params.selectionText)}`);
-        }
-      },
       { type: "separator" },
       {
         label: "Add to favs",
-        click: () => { mainWindow.webContents.send("addToFavs", content.getURL()) },
+        click: () => { mainWindow.webContents.send("addToFavs", content.getURL()); },
         visible: !params.linkURL && sbUrl.isScrapboxPage(content.getURL()) && !inFavs(content.getURL())
       },
       {
         label: "Remove from favs",
-        click: () => { mainWindow.webContents.send("removeFromFavs", content.getURL()) },
+        click: () => { mainWindow.webContents.send("removeFromFavs", content.getURL()); },
         visible: !params.linkURL && sbUrl.isScrapboxPage(content.getURL()) && inFavs(content.getURL())
-      }
+      },
+      {
+        label: "Copy as Markdown to clipboard",
+        click: () => { mainWindow.webContents.send("copyAsMarkdown", content.getURL()); },
+        visible: !params.linkURL && sbUrl.isScrapboxPage(content.getURL())
+      },
+      {
+        label: "Copy as Markdown (Hatena blog notation) to clipboard",
+        click: () => { mainWindow.webContents.send("copyAsHatenaMarkdown", content.getURL()); },
+        visible: !params.linkURL && sbUrl.isScrapboxPage(content.getURL())
+      },
+      {
+        label: 'Search Google for “{selection}”',
+        click: () => {
+          mainWindow.webContents.send("searchWithGoogle", params.selectionText.trim());
+        },
+        visible: params.selectionText.trim().length > 0
+      },
     ]
   });
 });
