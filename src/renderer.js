@@ -7,7 +7,7 @@ const getDate = require("./DateHelper");
 const { fetchPageInfo, fetchProjectMetrics, fetchPageData, fetchPageRawData } = require("./MetaData");
 const { initializeFavs, findInFavs, addToFavs, removeFromFavs } = require("./Favs");
 const { toHeading, toBodyText} = require("./Heading");
-const { createPageDialog, createProjectDialog, createLinksDialog, createPersonalDialog } = require("./Dialogs");
+const { createPageDialog, createProjectDialog, createLinksDialog, createPersonalDialog, createVersionsDialog } = require("./Dialogs");
 const { initializeHistory, addHistory } = require("./History");
 const { initializeProjects, addProject } = require("./Projects");
 let { toMarkdown, hatenaBlogNotation } = require("./Markdown");
@@ -283,6 +283,19 @@ ipcRenderer.on("heading4", (event, text) => {
 
 ipcRenderer.on("body", (event, text) => {
   tabGroup.getActiveWebView().insertText(toBodyText(text));
+});
+
+ipcRenderer.on("openVersionsDialog", () => {
+  const packageinfo = require('../package.json');
+  let data = {
+    app: "sbe(Scrapbox in Electron)",
+    description: packageinfo.description,
+    version: packageinfo.version,
+    copyright: 'Copyright (c) 2019 kondoumh',
+    electronVersion: process.versions.electron,
+    chromeVersion: process.versions.chrome
+  }
+  createVersionsDialog(data).showModal();
 });
 // end of IPC event handlers
 /////////////////////////////////////////////////

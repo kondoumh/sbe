@@ -5,7 +5,6 @@ const fetch = require("node-fetch");
 const path = require("path");
 const url = require("url");
 const Store = require("electron-store");
-const openAboutWindow = require("about-window").default;
 const contextMenu = require("electron-context-menu");
 const sbUrl = require("./UrlHelper");
 
@@ -282,9 +281,7 @@ function initWindowMenu() {
       submenu: [
         {
           label: "about sbe",
-          click() {
-            showAboutWindow();
-          }
+          click() { mainWindow.webContents.send("openVersionsDialog"); }
         },
         { type: "separator" },
         { role: "services", submenu: [] },
@@ -302,9 +299,7 @@ function initWindowMenu() {
       submenu: [
         {
           label: "about sbe",
-          click() {
-            showAboutWindow();
-          }
+          click() { mainWindow.webContents.send("openVersionsDialog"); }
         }
       ]
     })
@@ -312,14 +307,6 @@ function initWindowMenu() {
 
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
-}
-
-function showAboutWindow() {
-  openAboutWindow({
-    icon_path: path.join(__dirname, "../icons/png/512x512.png"),
-    copyright: 'Copyright (c) 2019 kondoumh',
-    package_json_dir: path.join(__dirname, "../")
-  });
 }
 
 ipcMain.on("tab-ready", (e, url) => {

@@ -7,6 +7,7 @@ let modalPageInfo;
 let modalProjectInfo;
 let modalLinks;
 let modalPersonal;
+let modalVersions;
 let urlIdx = 0;
 let linkUrls;
 let pageUrls;
@@ -213,9 +214,32 @@ function createPersonalDialog(data) {
   return modalPersonal;
 }
 
+function createVersionsDialog(data) {
+  if (!modalVersions) {
+    modalVersions = document.querySelector("#versions-info");
+    modalVersions.addEventListener("click", event => {
+      if (event.target == modalVersions) {
+        modalVersions.close("cancelled");
+      }
+    });
+    document.querySelector("#close-versions-info").addEventListener("click", () => {
+      modalVersions.close();
+    });
+  }
+  let content = document.querySelector("#versions-contents");
+  content.innerHTML = 
+    data.app + "<br>" + data.description + "<br>" +
+    "Version:" + data.version + "<br>" +
+    "Electron: " + data.electronVersion + "<br>" +
+    "Chrome: " + data.chromeVersion
+
+  return modalVersions;
+}
+
 module.exports = {
   createPageDialog,
   createProjectDialog,
   createLinksDialog,
-  createPersonalDialog
+  createPersonalDialog,
+  createVersionsDialog
 };
