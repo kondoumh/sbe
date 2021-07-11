@@ -1,11 +1,13 @@
 const electron = require("electron");
-const {app, Menu, BrowserWindow, ipcMain} = require("electron");
+const { app, Menu, BrowserWindow, ipcMain, webContents } = require("electron");
 const fetch = require("node-fetch");
 
 const path = require("path");
 const url = require("url");
 const Store = require("electron-store");
 const openAboutWindow = require("about-window").default;
+const contextMenu = require("electron-context-menu");
+const sbUrl = require("./UrlHelper");
 
 const store = new Store({
   defaults: {
@@ -318,4 +320,57 @@ function showAboutWindow() {
     copyright: 'Copyright (c) 2019 kondoumh',
     package_json_dir: path.join(__dirname, "../")
   });
+}
+
+ipcMain.on("tab-ready", (e, url) => {
+  const contents = webContents.getAllWebContents();
+  const content = contents.find(c => c.getURL() === url);
+  contextMenu({
+    window: content,
+    prepend: (defaultActions, params, main) => [
+      {
+        label: 'Open',
+        click: () => { mainWindow.webContents.send("openLink", params.linkURL); },
+        visible: params.linkURL && (params.mediaType === "none" || params.mediaType === "image")
+      },
+      {
+        label: 'Open in background',
+        click: () => { mainWindow.webContents.send("openLinkBackground", params.linkURL); },
+        visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && sbUrl.isScrapboxPage(params.linkURL)
+      },
+      {
+        label: "Info",
+        click: () => { mainWindow.webContents.send("showPageInfo", params.linkURL); },
+        visible: params.linkURL && sbUrl.isScrapboxPage(params.linkURL)
+      },
+      {
+        label: "Show linked pages",
+        click: () => { mainWindow.webContents.send("showLinkedPages", params.linkURL); },
+        visible: !params.linkURL && sbUrl.isScrapboxPage(content.getURL())
+      },
+      {
+        label: 'Search Google for “{selection}”',
+        visible: params.selectionText.trim().length > 0,
+        click: () => {
+          shell.openExternal(`https://google.com/search?q=${encodeURIComponent(params.selectionText)}`);
+        }
+      },
+      { type: "separator" },
+      {
+        label: "Add to favs",
+        click: () => { mainWindow.webContents.send("addToFavs", content.getURL()) },
+        visible: !params.linkURL && sbUrl.isScrapboxPage(content.getURL()) && !inFavs(content.getURL())
+      },
+      {
+        label: "Remove from favs",
+        click: () => { mainWindow.webContents.send("removeFromFavs", content.getURL()) },
+        visible: !params.linkURL && sbUrl.isScrapboxPage(content.getURL()) && inFavs(content.getURL())
+      }
+    ]
+  });
+});
+
+function inFavs(targetUrl) {
+  const result = store.get("favs").find( ({ url })  => url === targetUrl );
+  return result !== undefined;
 }

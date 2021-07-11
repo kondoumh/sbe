@@ -60,117 +60,71 @@ const addTab = (url, closable = true, projectName, active=true) => {
           box: ".search-box",
           visibleClass: ".state-visible"
         });
-        const contextMenu = require("electron-context-menu");
-        contextMenu({
-          window: tab.webview,
-          prepend: (actions, params, webview) => [
-            {
-              label: "Open",
-              click: () => { tabGroup.openUrl(params.linkURL); },
-              visible: params.linkURL && (params.mediaType === "none" || params.mediaType === "image")
-            },
-            {
-              label: "Open in background",
-              click: () => { addTab(params.linkURL, true, "", false); },
-              visible: params.linkURL && sbUrl.inScrapbox(params.linkURL)
-            },
-            {
-              label: "Info",
-              click: () => {
-                showPageInfo(params.linkURL);
-              },
-              visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && tabGroup.isPage(params.linkURL)
-            },
-            {
-              label: "Show linked pages",
-              click: () => {
-                showLinkedPages();
-              },
-              visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
-                && tabGroup.isPage(tab.webview.getURL())
-            },
-            { type: "separator" },
-            {
-              label: "Add to favs",
-              click: () => {
-                const favs = addToFavs(tab.webview.getURL());
-                ipcRenderer.send("updateFavs", favs);
-              },
-              visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
-                && tabGroup.isPage(tab.webview.getURL()) && findInFavs(tab.webview.getURL()) === -1
-            },
-            {
-              label: "Remove from favs",
-              click: () => {
-                const favs = removeFromFavs(tab.webview.getURL());
-                if (favs) {
-                  ipcRenderer.send("updateFavs", favs);
-                }
-              },
-              visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
-                && tabGroup.isPage(tab.webview.getURL()) && findInFavs(tab.webview.getURL()) != -1
-            },
-            {
-              label: "Copy as Markdown to clipboard",
-              click: () => {
-                copyAsMarkdown();
-              },
-              visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
-                && tabGroup.isPage(tab.webview.getURL())
-            },
-            {
-              label: "Copy as Markdown (Hatena blog notation) to clipboard",
-              click: () => {
-                copyAsMarkdown(true);
-              },
-              visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
-                && tabGroup.isPage(tab.webview.getURL())
-            },
-            {
-              label: "Search on Google \"" + params.selectionText + "\"",
-              click: () => {
-                const searchUrl = "https://www.google.com/search?q=" + params.selectionText;
-                tabGroup.openUrl(searchUrl);
-              },
-              visible: params.selectionText !== ""
-            },
-            {
-              label: "Heading1",
-              click: () => {
-                tabGroup.getActiveWebView().insertText(toHeading(params.selectionText, 1));
-              },
-              visible: params.selectionText && !params.linkURL
-            },
-            {
-              label: "Heading2",
-              click: () => {
-                tabGroup.getActiveWebView().insertText(toHeading(params.selectionText, 2));
-              },
-              visible: params.selectionText && !params.linkURL
-            },
-            {
-              label: "Heading3",
-              click: () => {
-                tabGroup.getActiveWebView().insertText(toHeading(params.selectionText, 3));
-              },
-              visible: params.selectionText && !params.linkURL
-            },
-            {
-              label: "heading4",
-              click: () => {
-                tabGroup.getActiveWebView().insertText(toHeading(params.selectionText, 4));
-              },
-              visible: params.selectionText && !params.linkURL
-            },
-            {
-              label: "body",
-              click: () => {
-                tabGroup.getActiveWebView().insertText(toBodyText(params.selectionText));
-              },
-              visible: params.selectionText && !params.linkURL
-            }
-          ]
-        });
+        ipcRenderer.send("tab-ready", tab.webview.getURL());
+        // contextMenu({
+        //   window: tab.webview,
+        //   prepend: (actions, params, webview) => [
+        //     {
+        //       label: "Copy as Markdown to clipboard",
+        //       click: () => {
+        //         copyAsMarkdown();
+        //       },
+        //       visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
+        //         && tabGroup.isPage(tab.webview.getURL())
+        //     },
+        //     {
+        //       label: "Copy as Markdown (Hatena blog notation) to clipboard",
+        //       click: () => {
+        //         copyAsMarkdown(true);
+        //       },
+        //       visible: !params.linkURL && sbUrl.inScrapbox(tab.webview.getURL())
+        //         && tabGroup.isPage(tab.webview.getURL())
+        //     },
+        //     {
+        //       label: "Search on Google \"" + params.selectionText + "\"",
+        //       click: () => {
+        //         const searchUrl = "https://www.google.com/search?q=" + params.selectionText;
+        //         tabGroup.openUrl(searchUrl);
+        //       },
+        //       visible: params.selectionText !== ""
+        //     },
+        //     {
+        //       label: "Heading1",
+        //       click: () => {
+        //         tabGroup.getActiveWebView().insertText(toHeading(params.selectionText, 1));
+        //       },
+        //       visible: params.selectionText && !params.linkURL
+        //     },
+        //     {
+        //       label: "Heading2",
+        //       click: () => {
+        //         tabGroup.getActiveWebView().insertText(toHeading(params.selectionText, 2));
+        //       },
+        //       visible: params.selectionText && !params.linkURL
+        //     },
+        //     {
+        //       label: "Heading3",
+        //       click: () => {
+        //         tabGroup.getActiveWebView().insertText(toHeading(params.selectionText, 3));
+        //       },
+        //       visible: params.selectionText && !params.linkURL
+        //     },
+        //     {
+        //       label: "heading4",
+        //       click: () => {
+        //         tabGroup.getActiveWebView().insertText(toHeading(params.selectionText, 4));
+        //       },
+        //       visible: params.selectionText && !params.linkURL
+        //     },
+        //     {
+        //       label: "body",
+        //       click: () => {
+        //         tabGroup.getActiveWebView().insertText(toBodyText(params.selectionText));
+        //       },
+        //       visible: params.selectionText && !params.linkURL
+        //     }
+        //   ]
+        // });
         tab.ready = true;
         if (projectName) {
           tab.projectName = projectName;
@@ -336,6 +290,33 @@ ipcRenderer.on("insertHeadline3", () => {
 ipcRenderer.on("openDevToolsForTab", () => {
   tabGroup.getActiveWebView().openDevTools();
 });
+
+ipcRenderer.on("openLink", (event, url) => {
+  tabGroup.openUrl(url);
+});
+
+ipcRenderer.on("openLinkBackground", (event, url) => {
+  addTab(url, true, "", false);
+});
+
+ipcRenderer.on("showPageInfo", (event, url) => {
+  showPageInfo(url);
+});
+
+ipcRenderer.on("showLinkedPages", (event, url) => {
+  showLinkedPages();
+});
+
+ipcRenderer.on("addToFavs", (event, url) => {
+  const favs = addToFavs(url);
+  ipcRenderer.send("updateFavs", favs);
+});
+
+ipcRenderer.on("removeFromFavs", (event, url) => {
+  const favs = removeFromFavs(url);
+  ipcRenderer.send("updateFavs", favs);
+});
+
 // end of IPC event handlers
 /////////////////////////////////////////////////
 
