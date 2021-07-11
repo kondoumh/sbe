@@ -20,8 +20,7 @@
     "start": "electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "test": "jest",
-    "patch": "cpx patch/index.js node_modules/about-window/src"
+    "test": "jest"
   },
   "repository": "https://github.com/kondoumh/sbe",
   "keywords": [
