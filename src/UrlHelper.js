@@ -13,6 +13,11 @@ sbUrl.inScrapbox = url => {
   return url.startsWith(sbUrl.BASE_URL);
 }
 
+sbUrl.isScrapboxPage = url => {
+  const path = url.substring(sbUrl.BASE_URL.length).split(/\/|#/);
+  return (path.length >= 2 && path[1] !== "");
+}
+
 sbUrl.isPageList = url => {
   return !sbUrl.inScrapbox(url) && url.endsWith(sbUrl.LIST_PAGE);
 }
