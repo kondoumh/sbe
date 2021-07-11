@@ -408,6 +408,6 @@ function inFavs(targetUrl) {
   if (!favs) {
     return false;
   }
-  const result = store.get("favs").find( ({ url })  => url === targetUrl );
+  const result = favs.find( ({ url })  => url === targetUrl );
   return result !== undefined;
 }
