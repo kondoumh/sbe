@@ -327,7 +327,7 @@ ipcMain.on("tab-ready", (e, url) => {
   const content = contents.find(c => c.getURL() === url);
   contextMenu({
     window: content,
-    prepend: (defaultActions, params, main) => [
+    prepend: (defaultActions, params) => [
       {
         label: 'Open',
         click: () => { mainWindow.webContents.send("openLink", params.linkURL); },

@@ -61,46 +61,6 @@ const addTab = (url, closable = true, projectName, active=true) => {
           visibleClass: ".state-visible"
         });
         ipcRenderer.send("tab-ready", tab.webview.getURL());
-        // contextMenu({
-        //   window: tab.webview,
-        //   prepend: (actions, params, webview) => [
-        //     {
-        //       label: "Heading1",
-        //       click: () => {
-        //         tabGroup.getActiveWebView().insertText(toHeading(params.selectionText, 1));
-        //       },
-        //       visible: params.selectionText && !params.linkURL
-        //     },
-        //     {
-        //       label: "Heading2",
-        //       click: () => {
-        //         tabGroup.getActiveWebView().insertText(toHeading(params.selectionText, 2));
-        //       },
-        //       visible: params.selectionText && !params.linkURL
-        //     },
-        //     {
-        //       label: "Heading3",
-        //       click: () => {
-        //         tabGroup.getActiveWebView().insertText(toHeading(params.selectionText, 3));
-        //       },
-        //       visible: params.selectionText && !params.linkURL
-        //     },
-        //     {
-        //       label: "heading4",
-        //       click: () => {
-        //         tabGroup.getActiveWebView().insertText(toHeading(params.selectionText, 4));
-        //       },
-        //       visible: params.selectionText && !params.linkURL
-        //     },
-        //     {
-        //       label: "body",
-        //       click: () => {
-        //         tabGroup.getActiveWebView().insertText(toBodyText(params.selectionText));
-        //       },
-        //       visible: params.selectionText && !params.linkURL
-        //     }
-        //   ]
-        // });
         tab.ready = true;
         if (projectName) {
           tab.projectName = projectName;
