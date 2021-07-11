@@ -404,6 +404,10 @@ ipcMain.on("tab-ready", (e, url) => {
 });
 
 function inFavs(targetUrl) {
+  const favs = store.get("favs");
+  if (!favs) {
+    return false;
+  }
   const result = store.get("favs").find( ({ url })  => url === targetUrl );
   return result !== undefined;
 }
