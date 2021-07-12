@@ -316,12 +316,12 @@ ipcMain.on("tab-ready", (e, url) => {
     window: content,
     prepend: (defaultActions, params) => [
       {
-        label: 'Open',
+        label: "Open",
         click: () => { mainWindow.webContents.send("openLink", params.linkURL); },
         visible: params.linkURL && (params.mediaType === "none" || params.mediaType === "image")
       },
       {
-        label: 'Open in background',
+        label: "Open in background",
         click: () => { mainWindow.webContents.send("openLinkBackground", params.linkURL); },
         visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && sbUrl.isScrapboxPage(params.linkURL)
       },
