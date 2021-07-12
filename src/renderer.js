@@ -60,7 +60,7 @@ const addTab = (url, closable = true, projectName, active=true) => {
           box: ".search-box",
           visibleClass: ".state-visible"
         });
-        ipcRenderer.send("tab-ready", tab.webview.getURL());
+        ipcRenderer.send("tab-ready", tab.webview.getWebContentsId());
         tab.ready = true;
         if (projectName) {
           tab.projectName = projectName;

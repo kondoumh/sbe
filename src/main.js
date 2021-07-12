@@ -309,9 +309,9 @@ function initWindowMenu() {
   Menu.setApplicationMenu(menu);
 }
 
-ipcMain.on("tab-ready", (e, url) => {
+ipcMain.on("tab-ready", (e, contetsId) => {
   const contents = webContents.getAllWebContents();
-  const content = contents.find(c => c.getURL() === url);
+  const content = contents.find(c => c.id === contetsId);
   contextMenu({
     window: content,
     prepend: (defaultActions, params) => [
