@@ -228,7 +228,7 @@ function createVersionsDialog(data) {
   }
   let content = document.querySelector("#versions-contents");
   content.innerHTML = 
-    "Version:" + data.version + "<br>" +
+    "Version: " + data.version + "<br>" +
     "Electron: " + data.electronVersion + "<br>" +
     "Chrome: " + data.chromeVersion
 
