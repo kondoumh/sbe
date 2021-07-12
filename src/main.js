@@ -35,7 +35,6 @@ const createWindow = async () => {
     webPreferences: {
       nodeIntegration: true,
       webviewTag: true,
-      enableRemoteModule: true, // electron-context-menu uses remote module
       contextIsolation: false
     },
     width: width, height: height, x: x, y: y
