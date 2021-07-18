@@ -313,6 +313,7 @@ ipcMain.on("tab-ready", (e, contetsId) => {
   const content = contents.find(c => c.id === contetsId);
   contextMenu({
     window: content,
+    showSearchWithGoogle: false,
     prepend: (defaultActions, params) => [
       {
         label: "Open",
