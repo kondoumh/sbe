@@ -40,7 +40,7 @@ Download installer for each platform from [Releases](https://github.com/kondoumh
 
 ## How to run with Electron
 ### requirement
-Node.js v10 or later
+Node.js v14
 
 ### run
 git clone or download zip.
