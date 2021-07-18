@@ -1,6 +1,5 @@
 # sbe - Scrapbox in Electron
 
-![OS Matrix](https://github.com/kondoumh/sbe/workflows/OS%20Matrix/badge.svg)
 ![Release](https://github.com/kondoumh/sbe/workflows/Release/badge.svg)
 
 An unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
