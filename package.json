@@ -20,7 +20,7 @@
     "start": "electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "test": "jest"
+    "test": "jest --detectOpenHandles"
   },
   "repository": "https://github.com/kondoumh/sbe",
   "keywords": [
