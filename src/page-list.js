@@ -37,8 +37,8 @@ const app = new Vue({
       let date = new Date()
       date.setTime(timestamp * 1000)
       const params = {
-        year: "numeric", month: "numeric", day: "numeric",
-        hour: "numeric", minute: "numeric", second: "numeric",
+        year: "numeric", month: "2-digit", day: "2-digit",
+        hour: "2-digit", minute: "numeric", second: "numeric",
         hour12: false
       }
       return date.toLocaleString(navigator.language, params)
