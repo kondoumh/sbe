@@ -18,6 +18,7 @@
   },
   "scripts": {
     "start": "electron .",
+    "trace": "electron --trace-warnings .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "test": "jest --detectOpenHandles"
