@@ -35,7 +35,8 @@ const createWindow = async () => {
     webPreferences: {
       nodeIntegration: true,
       webviewTag: true,
-      contextIsolation: false
+      contextIsolation: false,
+      nativeWindowOpen: true
     },
     width: width, height: height, x: x, y: y
   };
