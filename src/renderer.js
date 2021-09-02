@@ -321,6 +321,8 @@ function copyUrl() {
 function updateNavButtons(webview) {
   document.querySelector("#btn_back").disabled = !webview.canGoBack();
   document.querySelector("#btn_forward").disabled = !webview.canGoForward();
+  const url = tabGroup.getActiveWebView().getURL();
+  document.querySelector("#btn_copyurl").disabled = !sbUrl.inScrapbox(url);
 }
 
 function showTargetPageTitle(url) {
