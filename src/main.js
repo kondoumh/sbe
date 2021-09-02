@@ -36,7 +36,7 @@ const createWindow = async () => {
       nodeIntegration: true,
       webviewTag: true,
       contextIsolation: false,
-      nativeWindowOpen: true
+      nativeWindowOpen: false
     },
     width: width, height: height, x: x, y: y
   };
