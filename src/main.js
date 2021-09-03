@@ -48,13 +48,7 @@ const createWindow = async () => {
   mainWindow = new BrowserWindow(options);
   mainWindow.setBounds({x: x, y: y, width: width, height: height});
 
-  mainWindow.loadURL(
-    url.format({
-      pathname: path.join(__dirname, "container.html"),
-      protocol: "file:",
-      slashes: true
-    })
-  );
+  mainWindow.loadURL(`file://${__dirname}/container.html`);
 
   ['resize', 'move'].forEach(e => {
     mainWindow.on(e, () => {
