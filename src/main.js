@@ -54,10 +54,16 @@ const createWindow = async () => {
     mainWindow.on(e, () => {
         store.set('bounds', mainWindow.getBounds());
     });
-  })
+  });
+
+  mainWindow.on("resized", () => {
+    mainWindow.webContents.send("windowResized", mainWindow.getBounds());
+  });
+
   initWindowMenu();
   mainWindow.webContents.once("dom-ready", () => {
     mainWindow.webContents.send("domReady");
+    mainWindow.webContents.send("windowResized", mainWindow.getBounds());
   });
   mainWindow.on("closed", () => {
     mainWindow = null;

@@ -13,6 +13,23 @@ const { initializeProjects, addProject } = require("./Projects");
 let { toMarkdown, hatenaBlogNotation } = require("./Markdown");
 
 const tabGroup = new TabProvider();
+let windowWidth = 800;
+
+tabGroup.on("tab-added", (tab, group) => {
+  resizeTabWidth();
+});
+
+tabGroup.on("tab-removed", (tab, group) => {
+  resizeTabWidth();
+});
+
+function resizeTabWidth() {
+  const titles = document.getElementsByClassName("etabs-tab-title");
+  const available = (windowWidth / titles.length) - 40;
+  const width = Math.trunc(Math.min(available, 200));
+  console.log(width);
+  Array.prototype.forEach.call(titles, title => { title.style.maxWidth = `${width}px`; });
+}
 
 const addTab = (url, closable = true, projectName, active=true) => {
   if (!url) {
@@ -294,6 +311,11 @@ ipcRenderer.on("openVersionsDialog", () => {
     chromeVersion: process.versions.chrome
   }
   createVersionsDialog(data).showModal();
+});
+
+ipcRenderer.on("windowResized", (event, bounds) => {
+  windowWidth = bounds.width
+  resizeTabWidth();
 });
 // end of IPC event handlers
 /////////////////////////////////////////////////
