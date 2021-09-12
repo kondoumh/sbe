@@ -25,10 +25,17 @@ tabGroup.on("tab-removed", (tab, group) => {
 
 function resizeTabWidth() {
   const titles = document.getElementsByClassName("etabs-tab-title");
-  const available = (windowWidth / titles.length) - 40;
+  const available = (windowWidth / (titles.length + 2)) - 50;
   const width = Math.trunc(Math.min(available, 200));
+  let margin = 20;
+  if (windowWidth <= available * (titles.length + 2) ) {
+    margin = 10;
+  }
   console.log(width);
-  Array.prototype.forEach.call(titles, title => { title.style.maxWidth = `${width}px`; });
+  Array.prototype.forEach.call(titles, title => {
+    title.style.maxWidth = `${width}px`;
+    title.style.marginLeft = `${margin}px`;
+  });
 }
 
 const addTab = (url, closable = true, projectName, active=true) => {
