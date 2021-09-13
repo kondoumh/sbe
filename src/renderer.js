@@ -14,6 +14,9 @@ let { toMarkdown, hatenaBlogNotation } = require("./Markdown");
 
 const tabGroup = new TabProvider();
 let windowWidth = 800;
+const TAB_MARGIN = 2;
+const ICON_WIDTH = 20;
+const CLOSE_BUTTON_WIDTH = 36;
 
 tabGroup.on("tab-added", (tab, group) => {
   resizeTabWidth();
@@ -25,11 +28,14 @@ tabGroup.on("tab-removed", (tab, group) => {
 
 function resizeTabWidth() {
   const titles = document.getElementsByClassName("etabs-tab-title");
-  const available = (windowWidth / (titles.length + 2)) - 50;
+  let available = (windowWidth / (titles.length + TAB_MARGIN)) - ICON_WIDTH - CLOSE_BUTTON_WIDTH;
+  if (available <= 0) {
+    available = 1;
+  }
   const width = Math.trunc(Math.min(available, 200));
-  let margin = 20;
-  if (windowWidth <= available * (titles.length + 2) ) {
-    margin = 10;
+  let margin = ICON_WIDTH;
+  if (available === 1) {
+    margin = 0;
   }
   console.log(width);
   Array.prototype.forEach.call(titles, title => {
