@@ -1,5 +1,5 @@
 const electron = require("electron");
-const { app, Menu, BrowserWindow, ipcMain, webContents } = require("electron");
+const { app, Menu, BrowserWindow, ipcMain, webContents, session } = require("electron");
 const fetch = require("node-fetch");
 
 const path = require("path");
@@ -61,9 +61,15 @@ const createWindow = async () => {
   });
 
   initWindowMenu();
-  mainWindow.webContents.once("dom-ready", () => {
+  mainWindow.webContents.once("dom-ready", async () => {
     mainWindow.webContents.send("domReady");
     mainWindow.webContents.send("windowResized", mainWindow.getBounds());
+
+    const cookies = await session.defaultSession.cookies.get({ name: "connect.sid" });
+    if (cookies.length > 0) {
+      console.log(cookies[0].name, cookies[0].value);
+      mainWindow.webContents.send("connect-sid", "connect.sid=" + cookies[0].value);
+    }
   });
   mainWindow.on("closed", () => {
     mainWindow = null;

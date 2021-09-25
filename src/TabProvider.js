@@ -85,8 +85,9 @@ class TabProvider extends TabGroup {
       if (tab.getTitle() === newTitle) return;
       tab.setTitle(newTitle);
       const iconUrl = sbUrl.getIconUrl(path[0], path[1]);
+      const sid = localStorage.getItem("connect-sid");
       fetch(iconUrl, {
-        credentials: "include"
+        headers: { cookie: sid }
       }).then(res => {
         if (res.status === 200) {
           tab.setIcon(res.url);

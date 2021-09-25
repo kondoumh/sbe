@@ -169,7 +169,7 @@ async function fetchContent(url, titleHeader, contents) {
   disablePagingButtons(true);
   let page = {};
   if (!cache.has(url)) {
-    const { title, author, content } = await fetchPageText(url);
+    const { title, author, content } = await fetchPageText(encodeURI(url));
     cache.set(url, {title, author, content});
     page.title = title;
     page.author = author;

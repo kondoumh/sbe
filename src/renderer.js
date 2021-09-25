@@ -11,6 +11,7 @@ const { createPageDialog, createProjectDialog, createLinksDialog, createPersonal
 const { initializeHistory, addHistory } = require("./History");
 const { initializeProjects, addProject } = require("./Projects");
 let { toMarkdown, hatenaBlogNotation } = require("./Markdown");
+const fetch = require("node-fetch");
 
 const tabGroup = new TabProvider();
 let windowWidth = 800;
@@ -330,6 +331,11 @@ ipcRenderer.on("windowResized", (event, bounds) => {
   windowWidth = bounds.width
   resizeTabWidth();
 });
+
+ipcRenderer.on("connect-sid", (event, arg) => {
+  console.log(arg);
+  localStorage.setItem("connect-sid", arg);
+});
 // end of IPC event handlers
 /////////////////////////////////////////////////
 
@@ -407,7 +413,9 @@ async function showProjectActivities() {
 async function showLinkedPages() {
   const path = tabGroup.getPath();
   if (path[1] === "") return;
-  const res = await fetch(sbUrl.getPageUrl(path[0], path[1]));
+  const url = sbUrl.getPageUrl(path[0], path[1]);
+  const sid = localStorage.getItem("connect-sid");
+  const res = await fetch(url, { headers: { cookie: sid } });
   const data = await res.json();
   if (data.relatedPages.links1hop.length > 0) {
     createLinksDialog(data, path).showModal();
