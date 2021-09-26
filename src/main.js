@@ -67,7 +67,6 @@ const createWindow = async () => {
 
     const cookies = await session.defaultSession.cookies.get({ name: "connect.sid" });
     if (cookies.length > 0) {
-      console.log(cookies[0].name, cookies[0].value);
       mainWindow.webContents.send("connect-sid", "connect.sid=" + cookies[0].value);
     }
   });

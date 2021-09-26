@@ -18,6 +18,7 @@ let windowWidth = 800;
 const TAB_MARGIN = 2;
 const ICON_WIDTH = 20;
 const CLOSE_BUTTON_WIDTH = 36;
+let connectSid = "";
 
 tabGroup.on("tab-added", (tab, group) => {
   resizeTabWidth();
@@ -71,7 +72,7 @@ const addTab = (url, closable = true, projectName, active=true) => {
       tab.webview.addEventListener("load-commit", async e => {
         if (sbUrl.inScrapbox(e.url) || sbUrl.isPageList(e.url) || sbUrl.isUserPage(e.url)) {
           updateNavButtons(tab.webview);
-          tabGroup.updateTab(tab, e.url, localStorage.getItem("projectName"));
+          tabGroup.updateTab(tab, e.url, localStorage.getItem("projectName"), connectSid);
           const path = tabGroup.getPath(tab.webview.getURL());
           if (tabGroup.isPage(tab.webview.getURL())) {
             const pageUrl = sbUrl.getPageUrl(path[0], path[1]);
@@ -332,9 +333,8 @@ ipcRenderer.on("windowResized", (event, bounds) => {
   resizeTabWidth();
 });
 
-ipcRenderer.on("connect-sid", (event, arg) => {
-  console.log(arg);
-  localStorage.setItem("connect-sid", arg);
+ipcRenderer.on("connect-sid", (event, sid) => {
+  connectSid = sid;
 });
 // end of IPC event handlers
 /////////////////////////////////////////////////
@@ -414,8 +414,7 @@ async function showLinkedPages() {
   const path = tabGroup.getPath();
   if (path[1] === "") return;
   const url = sbUrl.getPageUrl(path[0], path[1]);
-  const sid = localStorage.getItem("connect-sid");
-  const res = await fetch(url, { headers: { cookie: sid } });
+  const res = await fetch(url, { headers: { cookie: connectSid } });
   const data = await res.json();
   if (data.relatedPages.links1hop.length > 0) {
     createLinksDialog(data, path).showModal();

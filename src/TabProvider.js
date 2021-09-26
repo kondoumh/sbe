@@ -64,7 +64,7 @@ class TabProvider extends TabGroup {
     return this.getActiveTab().webview;
   }
 
-  updateTab(tab, url, projectName) {
+  updateTab(tab, url, projectName, connectSid) {
     if (sbUrl.isPageList(tab.webview.getURL())) {
       if (!projectName) {
         projectName = tab.projectName;
@@ -85,9 +85,8 @@ class TabProvider extends TabGroup {
       if (tab.getTitle() === newTitle) return;
       tab.setTitle(newTitle);
       const iconUrl = sbUrl.getIconUrl(path[0], path[1]);
-      const sid = localStorage.getItem("connect-sid");
       fetch(iconUrl, {
-        headers: { cookie: sid }
+        headers: { cookie: connectSid }
       }).then(res => {
         if (res.status === 200) {
           tab.setIcon(res.url);

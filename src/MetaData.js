@@ -2,8 +2,7 @@ const fetch = require("node-fetch");
 
 async function fetchPageInfo(pageUrl) {
   let content, image;
-  const sid = localStorage.getItem("connect-sid");
-  const res = await fetch(pageUrl, { headers: { cookie: sid } });
+  const res = await fetch(pageUrl, { headers: { cookie: connectSid } });
   if (res.status === 200) {
     const data = await res.json();
 
@@ -26,8 +25,7 @@ async function fetchProjectMetrics(pagesUrl, messageFunc) {
   let pages = 0;
   for (count = 0; totalCount + 50 > count; count += 50) {
     const url = pagesUrl + "?skip=" + (count - 1) + "&limit=" + 50;
-    const sid = localStorage.getItem("connect-sid");
-    const res = await fetch(url, { headers: { cookie: sid } }).catch(error => {
+    const res = await fetch(url, { headers: { cookie: connectSid } }).catch(error => {
       messageFunc("error.." + error);
     });
     if (res.status === 200) {
@@ -43,8 +41,7 @@ async function fetchProjectMetrics(pagesUrl, messageFunc) {
 }
 
 async function fetchPostCount(pagesUrl, messageFunc) {
-  const sid = localStorage.getItem("connect-sid");
-  const res = await fetch(pagesUrl, { headers: { cookie: sid } }).catch(error => {
+  const res = await fetch(pagesUrl, { headers: { cookie: connectSid } }).catch(error => {
     messageFunc("error.." + error);
     return 0;
   });
@@ -54,9 +51,7 @@ async function fetchPostCount(pagesUrl, messageFunc) {
 
 async function fetchPageText(pageUrl) {
   let title, author, content, collaborators;
-  const sid = localStorage.getItem("connect-sid");
-  console.log(sid);
-  const res = await fetch(pageUrl, { headers: { cookie: sid } });
+  const res = await fetch(pageUrl, { headers: { cookie: connectSid } });
   if (res.status === 200) {
     const data = await res.json();
     title = data.title;
@@ -72,8 +67,7 @@ async function fetchPageText(pageUrl) {
 }
 
 async function fetchPageRawData(pageUrl) {
-  const sid = localStorage.getItem("connect-sid");
-  const res = await fetch(pageUrl, { headers: { cookie: sid } });
+  const res = await fetch(pageUrl, { headers: { cookie: connectSid } });
   if (res.status == 200) {
     const data = await res.json();
     const lines = data.lines.slice(1).map(line => { return line.text; });
@@ -103,8 +97,7 @@ function decorateLine(line) {
 }
 
 async function fetchPageData(pageUrl) {
-  const sid = localStorage.getItem("connect-sid");
-  const res = await fetch(pageUrl, { headers: { cookie: sid } });
+  const res = await fetch(pageUrl, { headers: { cookie: connectSid } });
   if (res.status === 200) {
     const data = await res.json();
     return data;
