@@ -19,6 +19,7 @@ const app = new Vue({
     }
     this.fetchData()
     window.addEventListener('focus', this.onFocus)
+    window.addEventListener('preload', (e) => { this.onMessage(e.detail) })
   },
   methods: {
     async fetchData () {
@@ -52,6 +53,11 @@ const app = new Vue({
     },
     encodeTitle(title) {
       return encodeURIComponent(title)
+    },
+    onMessage(data) {
+      console.log(data)
+      const event = new CustomEvent("callback", {detail: data + " fugaaaaaaa"});
+      window.dispatchEvent(event);
     }
   },
   watch: {

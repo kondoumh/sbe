@@ -57,6 +57,7 @@ const addTab = (url, closable = true, projectName, active=true) => {
     active: active,
     iconURL: sbUrl.DEFAULT_ICON_URL,
     closable: closable,
+    webviewAttributes: { preload: "./preload.js" },
     ready: tab => {
       tab.webview.addEventListener("dom-ready", e => {
         // Remove this once https://github.com/electron/electron/issues/14474 is fixed
@@ -84,6 +85,19 @@ const addTab = (url, closable = true, projectName, active=true) => {
           addProject(path[0]);
         }
       });
+      tab.webview.addEventListener("ipc-message", e => {
+        switch(e.channel) {
+          case "getTitle":
+            console.log(e.args[0]);
+            break;
+          case "callback":
+            console.log(e.args[0]);
+            break;
+        }
+      });
+      tab.webview.addEventListener("did-finish-load", () => {
+        tab.webview.send("getTitle");
+      })
       tab.on("webview-ready", tab => {
         tab.searcher = new ElectronSearchText({
           target: ".etabs-view.visible",
