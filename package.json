@@ -33,9 +33,9 @@
   "devDependencies": {
     "braces": ">=2.3.1",
     "cpx": "^1.5.0",
-    "electron": "^15.3.0",
-    "electron-builder": "^22.11.7",
-    "jest": "^27.1.0",
+    "electron": "^16.0.1",
+    "electron-builder": "^22.14.5",
+    "jest": "^27.3.1",
     "minimist": ">=1.2.2",
     "rimraf": "^3.0.2",
     "spectron": "^15.0.0"
@@ -44,7 +44,7 @@
     "dragula": "^3.7.3",
     "electron-context-menu": "^3.1.1",
     "electron-search-text": "^0.3.0",
-    "electron-store": "^8.0.0",
+    "electron-store": "^8.0.1",
     "electron-tabs": "^0.15.0",
     "node-fetch": "^2.6.1"
   }
