@@ -1,7 +1,7 @@
 const sbUrl = {}
 
 sbUrl.BASE_URL = "https://scrapbox.io/";
-sbUrl.LIST_PAGE = "page-list.html";
+sbUrl.LIST_PAGE = "https://sbe-list.netlify.app/";
 sbUrl.USER_PAGE = "user-info.html";
 sbUrl.DEFAULT_ICON_URL = sbUrl.BASE_URL + "assets/img/favicon/favicon.ico";
 
