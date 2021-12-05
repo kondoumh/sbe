@@ -85,19 +85,6 @@ const addTab = (url, closable = true, projectName, active=true) => {
           addProject(path[0]);
         }
       });
-      tab.webview.addEventListener("ipc-message", e => {
-        switch(e.channel) {
-          case "getTitle":
-            console.log(e.args[0]);
-            break;
-          case "callback":
-            console.log(e.args[0]);
-            break;
-        }
-      });
-      tab.webview.addEventListener("did-finish-load", () => {
-        tab.webview.send("getTitle");
-      })
       tab.on("webview-ready", tab => {
         tab.searcher = new ElectronSearchText({
           target: ".etabs-view.visible",
