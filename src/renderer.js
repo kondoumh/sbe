@@ -350,6 +350,10 @@ ipcRenderer.on("windowResized", (event, bounds) => {
 ipcRenderer.on("connect-sid", (event, sid) => {
   connectSid = sid;
 });
+
+ipcRenderer.on("projectNameSet", (event, project) => {
+  addTab(sbUrl.LIST_PAGE, true, project);
+});
 // end of IPC event handlers
 /////////////////////////////////////////////////
 
@@ -357,7 +361,7 @@ function showPageList() {
   const path = tabGroup.getPath();
   if (!tabGroup.activateIfViewOpened(sbUrl.LIST_PAGE, path[0])) {
     localStorage.setItem("projectName", path[0]);
-    addTab(sbUrl.LIST_PAGE, true, path[0]);
+    ipcRenderer.send("showPageList", path[0]);
   }
 }
 

@@ -67,6 +67,13 @@ const createWindow = async () => {
 
     const cookies = await session.defaultSession.cookies.get({ name: "connect.sid" });
     if (cookies.length > 0) {
+      const sid = encodeURIComponent("connect.sid=" + cookies[0].value);
+      const cookie = {
+        url: "https://sbe-list.netlify.app",
+        name: "connect_sid",
+        value: sid
+      };
+      await session.defaultSession.cookies.set(cookie);
       mainWindow.webContents.send("connect-sid", "connect.sid=" + cookies[0].value);
     }
   });
@@ -131,6 +138,16 @@ if (!app.requestSingleInstanceLock()) {
 
 ipcMain.on("updateFavs", (e, arg) => {
   store.set("favs", arg);
+});
+
+ipcMain.on("showPageList", async (e, arg) => {
+  const cookie = {
+    url: "https://sbe-list.netlify.app",
+    name: "project_name",
+    value: arg
+  };
+  await session.defaultSession.cookies.set(cookie);
+  mainWindow.webContents.send("projectNameSet", arg);
 });
 
 function initWindowMenu() {
