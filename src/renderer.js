@@ -57,7 +57,6 @@ const addTab = (url, closable = true, projectName, active=true) => {
     active: active,
     iconURL: sbUrl.DEFAULT_ICON_URL,
     closable: closable,
-    webviewAttributes: { preload: "./preload.js" },
     ready: tab => {
       tab.webview.addEventListener("dom-ready", e => {
         // Remove this once https://github.com/electron/electron/issues/14474 is fixed
