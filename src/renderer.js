@@ -429,8 +429,14 @@ async function showLinkedPages() {
 
 async function showUserInfo() {
   const projectName = tabGroup.getPath()[0];
+  if (tabGroup.activateIfViewOpened(sbUrl.USER_PAGE, projectName)) {
+    return;
+  }
+  localStorage.setItem("projectName", projectName);
   const user = await fetchUserInfo(sbUrl.getPagesUrl(projectName));
   const infoKey = projectName + "_" + user.name;
+  localStorage.setItem("userName", user.name);
+  localStorage.setItem("userDisplayName", user.displayName);
   let userInfo = {};
   const localData = localStorage.getItem(infoKey);
   let lastCreated;
@@ -452,7 +458,7 @@ async function showUserInfo() {
   userInfo.userName = user.name;
   userInfo.userDisplayName = user.displayName;
   userInfo.projectName = projectName;
-  createPersonalDialog(userInfo).showModal();
+  addTab("user-info.html", true, projectName);
 }
 
 async function copyAsMarkdown(hatena = false) {
