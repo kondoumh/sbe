@@ -210,7 +210,33 @@ function createPersonalDialog(data) {
     });
   }
   let content = document.querySelector("#personal-contents");
-  content.innerHTML = data;
+  content.innerHTML = "";
+  let views = 0;
+  let linked = 0;
+  let idx = 0;
+  data.pages.forEach(page => {
+    content.innerHTML += getDate(page.created) + " : ";
+    content.innerHTML += `<button id="up-${idx}" class="modal-button">${page.title}</button><br>`
+    views += parseInt(page.views);
+    linked += parseInt(page.linked);
+    idx++;
+  });
+  let summary = document.querySelector("#personal-summary");
+  summary.innerHTML = "";
+  summary.innerHTML += "user: " + data.userName + " (" + data.userDisplayName + ")" + "<br>";
+  summary.innerHTML += "pages created: " + data.pages.length + "<br>";
+  summary.innerHTML += "views: " + views + "<br>";
+  summary.innerHTML += "linkded: " + linked + "<br>";
+  summary.innerHTML += "updated: " + data.fetched;
+
+  idx = 0;
+  data.pages.forEach(page => {
+    document.querySelector(`#up-${idx}`).addEventListener("click", () => {
+      addTab(sbUrl.getPage(data.projectName, page.title), true, "", false);
+    });
+    idx++;
+  });
+
   return modalPersonal;
 }
 

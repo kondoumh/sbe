@@ -46,4 +46,8 @@ sbUrl.getIconUrl = (projectName, pageTitle) => {
   return sbUrl.BASE_URL + "api/pages/" + projectName + "/" + pageTitle + "/icon";
 }
 
+sbUrl.getPage = (projectName, pageTitle) => {
+  return `https://scrapbox.io/${projectName}/${pageTitle}`;
+}
+
 module.exports = sbUrl;

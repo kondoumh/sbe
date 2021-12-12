@@ -4,7 +4,7 @@ const TabProvider = require("./TabProvider");
 const ElectronSearchText = require("electron-search-text");
 const Store = require("electron-store");
 const getDate = require("./DateHelper");
-const { fetchPageInfo, fetchProjectMetrics, fetchPageData, fetchPageRawData } = require("./MetaData");
+const { fetchPageInfo, fetchProjectMetrics, fetchPageData, fetchPageRawData, fetchUserInfo, fetchUserRelatedPages } = require("./MetaData");
 const { initializeFavs, findInFavs, addToFavs, removeFromFavs } = require("./Favs");
 const { toHeading, toBodyText} = require("./Heading");
 const { createPageDialog, createProjectDialog, createLinksDialog, createPersonalDialog, createVersionsDialog } = require("./Dialogs");
@@ -428,11 +428,31 @@ async function showLinkedPages() {
 }
 
 async function showUserInfo() {
-  const path = tabGroup.getPath();
-  if (!tabGroup.activateIfViewOpened(sbUrl.USER_PAGE, path[0])) {
-    localStorage.setItem("projectName", path[0]);
-    addTab("user-info.html", true, path[0]);
+  const projectName = tabGroup.getPath()[0];
+  const user = await fetchUserInfo(sbUrl.getPagesUrl(projectName));
+  const infoKey = projectName + "_" + user.name;
+  let userInfo = {};
+  const localData = localStorage.getItem(infoKey);
+  let lastCreated;
+  if (localData) {
+    userInfo = JSON.parse(localData);
+    if (userInfo.pages.length > 0) {
+      lastCreated = userInfo.pages.reduce((a, b) => a.created > b.created ? a : b);
+      console.log(getDate(lastCreated.created) + " : " + lastCreated.title);
+    }
+  } else {
+    userInfo.fetched = getDate();
   }
+  pages = await fetchUserRelatedPages(sbUrl.getPagesUrl(projectName), user.userId, lastCreated);
+  if (pages.length > 0) {
+    userInfo.fetched = getDate();
+    userInfo.pages = userInfo.pages ? pages.concat(userInfo.pages) : pages;
+  }
+  localStorage.setItem(infoKey, JSON.stringify(userInfo));
+  userInfo.userName = user.name;
+  userInfo.userDisplayName = user.displayName;
+  userInfo.projectName = projectName;
+  createPersonalDialog(userInfo).showModal();
 }
 
 async function copyAsMarkdown(hatena = false) {
