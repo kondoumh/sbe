@@ -4,19 +4,21 @@ const TabProvider = require("./TabProvider");
 const ElectronSearchText = require("electron-search-text");
 const Store = require("electron-store");
 const getDate = require("./DateHelper");
-const { fetchPageInfo, fetchProjectMetrics, fetchPageData, fetchPageRawData } = require("./MetaData");
+const { fetchPageInfo, fetchProjectMetrics, fetchPageData, fetchPageRawData, fetchUserInfo, fetchUserRelatedPages } = require("./MetaData");
 const { initializeFavs, findInFavs, addToFavs, removeFromFavs } = require("./Favs");
 const { toHeading, toBodyText} = require("./Heading");
-const { createPageDialog, createProjectDialog, createLinksDialog, createPersonalDialog, createVersionsDialog } = require("./Dialogs");
+const { createPageDialog, createProjectDialog, createLinksDialog, createVersionsDialog } = require("./Dialogs");
 const { initializeHistory, addHistory } = require("./History");
 const { initializeProjects, addProject } = require("./Projects");
 let { toMarkdown, hatenaBlogNotation } = require("./Markdown");
+const fetch = require("node-fetch");
 
 const tabGroup = new TabProvider();
 let windowWidth = 800;
 const TAB_MARGIN = 2;
 const ICON_WIDTH = 20;
 const CLOSE_BUTTON_WIDTH = 36;
+let connectSid = "";
 
 tabGroup.on("tab-added", (tab, group) => {
   resizeTabWidth();
@@ -70,7 +72,7 @@ const addTab = (url, closable = true, projectName, active=true) => {
       tab.webview.addEventListener("load-commit", async e => {
         if (sbUrl.inScrapbox(e.url) || sbUrl.isPageList(e.url) || sbUrl.isUserPage(e.url)) {
           updateNavButtons(tab.webview);
-          tabGroup.updateTab(tab, e.url, localStorage.getItem("projectName"));
+          tabGroup.updateTab(tab, e.url, localStorage.getItem("projectName"), connectSid);
           const path = tabGroup.getPath(tab.webview.getURL());
           if (tabGroup.isPage(tab.webview.getURL())) {
             const pageUrl = sbUrl.getPageUrl(path[0], path[1]);
@@ -330,6 +332,14 @@ ipcRenderer.on("windowResized", (event, bounds) => {
   windowWidth = bounds.width
   resizeTabWidth();
 });
+
+ipcRenderer.on("connect-sid", (event, sid) => {
+  connectSid = sid;
+});
+
+ipcRenderer.on("projectNameSet", (event, project) => {
+  addTab(sbUrl.LIST_PAGE, true, project);
+});
 // end of IPC event handlers
 /////////////////////////////////////////////////
 
@@ -337,7 +347,7 @@ function showPageList() {
   const path = tabGroup.getPath();
   if (!tabGroup.activateIfViewOpened(sbUrl.LIST_PAGE, path[0])) {
     localStorage.setItem("projectName", path[0]);
-    addTab(sbUrl.LIST_PAGE, true, path[0]);
+    ipcRenderer.send("showPageList", path[0]);
   }
 }
 
@@ -407,7 +417,8 @@ async function showProjectActivities() {
 async function showLinkedPages() {
   const path = tabGroup.getPath();
   if (path[1] === "") return;
-  const res = await fetch(sbUrl.getPageUrl(path[0], path[1]));
+  const url = sbUrl.getPageUrl(path[0], path[1]);
+  const res = await fetch(url, { headers: { cookie: connectSid } });
   const data = await res.json();
   if (data.relatedPages.links1hop.length > 0) {
     createLinksDialog(data, path).showModal();
@@ -417,11 +428,37 @@ async function showLinkedPages() {
 }
 
 async function showUserInfo() {
-  const path = tabGroup.getPath();
-  if (!tabGroup.activateIfViewOpened(sbUrl.USER_PAGE, path[0])) {
-    localStorage.setItem("projectName", path[0]);
-    addTab("user-info.html", true, path[0]);
+  const projectName = tabGroup.getPath()[0];
+  if (tabGroup.activateIfViewOpened(sbUrl.USER_PAGE, projectName)) {
+    return;
   }
+  localStorage.setItem("projectName", projectName);
+  const user = await fetchUserInfo(sbUrl.getPagesUrl(projectName));
+  const infoKey = projectName + "_" + user.name;
+  localStorage.setItem("userName", user.name);
+  localStorage.setItem("userDisplayName", user.displayName);
+  let userInfo = {};
+  const localData = localStorage.getItem(infoKey);
+  let lastCreated;
+  if (localData) {
+    userInfo = JSON.parse(localData);
+    if (userInfo.pages.length > 0) {
+      lastCreated = userInfo.pages.reduce((a, b) => a.created > b.created ? a : b);
+      console.log(getDate(lastCreated.created) + " : " + lastCreated.title);
+    }
+  } else {
+    userInfo.fetched = getDate();
+  }
+  pages = await fetchUserRelatedPages(sbUrl.getPagesUrl(projectName), user.userId, lastCreated);
+  if (pages.length > 0) {
+    userInfo.fetched = getDate();
+    userInfo.pages = userInfo.pages ? pages.concat(userInfo.pages) : pages;
+  }
+  localStorage.setItem(infoKey, JSON.stringify(userInfo));
+  userInfo.userName = user.name;
+  userInfo.userDisplayName = user.displayName;
+  userInfo.projectName = projectName;
+  addTab("user-info.html", true, projectName);
 }
 
 async function copyAsMarkdown(hatena = false) {

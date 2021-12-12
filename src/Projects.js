@@ -8,7 +8,7 @@ function initializeProjects() {
     const project = select.value;
       if (!tabGroup.activateIfViewOpened(sbUrl.LIST_PAGE, project)) {
         localStorage.setItem("projectName", project);
-        addTab(sbUrl.LIST_PAGE, true, project);
+        ipcRenderer.send("showPageList", project);
       }
       select.selectedIndex = 0;
   });

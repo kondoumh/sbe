@@ -169,7 +169,7 @@ async function fetchContent(url, titleHeader, contents) {
   disablePagingButtons(true);
   let page = {};
   if (!cache.has(url)) {
-    const { title, author, content } = await fetchPageText(url);
+    const { title, author, content } = await fetchPageText(encodeURI(url));
     cache.set(url, {title, author, content});
     page.title = title;
     page.author = author;
@@ -197,23 +197,6 @@ function disablePagingButtons(disabled) {
   document.querySelector("#open-link").disabled = disabled;
 }
 
-function createPersonalDialog(data) {
-  if (!modalPersonal) {
-    modalPersonal = document.querySelector("#personal-info");
-    modalPersonal.addEventListener("click", (event) => {
-      if (event.target === modalPersonal) {
-        modalPersonal.close("cancelled");
-      }
-    });
-    document.querySelector("#close-personal").addEventListener("click", () => {
-      modalPersonal.close();
-    });
-  }
-  let content = document.querySelector("#personal-contents");
-  content.innerHTML = data;
-  return modalPersonal;
-}
-
 function createVersionsDialog(data) {
   if (!modalVersions) {
     modalVersions = document.querySelector("#versions-info");
@@ -239,6 +222,5 @@ module.exports = {
   createPageDialog,
   createProjectDialog,
   createLinksDialog,
-  createPersonalDialog,
   createVersionsDialog
 };

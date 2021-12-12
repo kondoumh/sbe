@@ -1,5 +1,5 @@
 const electron = require("electron");
-const { app, Menu, BrowserWindow, ipcMain, webContents } = require("electron");
+const { app, Menu, BrowserWindow, ipcMain, webContents, session } = require("electron");
 const fetch = require("node-fetch");
 
 const path = require("path");
@@ -61,9 +61,21 @@ const createWindow = async () => {
   });
 
   initWindowMenu();
-  mainWindow.webContents.once("dom-ready", () => {
+  mainWindow.webContents.once("dom-ready", async () => {
     mainWindow.webContents.send("domReady");
     mainWindow.webContents.send("windowResized", mainWindow.getBounds());
+
+    const cookies = await session.defaultSession.cookies.get({ name: "connect.sid" });
+    if (cookies.length > 0) {
+      const sid = encodeURIComponent("connect.sid=" + cookies[0].value);
+      const cookie = {
+        url: "https://sbe-list.netlify.app",
+        name: "connect_sid",
+        value: sid
+      };
+      await session.defaultSession.cookies.set(cookie);
+      mainWindow.webContents.send("connect-sid", "connect.sid=" + cookies[0].value);
+    }
   });
   mainWindow.on("closed", () => {
     mainWindow = null;
@@ -126,6 +138,16 @@ if (!app.requestSingleInstanceLock()) {
 
 ipcMain.on("updateFavs", (e, arg) => {
   store.set("favs", arg);
+});
+
+ipcMain.on("showPageList", async (e, arg) => {
+  const cookie = {
+    url: "https://sbe-list.netlify.app",
+    name: "project_name",
+    value: arg
+  };
+  await session.defaultSession.cookies.set(cookie);
+  mainWindow.webContents.send("projectNameSet", arg);
 });
 
 function initWindowMenu() {
