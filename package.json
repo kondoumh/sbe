@@ -46,6 +46,7 @@
     "electron-search-text": "^0.3.0",
     "electron-store": "^8.0.1",
     "electron-tabs": "^0.15.0",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "glob-parent": ">=5.1.2"
   }
 }
