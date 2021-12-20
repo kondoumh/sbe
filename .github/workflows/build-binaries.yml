@@ -6,7 +6,7 @@ on:
       beta:
         description: 'Build with Electron beta'
         required: true
-        default: 'true'
+        default: 'false'
 
 jobs:
   build:
