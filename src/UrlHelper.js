@@ -14,6 +14,9 @@ sbUrl.inScrapbox = url => {
 }
 
 sbUrl.isScrapboxPage = url => {
+  if (!url.startsWith(sbUrl.BASE_URL)) {
+    return false;
+  }
   const path = url.substring(sbUrl.BASE_URL.length).split(/\/|#/);
   return (path.length >= 2 && path[1] !== "");
 }
