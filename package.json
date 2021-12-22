@@ -40,6 +40,7 @@
     "rimraf": "^3.0.2"
   },
   "dependencies": {
+    "compare-versions": "^4.1.2",
     "dragula": "^3.7.3",
     "electron-context-menu": "^3.1.1",
     "electron-search-text": "^0.3.0",

@@ -7,6 +7,7 @@ const url = require("url");
 const Store = require("electron-store");
 const contextMenu = require("electron-context-menu");
 const sbUrl = require("./UrlHelper");
+const compareVersions = require("compare-versions");
 
 const store = new Store({
   defaults: {
@@ -84,7 +85,10 @@ const createWindow = async () => {
     const res = await fetch("https://api.github.com/repos/kondoumh/sbe/releases/latest");
     if (res.status === 200) {
       const data = await res.json();
-      if (data.name !== "v" + app.getVersion()) {
+      const latest = data.name.substring(1, data.name.length);
+      console.log(latest);
+      console.log(app.getVersion());
+      if (compareVersions(latest, app.getVersion()) === 1) {
         mainWindow.webContents.send("appUpdated");
       }
     }
