@@ -33,11 +33,12 @@ function convert(line) {
       return result;
     }
   } else if (table) {
-    if (!line.startsWith(" ")) {
+    if (!line.startsWith(" ") && !line.startsWith("\t")) {
       table = false;
       renderTalbleHeader = false;
     } else {
-      const tr = line.replace(/\t/gi, "$\t").trim(" ").split("$\t");
+      const row = line.substring(1);
+      const tr = row.replace(/\t/gi, "$\t").trim(" ").split("$\t");
       result = "| " + tr.join(" | ") + " |";
       if (!renderTalbleHeader) {
         result += "\n" + "|:--".repeat(tr.length) + "|";
