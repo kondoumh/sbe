@@ -230,7 +230,8 @@ function createVersionsDialog(data) {
   content.innerHTML = 
     "Version: " + data.version + "<br>" +
     "Electron: " + data.electronVersion + "<br>" +
-    "Chrome: " + data.chromeVersion
+    "Chrome: " + data.chromeVersion + "<br>" +
+    "Arch: " + data.arch
 
   return modalVersions;
 }

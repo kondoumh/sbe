@@ -10,6 +10,7 @@ const { toHeading, toBodyText} = require("./Heading");
 const { createPageDialog, createProjectDialog, createLinksDialog, createPersonalDialog, createVersionsDialog } = require("./Dialogs");
 const { initializeHistory, addHistory } = require("./History");
 const { initializeProjects, addProject } = require("./Projects");
+const { arch } = require("process");
 let { toMarkdown, hatenaBlogNotation } = require("./Markdown");
 
 const tabGroup = new TabProvider();
@@ -321,7 +322,8 @@ ipcRenderer.on("openVersionsDialog", () => {
     version: packageinfo.version,
     copyright: 'Copyright (c) 2019 kondoumh',
     electronVersion: process.versions.electron,
-    chromeVersion: process.versions.chrome
+    chromeVersion: process.versions.chrome,
+    arch: arch
   }
   createVersionsDialog(data).showModal();
 });
