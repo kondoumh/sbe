@@ -21,11 +21,17 @@ jobs:
     - name: Setup nodejs
       uses: actions/setup-node@v2
       with:
-        node-version: '14'
+        node-version: '16'
     - name: Install dependencies
       run: npm install
-    - name: Package
+    - name: Package (Windows)
+      if: matrix.os != 'windows-latest'
       run: npm run dist
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Package (macOS)
+      if: matrix.os != 'macos-latest'
+      run: npx electron-builder --mac --universal
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Cleanup artifacts (Windows)
