@@ -24,13 +24,13 @@ jobs:
         node-version: '16'
     - name: Install dependencies
       run: npm install
-    - name: Package (Windows)
-      if: matrix.os != 'windows-latest'
+    - name: Package (Windows / Linux)
+      if: matrix.os != 'macos-latest'
       run: npm run dist
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Package (macOS)
-      if: matrix.os != 'macos-latest'
+      if: matrix.os == 'macos-latest'
       run: npx electron-builder --mac --universal
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
