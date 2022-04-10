@@ -36,7 +36,7 @@
     "electron": "^14.2.9",
     "electron-builder": "^23.0.3",
     "jest": "^27.1.0",
-    "minimist": ">=1.2.2",
+    "minimist": ">=1.2.6",
     "rimraf": "^3.0.2",
     "spectron": "^16.0.0"
   },
