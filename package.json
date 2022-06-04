@@ -26,7 +26,6 @@
   "author": "kondoumh",
   "license": "MIT",
   "devDependencies": {
-    "cpx": "^1.5.0",
     "electron": "^19.0.3",
     "electron-builder": "^23.0.4",
     "rimraf": "^3.0.2"
