@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Page Info</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.3/dist/vuetify.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.6.3/dist/vuetify.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons">
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css">
+    <style scoped>
+      *{ text-transform: none !important; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <v-app id="inspire">
+        <template>
+          <v-card class="overflow-hidden">
+            <v-app-bar
+              fixed
+            >
+              <v-toolbar-title>{{ title }}</v-toolbar-title>
+              <template v-slot:extension>
+                <p v-html="views"></p>
+                <v-spacer></v-spacer>
+                <v-btn
+                  v-on:click="close"
+                >Close</v-btn>
+                <v-btn
+                  v-on:click="openPage"
+                >Open</v-btn>
+              </template>
+            </v-app-bar>
+            <v-sheet
+              height="110"
+            ></v-sheet>
+            <v-img
+              :src="image"
+              max-height="300"
+              max-width="300"
+            ></v-img>
+            <p v-html="summary"></p>
+            <v-expansion-panels>
+              <v-expansion-panel>
+                <v-expansion-panel-header>
+                  Detail
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <p v-html="text"></p>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </v-card>
+        </template>
+      </v-app>
+    </div>
+    <script src="pageinfo.js"></script>
+  </body>
+</html>

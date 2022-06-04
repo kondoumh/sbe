@@ -1,6 +1,6 @@
 function toHeading(text, level) {
   const re = /\[(\*+)\s([^\[\]]+)\]/;
-  let slevel = "*".repeat(level);
+  let slevel = '*'.repeat(level);
   let result = text;
   if (!text.match(re)) {
     result = `[${slevel} ${text}]`;
