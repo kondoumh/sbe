@@ -14,16 +14,12 @@ An unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 ### Meta view
 - Provide Page-list that can be sorted by updated / views / linked with pagination
 - Preview page info (author, collaborators, descriptions)
-- Preview 1-hop links of current page
 - Show project activities (total pages created, total views and linked)
-- Show user's activities (pages created)
 ### Utilities
 - In-page search
-- Text box to open page by url and search with in project
 - Open external url with web browser
 - Search selected text on Google with web browser
 - Add pages to fav list
-- Open scrapbox page from web browser via url-scheme
 - Open page from browsing history
 - Copy article to clipboard as Markdown format
 
@@ -39,7 +35,7 @@ Download installer for each platform from [Releases](https://github.com/kondoumh
 
 ## How to run with Electron
 ### requirement
-Node.js v14
+Node.js v16
 
 ### run
 git clone or download zip.
@@ -48,22 +44,6 @@ git clone or download zip.
 cd sbe
 npm install
 npm start
-```
-
-### How to run test
-
-You need to build runtime module before running test.
-
-```
-npm install
-npm run pack
-npm test
-```
-
-Under proxy environment, `no_proxy` setting may be required.
-
-```
-export {no_proxy,NO_PROXY}="127.0.0.1,localhost"
 ```
 
 ## How to build exectable binary
@@ -81,25 +61,12 @@ Binary will be created.
 
 ## How to build installer
 
-Currently Windows and macOS only.
-
 ```
 npm install
 npm run dist
 ```
 
 Setup modules wil be created.
-- macOS: `./dist/mac/sbe-<version>.dmg`
+- macOS: `./dist/mac/sbe-<version>-universal.dmg`
 - Windows: `./dist/win-unpacked/sbe.Setup.<version>.exe`
-
-## Open from web browser
-
-Since sbe is registered as a client of URL Scheme, it is possible to open the corresponding page with sbe by adding prefix `sbe://` to the url. 
-
-e.g. `https://scrapbox.io/foo/bar` ==> `sbe://https://scrapbox.io/foo/bar`
-
-This conversion can be done by following script which executed by bookmarklet or browser extensions such as [SurfingKeys](https://github.com/brookhong/Surfingkeys).
-
-```javascript
-javascript:(function(){location.href=`sbe://${window.top.location.href}`})();
-```
+- Linux: `./dist/linux/sbe-<version>.AppImage`
