@@ -14,34 +14,34 @@ let renderTalbleHeader = false;
 let hatenaMarkdown = false;
 
 function toMarkdown(lines, hatena) {
-  let content = "";
+  let content = '';
   hatenaMarkdown = hatena;
   lines.forEach(line => {
-    content += convert(line) + "\n";
+    content += convert(line) + '\n';
   });
   return content;
 }
 
 function convert(line) {
-  let result = "";
+  let result = '';
   if (codeblock) {
-    if (!line.startsWith(" ")) {
-      result = "```\n"
+    if (!line.startsWith(' ')) {
+      result = '```\n'
       codeblock = false;
     } else {
       result = line;
       return result;
     }
   } else if (table) {
-    if (!line.startsWith(" ") && !line.startsWith("\t")) {
+    if (!line.startsWith(' ') && !line.startsWith('\t')) {
       table = false;
       renderTalbleHeader = false;
     } else {
       const row = line.substring(1);
-      const tr = row.replace(/\t/gi, "$\t").trim(" ").split("$\t");
-      result = "| " + tr.join(" | ") + " |";
+      const tr = row.replace(/\t/gi, '$\t').trim(' ').split('$\t');
+      result = '| ' + tr.join(' | ') + ' |';
       if (!renderTalbleHeader) {
-        result += "\n" + "|:--".repeat(tr.length) + "|";
+        result += '\n' + '|:--'.repeat(tr.length) + '|';
         renderTalbleHeader = true;
       }
       return result;
@@ -51,25 +51,25 @@ function convert(line) {
     if (rgxCodeBlock.test(line)) {
       const ar = rgxCodeBlock.exec(line);
       codeblock = true;
-      result = ar[1] + (ar[2] ? ar[2] : "") + "\n```" + (ar[3] ? ar[3] : "");
+      result = ar[1] + (ar[2] ? ar[2] : '') + '\n```' + (ar[3] ? ar[3] : '');
       return result;
     }
     if (rgxTable.test(line)) {
       table = true;
       const ar = rgxTable.exec(line);
-      result = ar[1] + "\n";
+      result = ar[1] + '\n';
       return result;
     }
     if (rgxHeading.test(line)) {
       const ar = rgxHeading.exec(line);
-      result += "#".repeat(decideLevel(ar[1].length)) + " " + ar[2];
+      result += '#'.repeat(decideLevel(ar[1].length)) + ' ' + ar[2];
     } else if (rgxIndent.test(line)) {
       const ar = rgxIndent.exec(line);
-      const indent = "  ".repeat(ar[1].length - 1);
-      result += indent + "- " + replaceGazoImage(replaceMdLink(ar[2]).replace(rgxStrong, "**$2**"));
+      const indent = '  '.repeat(ar[1].length - 1);
+      result += indent + '- ' + replaceGazoImage(replaceMdLink(ar[2]).replace(rgxStrong, '**$2**'));
     } else {
       const replaced = replaceGazoImage(replaceMdLink(line));
-      result += replaced.replace(rgxStrong, " **$2** ");
+      result += replaced.replace(rgxStrong, ' **$2** ');
     }
   }
   return result;

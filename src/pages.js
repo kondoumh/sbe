@@ -9,27 +9,19 @@ const app = new Vue({
   }),
   el: '#app',
   async mounted () {
-    if (!this.projectName) {
-      this.projectName = sessionStorage.getItem("projectName")
-      if (!this.projectName) {
-        this.projectName = localStorage.getItem("projectName")
-        sessionStorage.setItem("projectName", this.projectName)
-        localStorage.removeItem("projectName")
-      }
-    }
+    this.projectName = await window.pagesApi.activeProject();
     this.fetchData()
-    window.addEventListener('focus', this.onFocus)
+    window.pagesApi.on('browser-window-fucus', this.onFocus)
+    window.pagesApi.on('browser-window-blur', this.onFocus)
   },
   methods: {
     async fetchData () {
       const { sortBy, sortDesc, page, itemsPerPage } = this.options
       const skip = (page - 1) * itemsPerPage
       let url = `https://scrapbox.io/api/pages/${this.projectName}?skip=${skip}&limit=${itemsPerPage}&sort=${sortBy}`
-      console.log(url)
-      const res = await fetch(url)
-      const data = await res.json()
+      console.log(this.projectName, page, itemsPerPage, page);
+      const data = await window.pagesApi.fetchPages(url)
       this.items = await data.pages
-      console.log(data.count)
       this.pageCount = data.count
       this.length = Math.ceil(this.pageCount / itemsPerPage)
     },
@@ -37,8 +29,8 @@ const app = new Vue({
       let date = new Date()
       date.setTime(timestamp * 1000)
       const params = {
-        year: "numeric", month: "2-digit", day: "2-digit",
-        hour: "2-digit", minute: "numeric", second: "numeric",
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: 'numeric', second: 'numeric',
         hour12: false
       }
       return date.toLocaleString(navigator.language, params)
@@ -67,7 +59,7 @@ const app = new Vue({
     pageCount: 0,
     length: 1,
     items: [],
-    ptojectName: '',
+    projectName: '',
     options: {
       itemsPerPage: 50,
     },

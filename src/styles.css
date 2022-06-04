@@ -1,0 +1,76 @@
+.toolbar {
+  position: absolute;
+  height: 25px;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+.tabbar {
+  position: absolute;
+  height: 25px;
+  top: 25px;
+  right: 0;
+  left: 0;
+}
+.statusbar {
+  position: absolute;
+  height: 25px;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+.search-box {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 3px;
+  box-sizing: border-box;
+  height: 35px;
+  padding: 5px;
+  background-color: #fff;
+  border-left: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 1px 1px 0px rgba(0,0,0,0.3);
+}
+.search-input {
+  box-sizing: border-box;
+  width: 220px;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 2px;
+  border: 1px solid rgba(0,0,0,.1);
+  outline-width: 2px;
+  padding-right: 30px;
+}
+.search-count {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  line-height: 40px;  
+}
+.state-visible {
+  display: block;
+}
+
+.child-header {
+  position: absolute;
+  height: 60px;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+.child-body {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  left: 0;
+  bottom: 30px;
+  overflow: auto;
+}
+.child-footer {
+  position: absolute;
+  height: 30px;
+  bottom: 0;
+  ritht: 0;
+  left: 0;
+}
