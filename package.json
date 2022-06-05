@@ -15,6 +15,7 @@
   },
   "scripts": {
     "start": "electron .",
+    "test": "playwright test",
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
@@ -26,8 +27,10 @@
   "author": "kondoumh",
   "license": "MIT",
   "devDependencies": {
+    "@playwright/test": "^1.22.2",
     "electron": "^19.0.3",
     "electron-builder": "^23.0.4",
+    "playwright": "^1.22.2",
     "rimraf": "^3.0.2"
   },
   "dependencies": {
