@@ -1,0 +1,29 @@
+name: OS Matrix
+
+on: [workflow_dispatch]
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup nodejs
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+    - name: Install dependencies
+      run: npm install
+    - name: Run Test
+      run: npm test
+    - name: Upload screenshots
+      uses: actions/upload-artifact@v2
+      with:
+        name: screenshots_${{ matrix.os }}
+        path: screenshot
