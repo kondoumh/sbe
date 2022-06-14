@@ -296,6 +296,7 @@ function prepareMenu() {
           label: 'Search in window',
           accelerator: 'CmdOrCtrl+F',
           click() {
+            mainWindow.webContents.send('focus-search-text');
           }
         },
         { type: 'separator' },

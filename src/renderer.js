@@ -40,6 +40,9 @@ const app = new Vue({
     }),
     window.api.on('query-title', (e, title) => {
       this.selectByTitle(title);
+    }),
+    window.api.on('focus-search-text', () => {
+      this.fucusSearchText();
     })
   },
   data: () => ({
@@ -110,6 +113,9 @@ const app = new Vue({
       } else {
         window.api.sendIdByTitle(-1);
       }
+    },
+    fucusSearchText() {
+      this.$refs.searchText.focus();
     }
   }
 })
