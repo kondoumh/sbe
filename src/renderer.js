@@ -64,6 +64,7 @@ const app = new Vue({
     searchStop() {
       this.searchText = '';
       window.api.searchStop();
+      this.$refs.searchText.blur();
     },
     selectPage (idx) {
       if (idx !== undefined) {
