@@ -79,7 +79,7 @@ function loadPageList() {
   mainWindow.webContents.send('add-page', view.webContents.id, title, true);
 }
 
-function loadPage(url, activate=true) {
+async function loadPage(url, activate=true) {
   const view = new BrowserView();
   mainWindow.addBrowserView(view);
   resizeView(view);
@@ -90,7 +90,10 @@ function loadPage(url, activate=true) {
   handleLinkEvent(view);
   handleNavigation(view);
   mainWindow.webContents.send('add-page', view.webContents.id, sbUrl.toTitle(url), activate);
-  saveHistory(url);
+  const page = await fetchPageData(url);
+  if (page && page.id) {
+    saveHistory(url);
+  }
 }
 
 function loadFavPage() {
@@ -155,8 +158,11 @@ function handleLinkEvent(view) {
       openLink(url);
     }
   });
-  view.webContents.on('did-navigate-in-page', (e, url) => {
-    saveHistory(url);
+  view.webContents.on('did-navigate-in-page', async (e, url) => {
+    const page = await fetchPageData(url);
+    if (page && page.id) {
+      saveHistory(url, page.id);
+    }
   });
 }
 
@@ -784,14 +790,17 @@ function inFavs(url) {
   return fav !== undefined;
 }
 
-function saveHistory(url) {
+function saveHistory(url, pageId) {
   const page = sbUrl.takeProjectPage(url);
-  const addItem = { project: page.project, page: decodeURIComponent(page.page), url: url };
+  const addItem = { project: page.project, page: decodeURIComponent(page.page), url: url, id: pageId };
   if (!page.page) {
     return;
   }
+  if (page.page === 'new') { // If the user creates a page titled 'new', it will be'new_'
+    return;
+  }
   const history = store.get('history');
-  const removed = history.filter(item => item.url !== url);
+  const removed = history.filter(item => item.id !== pageId);
   removed.unshift(addItem);
   if (removed.length > 100) {
     removed.pop();
@@ -816,7 +825,7 @@ function openAboutWindow() {
   child.show();
 }
 
-async function copyAsMarkdown(url, hatena=false) {
+async function fetchPageData(url) {
   let sid;
   const endpoint = sbUrl.convertToPageApi(url);
   const cookies = await session.defaultSession.cookies.get({ name: 'connect.sid' });
@@ -829,6 +838,13 @@ async function copyAsMarkdown(url, hatena=false) {
   let data;
   if (res.status === 200) {
     data = await res.json();
+  }
+  return data;
+}
+
+async function copyAsMarkdown(url, hatena=false) {
+  const data = await fetchPageData(url);
+  if (data) {
     const lines = data.lines.slice(1).map(line => { return line.text; });
     const text = toMarkdown(lines, hatena);
     clipboard.writeText(text);
