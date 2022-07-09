@@ -6,8 +6,8 @@ const app = new Vue({
     }    
   }),
   async mounted () {
-    window.api.on('add-page', (e, contentId, title, activate) => {
-      const item = { title: title, contentId: contentId };
+    window.api.on('add-page', (e, contentId, title, activate, icon) => {
+      const item = { title: title, contentId: contentId, icon: icon };
       this.items.push(item);
       if (activate) {
         this.tab = this.items.length - 1;

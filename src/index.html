@@ -130,6 +130,9 @@
                 v-for="item in items"
                 :key="item.contentId"
               >
+                <v-icon
+                  v-if="item.icon"
+                >{{ item.icon }}</v-icon>
                 {{ item.title }}
                 <v-btn
                   v-if="isActive(item.contentId) && items.length > 1"

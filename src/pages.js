@@ -14,6 +14,7 @@ const app = new Vue({
     this.fetchData()
     window.pagesApi.on('browser-window-fucus', this.onFocus)
     window.pagesApi.on('browser-window-blur', this.onFocus)
+    window.pagesApi.on('bring-to-top', this.onFocus)
   },
   methods: {
     async fetchData () {
@@ -35,8 +36,10 @@ const app = new Vue({
       }
       return date.toLocaleString(navigator.language, params)
     },
-    onFocus () {
+    async onFocus () {
       this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      this.projectName = await window.pagesApi.activeProject()
+      this.projects = await window.pagesApi.openedProjects()
       this.fetchData()
     },
     encodeTitle(title) {

@@ -75,8 +75,7 @@ function loadPageList() {
   prepareContextMenu(view.webContents);
   registerSearchAction(view);
   handleLinkEvent(view);
-  const title = 'Pages';
-  mainWindow.webContents.send('add-page', view.webContents.id, title, true);
+  mainWindow.webContents.send('add-page', view.webContents.id, 'Pages', true, 'mdi-view-list');
 }
 
 async function loadPage(url, activate=true) {
@@ -114,7 +113,7 @@ function loadFavPage() {
   prepareContextMenu(view.webContents);
   registerSearchAction(view);
   handleLinkEvent(view);
-  mainWindow.webContents.send('add-page', view.webContents.id, 'Favs', true);
+  mainWindow.webContents.send('add-page', view.webContents.id, 'Favs', true, 'mdi-star-outline');
 }
 
 function loadHistoryPage() {
@@ -135,7 +134,7 @@ function loadHistoryPage() {
   prepareContextMenu(view.webContents);
   registerSearchAction(view);
   handleLinkEvent(view);
-  mainWindow.webContents.send('add-page', view.webContents.id, 'History', true);
+  mainWindow.webContents.send('add-page', view.webContents.id, 'History', true, 'mdi-history');
 }
 
 function registerSearchAction(view) {
