@@ -18,6 +18,10 @@ contextBridge.exposeInMainWorld(
       const active = await ipcRenderer.invoke('active-project');
       return active;
     },
+    openedProjects: async () => {
+      const projects = await ipcRenderer.invoke('opened-projects');
+      return projects;
+    },
     on: (channel, callback) => ipcRenderer.on(channel, (event, ...args) => callback(event, ...args))
   }
 );

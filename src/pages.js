@@ -9,7 +9,8 @@ const app = new Vue({
   }),
   el: '#app',
   async mounted () {
-    this.projectName = await window.pagesApi.activeProject();
+    this.projectName = await window.pagesApi.activeProject()
+    this.projects = await window.pagesApi.openedProjects()
     this.fetchData()
     window.pagesApi.on('browser-window-fucus', this.onFocus)
     window.pagesApi.on('browser-window-blur', this.onFocus)
@@ -19,7 +20,6 @@ const app = new Vue({
       const { sortBy, sortDesc, page, itemsPerPage } = this.options
       const skip = (page - 1) * itemsPerPage
       let url = `https://scrapbox.io/api/pages/${this.projectName}?skip=${skip}&limit=${itemsPerPage}&sort=${sortBy}`
-      console.log(this.projectName, page, itemsPerPage, page);
       const data = await window.pagesApi.fetchPages(url)
       this.items = await data.pages
       this.pageCount = data.count
@@ -34,9 +34,6 @@ const app = new Vue({
         hour12: false
       }
       return date.toLocaleString(navigator.language, params)
-    },
-    input () {
-      this.fetchData()
     },
     onFocus () {
       this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -60,6 +57,7 @@ const app = new Vue({
     length: 1,
     items: [],
     projectName: '',
+    projects: [],
     options: {
       itemsPerPage: 50,
     },

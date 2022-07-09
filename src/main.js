@@ -75,7 +75,7 @@ function loadPageList() {
   prepareContextMenu(view.webContents);
   registerSearchAction(view);
   handleLinkEvent(view);
-  const title = 'Pages:' + activeProject();
+  const title = 'Pages';
   mainWindow.webContents.send('add-page', view.webContents.id, title, true);
 }
 
@@ -575,10 +575,15 @@ ipcMain.handle('send-title', (e, url, title) => {
   }
 });
 
-ipcMain.handle('active-project', async e => {
-  let active = activeProject();
+ipcMain.handle('active-project', async () => {
+  const active = activeProject();
   return active;
 });
+
+ipcMain.handle('opened-projects', async () => {
+  const projects = openedProjects();
+  return projects;
+})
 
 function getActiveViews() {
   const views = mainWindow.getBrowserViews().filter(view => view.webContents.isFocused());
@@ -644,6 +649,19 @@ function activeProject() {
     }
   });
   return project;
+}
+
+function openedProjects() {
+  const projects = new Set();
+  mainWindow.getBrowserViews().forEach(view => {
+    const url = view.webContents.getURL();
+    if (sbUrl.inScrapbox(url)) {
+      const prj = sbUrl.takeProjectPage(url);
+      projects.add(prj.project);
+    }
+  })
+  const arr = Array.from(projects);
+  return arr;
 }
 
 ipcMain.handle('open-it', (e, url) => {

@@ -45,6 +45,14 @@
     <div id="app">
       <v-app id="inspire">
         <div>
+          <v-container>
+            <v-select
+              v-model="projectName"
+              :items="projects"
+              dense
+              @change="fetchData"
+            ></v-select>
+          </v-container>
           <div class="text-xs-center pt-2">
             <v-pagination
               v-model="page"
