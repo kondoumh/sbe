@@ -63,6 +63,11 @@ async function createWindow () {
 }
 
 function loadPageList() {
+  const opened = openedPageList();
+  if (opened > 0) {
+    bringToTop(opened);
+    return;
+  }
   const view = new BrowserView({
     webPreferences: {
       preload: path.join(__dirname, 'pages-preload.js')
@@ -773,6 +778,14 @@ async function notifyUpdate() {
   } catch (err) {
     console.error("request failed: " + err.message);
   }
+}
+
+function openedPageList() {
+  const views = mainWindow.getBrowserViews().filter(view => view.webContents.getURL().endsWith('pages.html'));
+  if (views.length > 0) {
+    return views[0].webContents.id;
+  }
+  return -1;
 }
 
 function openedFavPage() {
