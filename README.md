@@ -22,9 +22,10 @@ An unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 - Add pages to fav list
 - Open page from browsing history
 - Copy article to clipboard as Markdown format
+### Other
+- Dark Mode Toggle (UI other than Scrapbox contents)
 
-![Screenshot](https://user-images.githubusercontent.com/2092183/63644879-904e0a00-c72d-11e9-96d2-64e4727e64c6.gif)
-
+![Screenshot](https://i.gyazo.com/5314e24354451448a0cb2aee1315f986.gif)
 
 ## How to install
 Download installer for each platform from [Releases](https://github.com/kondoumh/sbe/releases) and execute.
@@ -57,6 +58,7 @@ Binary will be created.
 
 - macOS: `./dist/mac/sbe.app`
 - Windows: `./dis/win-unpacked/sbe.exe`
+- Linux: `.dist/linux/sbe.AppImage`
 
 
 ## How to build installer
