@@ -38,8 +38,14 @@ const app = new Vue({
     },
     async onFocus () {
       this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-      this.projectName = await window.pagesApi.activeProject()
-      this.projects = await window.pagesApi.openedProjects()
+      const projectName = await window.pagesApi.activeProject()
+      const projects = await window.pagesApi.openedProjects()
+      if (projectName) {
+        this.projectName = projectName
+      }
+      if (projects.length > 0) {
+        this.projects = projects
+      }
       this.fetchData()
     },
     encodeTitle(title) {
