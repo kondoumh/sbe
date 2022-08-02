@@ -616,7 +616,6 @@ function openPageInfoWindow(url) {
       parent: mainWindow,
       title: 'Page Info : ' + sbUrl.decodeTitle(projectPage.page),
       webPreferences: {
-        sandbox: false,
         preload: path.join(__dirname, 'pageinfo-preload.js')
       }
     }
@@ -764,7 +763,12 @@ ipcMain.handle('get-version-info', async () => {
     arch: process.arch
   }
   return info;
-})
+});
+
+ipcMain.handle('fetch-page-info', async (e, url) => {
+  const data = await fetchPageInfo(url);
+  return data;
+});
 
 async function notifyUpdate() {
   try {
@@ -873,6 +877,27 @@ async function fetchPageData(url) {
     data = await res.json();
   }
   return data;
+}
+
+async function fetchPageInfo(url) {
+  const sid = await getSid();
+  const res = await nfetch(url, { headers: { cookie: sid } }).catch(error => {
+    console.error(error);
+  });
+  let data;
+  if (res.status == 200) {
+    data = await res.json();
+  }
+  return data;
+}
+
+async function getSid() {
+  let sid;
+  const cookies = await session.defaultSession.cookies.get({ name: 'connect.sid' });
+  if (cookies.length > 0) {
+    sid = 'connect.sid=' + cookies[0].value;
+  }
+  return sid;
 }
 
 async function copyAsMarkdown(url, hatena=false) {
