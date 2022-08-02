@@ -770,6 +770,16 @@ ipcMain.handle('fetch-page-info', async (e, url) => {
   return data;
 });
 
+ipcMain.handle('fetch-post-count', async (e, projectName) => {
+  const count = await fetchPostCount(projectName);
+  return count;
+});
+
+ipcMain.handle('fetch-project-metrics', async (e, projectName, count, skip) => {
+  const metrics = fetchProjectMetrix(projectName, count, skip);
+  return metrics;
+});
+
 async function notifyUpdate() {
   try {
     const res = await fetch("https://api.github.com/repos/kondoumh/sbe/releases/latest");
@@ -898,6 +908,36 @@ async function getSid() {
     sid = 'connect.sid=' + cookies[0].value;
   }
   return sid;
+}
+
+async function fetchPostCount(projectName) {
+  const pagesUrl = sbUrl.pagesApi(projectName);
+  const sid = await getSid();
+  const res = await nfetch(pagesUrl, { headers: { cookie: sid } }).catch(error => {
+    console.error('error..' + error);
+    return 0;
+  });
+  const data = await res.json();
+  return parseInt(data.count);
+}
+
+async function fetchProjectMetrix(projectName, count, skip) {
+  const pagesUrl = sbUrl.pagesApi(projectName);
+  const sid = await getSid();
+  const url = pagesUrl + '?skip=' + (count - 1) + '&limit=' + skip;
+  const res = await fetch(url, { headers: { cookie: sid } }).catch(error => {
+    console.error('error..' + error);
+  });
+  let views = 0;
+  let linked = 0;
+  if (res.status === 200) {
+    const data = await res.json();
+    Object.keys(data.pages).forEach(key => {
+      views += parseInt(data.pages[key].views);
+      linked += parseInt(data.pages[key].linked);
+    });
+    return { views: views, linked: linked, fetched: data.pages.length };
+  }
 }
 
 async function copyAsMarkdown(url, hatena=false) {
