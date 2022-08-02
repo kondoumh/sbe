@@ -70,6 +70,7 @@ function loadPageList() {
   }
   const view = new BrowserView({
     webPreferences: {
+      sandbox: false,
       preload: path.join(__dirname, 'pages-preload.js')
     }
   });
@@ -615,6 +616,7 @@ function openPageInfoWindow(url) {
       parent: mainWindow,
       title: 'Page Info : ' + sbUrl.decodeTitle(projectPage.page),
       webPreferences: {
+        sandbox: false,
         preload: path.join(__dirname, 'pageinfo-preload.js')
       }
     }
@@ -634,6 +636,7 @@ function openProjectInfoWindow() {
       parent: mainWindow,
       title: 'Project Activities : ' + project,
       webPreferences: {
+        sandbox: false,
         preload: path.join(__dirname, 'projectinfo-preload.js')
       }
     }
