@@ -862,12 +862,8 @@ function openAboutWindow() {
 }
 
 async function fetchPageData(url) {
-  let sid;
   const endpoint = sbUrl.convertToPageApi(url);
-  const cookies = await session.defaultSession.cookies.get({ name: 'connect.sid' });
-  if (cookies.length > 0) {
-    sid = 'connect.sid=' + cookies[0].value;
-  }
+  const sid = await getSid();
   const res = await nfetch(endpoint, { headers: { cookie: sid } }).catch(error => {
     console.error(error);
   });
