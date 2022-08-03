@@ -75,7 +75,7 @@
               {{ item.pin != 0 ? "&#128204;" : "" }}
             </template>
             <template v-slot:item.updated="{item}">
-              {{ formatDate(item.updated) }}
+              {{ formattedDate(item.updated) }}
             </template>
             <template v-slot:item.title="{item}">
               <a
@@ -91,5 +91,6 @@
       </v-app>
     </div>
     <script src="pages.js"></script>
+    <script src="./date-helper.js"></script>
   </body>
 </html>

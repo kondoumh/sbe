@@ -26,15 +26,8 @@ const app = new Vue({
       this.pageCount = data.count
       this.length = Math.ceil(this.pageCount / itemsPerPage)
     },
-    formatDate (timestamp) {
-      let date = new Date()
-      date.setTime(timestamp * 1000)
-      const params = {
-        year: 'numeric', month: '2-digit', day: '2-digit',
-        hour: '2-digit', minute: 'numeric', second: 'numeric',
-        hour12: false
-      }
-      return date.toLocaleString(navigator.language, params)
+    formattedDate (timestamp) {
+      return formatDate(timestamp);
     },
     async onFocus () {
       this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
