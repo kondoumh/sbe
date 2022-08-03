@@ -1,5 +1,4 @@
 const { contextBridge, ipcRenderer, clipboard } = require('electron');
-const { formatDate } = require('./date-helper');
 
 contextBridge.exposeInMainWorld(
   'api', {
@@ -17,9 +16,6 @@ contextBridge.exposeInMainWorld(
     activeProject: async () => {
       const active = await ipcRenderer.invoke('active-project');
       return active;
-    },
-    getDate: () => {
-      return formatDate();
     },
     on: (channel, callback) => ipcRenderer.on(channel, (event, ...args) => callback(event, ...args))
   }

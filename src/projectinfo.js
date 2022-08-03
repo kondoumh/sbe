@@ -13,7 +13,7 @@ const app = new Vue({
     window.api.on('browser-window-blur', this.onFocus);
     this.projectName = await window.api.activeProject();
     await this.showProjectInfo();
-    this.date = window.api.getDate();
+    this.date = formatDate();
   },
   methods: {
     onFocus () {

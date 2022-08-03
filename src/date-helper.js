@@ -10,7 +10,3 @@ function formatDate (timestamp) {
   }
   return date.toLocaleString(navigator.language, params)
 }
-
-module.exports = {
-  formatDate
-}

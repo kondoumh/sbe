@@ -635,7 +635,6 @@ function openProjectInfoWindow() {
       parent: mainWindow,
       title: 'Project Activities : ' + project,
       webPreferences: {
-        sandbox: false,
         preload: path.join(__dirname, 'projectinfo-preload.js')
       }
     }
