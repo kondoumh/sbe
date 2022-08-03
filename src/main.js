@@ -70,7 +70,6 @@ function loadPageList() {
   }
   const view = new BrowserView({
     webPreferences: {
-      sandbox: false,
       preload: path.join(__dirname, 'pages-preload.js')
     }
   });
@@ -561,15 +560,6 @@ ipcMain.handle('debug-view', e => {
 
 ipcMain.handle('debug-window', e => {
   mainWindow.webContents.openDevTools({ mode: 'detach'});
-});
-
-ipcMain.handle('get-cookie', async e => {
-  let sid;
-  const cookies = await session.defaultSession.cookies.get({ name: 'connect.sid' });
-  if (cookies.length > 0) {
-    sid = 'connect.sid=' + cookies[0].value;
-  }
-  return sid;
 });
 
 ipcMain.handle('send-title', (e, url, title) => {
