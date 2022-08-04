@@ -290,17 +290,6 @@ function prepareMenu() {
             loadHistoryPage();
           }
         },
-        {
-          label: 'Show linked pages',
-          click() {
-          }
-        },
-        {
-          label: 'Show user info',
-          click() {
-            mainWindow.webContents.send('showUserInfo');
-          }
-        },
         { type: 'separator' },
         {
           label: 'Search in window',
@@ -402,11 +391,6 @@ function prepareContextMenu(content) {
           openPageInfoWindow(params.linkURL);
         },
         visible: params.linkURL && sbUrl.isPage(params.linkURL)
-      },
-      {
-        label: 'Show linked pages',
-        click: () => { mainWindow.webContents.send('showLinkedPages', params.linkURL); },
-        visible: !params.linkURL && sbUrl.isPage(content.getURL())
       },
       { type: 'separator' },
       {
