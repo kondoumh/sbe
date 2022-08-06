@@ -2,11 +2,10 @@ const electron = require('electron');
 const { app, BrowserWindow, BrowserView, ipcMain, session, Menu, clipboard, shell, Notification } = require('electron');
 const path = require('path');
 const Store = require('electron-store');
-const fetch = require('node-fetch');
 const contextMenu = require('electron-context-menu');
 const sbUrl = require('./url-helper');
 const { toMarkdown } = require('./markdown');
-const nfetch = require('node-fetch');
+const fetch = require('electron-fetch').default;
 const { toHeading, toBodyText } = require('./format');
 const compareVersions = require("compare-versions");
 
@@ -848,7 +847,7 @@ function openAboutWindow() {
 async function fetchPageData(url) {
   const endpoint = sbUrl.convertToPageApi(url);
   const sid = await getSid();
-  const res = await nfetch(endpoint, { headers: { cookie: sid } }).catch(error => {
+  const res = await fetch(endpoint, { headers: { cookie: sid } }).catch(error => {
     console.error(error);
   });
   let data;
@@ -860,7 +859,7 @@ async function fetchPageData(url) {
 
 async function fetchPageInfo(url) {
   const sid = await getSid();
-  const res = await nfetch(url, { headers: { cookie: sid } }).catch(error => {
+  const res = await fetch(url, { headers: { cookie: sid } }).catch(error => {
     console.error(error);
   });
   let data;
@@ -882,7 +881,7 @@ async function getSid() {
 async function fetchPostCount(projectName) {
   const pagesUrl = sbUrl.pagesApi(projectName);
   const sid = await getSid();
-  const res = await nfetch(pagesUrl, { headers: { cookie: sid } }).catch(error => {
+  const res = await fetch(pagesUrl, { headers: { cookie: sid } }).catch(error => {
     console.error('error..' + error);
     return 0;
   });
