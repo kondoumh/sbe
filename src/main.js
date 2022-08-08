@@ -56,6 +56,7 @@ async function createWindow () {
     });
   });
   mainWindow.webContents.on('did-finish-load', e => {
+    loadDashboard();
     loadPage('https://scrapbox.io');
   });
   await notifyUpdate();
@@ -139,6 +140,22 @@ function loadHistoryPage() {
   registerSearchAction(view);
   handleLinkEvent(view);
   mainWindow.webContents.send('add-page', view.webContents.id, 'History', true, 'mdi-history');
+}
+
+function loadDashboard() {
+  const view = new BrowserView({
+    webPreferences: {
+      preload: path.join(__dirname, 'dashboard-preload.js')
+    }
+  });
+  mainWindow.addBrowserView(view);
+  resizeView(view);
+  view.webContents.loadFile(path.join(__dirname, 'dashboard.html'));
+  topViewId = view.webContents.id;
+  prepareContextMenu(view.webContents);
+  registerSearchAction(view);
+  handleLinkEvent(view);
+  mainWindow.webContents.send('add-page', view.webContents.id, 'Dashboard', true, 'mdi-view-dashboard-variant-outline');
 }
 
 function registerSearchAction(view) {

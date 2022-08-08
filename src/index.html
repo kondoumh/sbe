@@ -133,7 +133,7 @@
                 >{{ item.icon }}</v-icon>
                 {{ item.title }}
                 <v-btn
-                  v-if="isActive(item.contentId) && items.length > 1"
+                  v-if="isActive(item.contentId) && items.length > 1 && item.title !== 'Dashboard'"
                   icon
                   small
                   @click="closePage"
