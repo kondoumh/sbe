@@ -9,20 +9,23 @@ const app = new Vue({
   }),
   el: '#app',
   async mounted () {
-    window.favsApi.on('browser-window-fucus', this.onFocus);
-    window.favsApi.on('browser-window-blur', this.onFocus);
-    window.favsApi.on('bring-to-top', this.onFocus);
+    window.api.on('browser-window-fucus', this.onFocus);
+    window.api.on('browser-window-blur', this.onFocus);
+    window.api.on('bring-to-top', this.onFocus);
     await this.onFocus();
   },
   methods: {
     async onFocus () {
       this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-      const favs = await window.favsApi.getFavs();
-      this.items = favs;
+      const favs = await window.api.getFavs();
+      this.favs = favs;
+      const history = await window.api.getHistory();
+      this.history = history;
     },
   },
   data: () => ({
     selectedItem: 0,
-    items: [],
+    favs: [],
+    history: []
   })
 })
