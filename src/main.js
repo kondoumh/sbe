@@ -832,9 +832,6 @@ function saveHistory(url, pageId) {
   if (!page.page) {
     return;
   }
-  if (page.page === 'new') { // If the user creates a page titled 'new', it will be'new_'
-    return;
-  }
   const history = store.get('history');
   const removed = history.filter(item => item.id !== pageId && item.url !== url);
   removed.unshift(addItem);

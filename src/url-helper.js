@@ -35,6 +35,31 @@ sbUrl.takeProjectPage = url => {
   const path = url.substring(sbUrl.BASE_URL.length).split(/\/|#/);
   project = path[0] ? path[0] : '';
   page = path[1] ? path[1] : '';
+
+  // If the user creates a page titled 'new', it will be'new_'
+  if (path[1] === 'new') {
+    page = '';
+  }
+  // /product - about scrapbox
+  if (path[0] === 'product') {
+    project = '';
+    page = '';
+  }
+  // /settings/profile etc
+  if (path[0] === 'settings') {
+    project = '';
+    page = '';
+  }
+  // /project-name/search/page?q=hoge
+  if (path.length > 2 && path[1] === 'search') {
+    project = path[0];
+    page = '';
+  }
+  // stream/project-name or projects/project-name/settings
+  if (path.length > 1 && (path[0] === 'projects' || path[0] === 'stream')) {
+    project = path[1];
+    page = '';
+  }
   return { project: project, page: page};
 }
 
