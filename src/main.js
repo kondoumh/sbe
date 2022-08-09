@@ -836,7 +836,7 @@ function saveHistory(url, pageId) {
     return;
   }
   const history = store.get('history');
-  const removed = history.filter(item => item.id !== pageId);
+  const removed = history.filter(item => item.id !== pageId && item.url !== url);
   removed.unshift(addItem);
   if (removed.length > 100) {
     removed.pop();
