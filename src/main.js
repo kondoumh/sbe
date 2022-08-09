@@ -95,7 +95,7 @@ async function loadPage(url, activate=true) {
   handleNavigation(view);
   mainWindow.webContents.send('add-page', view.webContents.id, sbUrl.toTitle(url), activate);
   const page = await fetchPageData(url);
-  if (page && page.id) {
+  if (page && page.id && page.persistent) {
     saveHistory(url);
   }
 }
@@ -180,7 +180,7 @@ function handleLinkEvent(view) {
   });
   view.webContents.on('did-navigate-in-page', async (e, url) => {
     const page = await fetchPageData(url);
-    if (page && page.id) {
+    if (page && page.id && page.persistent) {
       saveHistory(url, page.id);
     }
   });
