@@ -20,7 +20,7 @@ const app = new Vue({
       const favs = await window.api.getFavs();
       this.favs = favs;
       const history = await window.api.getHistory();
-      this.history = history;
+      this.history = history.slice(0, 10);
     },
   },
   data: () => ({
