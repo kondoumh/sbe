@@ -36,24 +36,24 @@
                 </v-list-item>
               </v-list-item-group>
             </v-list>
-            <v-list
+            <v-header>History</v-header>
+            <v-timeline
+              align-top
               dense
             >
-              <v-header>History</v-header>
-              <v-list-item-group
-                color="primary"
-              >
-                <v-list-item
+              <v-timeline-item
                   v-for="(item, i) in history"
                   :key="i"
+                  small
                 >
-                  <v-list-item-content>
-                    <v-list-item-title v-text="item.project"></v-list-item-title>
-                    <a :href="item.url">{{ item.page }}</a>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list-item-group>
-            </v-list>
+                  <v-row class="pt-1">
+                    <v-col>
+                      <div class="text-caption">{{ item.project }}</div>
+                      <a :href="item.url">{{ item.page }}</a>
+                    </v-col>
+                  </v-row>
+                </v-timeline-item>
+            </v-timeline>
           </v-card>
         </template>
       </v-app>
