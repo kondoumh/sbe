@@ -19,7 +19,7 @@
               <v-spacer></v-spacer>
               {{ user.displayName }}
             </v-toolbar>
-            <v-row>
+            <v-row no-gutters>
               <v-col>
                 <v-card
                   class="mx-auto"
@@ -29,6 +29,8 @@
                   <v-card-title>Favs</v-card-title>
                   <v-list
                     dense
+                    max-height="300"
+                    class="overflow-y-auto"
                   >
                     <v-list-item-group
                       color="primary"
@@ -54,6 +56,8 @@
                   <v-card-title>Projects</v-card-title>
                   <v-list
                     dense
+                    max-height="300"
+                    class="overflow-y-auto"
                   >
                     <v-list-item-group
                       color="primary"
@@ -71,27 +75,36 @@
                 </v-card>    
               </v-col>
             </v-row>
-            <v-card>
-              <v-card-title>History</v-card-title>
-              <v-timeline
-                align-top
-                dense
-              >
-                <v-timeline-item
-                    v-for="(item, i) in history"
-                    :key="i"
-                    :color="timeLineColor(item)"
-                    small
+            <v-row no-gutters>
+              <v-col>
+                <v-card>
+                  <v-card-title>History</v-card-title>
+                  <v-card
+                    max-height="600"
+                    class="overflow-y-auto"
                   >
-                    <v-row class="pt-1">
-                      <v-col>
-                        <div class="text-caption">{{ item.project }}</div>
-                        <a :href="item.url">{{ item.page }}</a>
-                      </v-col>
-                    </v-row>
-                  </v-timeline-item>
-              </v-timeline>
-            </v-card>
+                    <v-timeline
+                      align-top
+                      dense
+                    >
+                      <v-timeline-item
+                          v-for="(item, i) in history"
+                          :key="i"
+                          :color="timeLineColor(item)"
+                          small
+                        >
+                          <v-row class="pt-1">
+                            <v-col>
+                              <div class="text-caption">{{ item.project }}</div>
+                              <a :href="item.url">{{ item.page }}</a>
+                            </v-col>
+                          </v-row>
+                      </v-timeline-item>
+                    </v-timeline>
+                  </v-card>
+                </v-card>
+              </v-col>
+            </v-row>
           </v-container>
         </template>
       </v-app>
