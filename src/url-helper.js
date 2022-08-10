@@ -93,6 +93,10 @@ sbUrl.getSearchUrl = (projectName, url) => {
   return sbUrl.BASE_URL + projectName + '/search/page?q=' + encodeURIComponent(url);
 }
 
+sbUrl.getUserUrl = projectName => {
+  return sbUrl.BASE_URL + 'api/pages/' + projectName + '/user';
+}
+
 sbUrl.getIconUrl = (projectName, pageTitle) => {
   return sbUrl.BASE_URL + 'api/pages/' + projectName + '/' + pageTitle + '/icon';
 }

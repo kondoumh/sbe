@@ -16,13 +16,15 @@ const store = new Store({
       height: 800,
     },
     favs: [],
-    history: []
+    history: [],
+    projects: []
   },
 });
 
 let mainWindow;
 let topViewId;
 let previousText;
+let loginUser;
 
 async function createWindow () {
   let {width, height, x, y} = store.get('bounds');
@@ -96,7 +98,7 @@ async function loadPage(url, activate=true) {
   mainWindow.webContents.send('add-page', view.webContents.id, sbUrl.toTitle(url), activate);
   const page = await fetchPageData(url);
   if (page && page.id && page.persistent) {
-    saveHistory(url);
+    saveHistory(url, page);
   }
 }
 
@@ -181,7 +183,14 @@ function handleLinkEvent(view) {
   view.webContents.on('did-navigate-in-page', async (e, url) => {
     const page = await fetchPageData(url);
     if (page && page.id && page.persistent) {
-      saveHistory(url, page.id);
+      saveHistory(url, page);
+    }
+    const project = sbUrl.takeProjectPage(url);
+    if (!loginUser) {
+      const user = await fetchProjectUser(project.project);
+      if (user) {
+        loginUser = user;
+      }
     }
   });
 }
@@ -826,14 +835,24 @@ function inFavs(url) {
   return fav !== undefined;
 }
 
-function saveHistory(url, pageId) {
-  const page = sbUrl.takeProjectPage(url);
-  const addItem = { project: page.project, page: decodeURIComponent(page.page), url: url, id: pageId };
-  if (!page.page) {
-    return;
-  }
+function saveHistory(url, page) {
+  const author = page.user.id === loginUser.id;
+  const found = page.collaborators.find(item => item.id === loginUser.id);
+  console.log(page.collaborators);
+  console.log(found);
+  const contributed = found ? true: false;
+  const projectPage = sbUrl.takeProjectPage(url);
+  const addItem = { 
+    project: projectPage.project,
+    page: decodeURIComponent(projectPage.page),
+    url: url,
+    id: page.id,
+    author: author,
+    contributed: contributed
+  };
+  console.log(addItem);
   const history = store.get('history');
-  const removed = history.filter(item => item.id !== pageId && item.url !== url);
+  const removed = history.filter(item => item.id !== page.id && item.url !== url);
   removed.unshift(addItem);
   if (removed.length > 100) {
     removed.pop();
@@ -877,10 +896,23 @@ async function fetchPageInfo(url) {
     console.error(error);
   });
   let data;
-  if (res.status == 200) {
+  if (res.status === 200) {
     data = await res.json();
   }
   return data;
+}
+
+async function fetchProjectUser(projectName) {
+  const sid = await getSid();
+  const url = sbUrl.getUserUrl(projectName);
+  const res = await fetch(url, { headers: { cookie: sid} }).catch(error => {
+    console.error(error);
+  });
+  let data;
+  if (res.status === 200) {
+    data = await res.json();
+    return { id : data.user.id, name: data.user.name, displayName: data.user.displayName };
+  }
 }
 
 async function getSid() {
