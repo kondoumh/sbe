@@ -17,9 +17,9 @@
             <v-row>
               <v-col>
                 <v-card
-                class="mx-auto"
-                min-width="800"
-                tile
+                  class="mx-auto"
+                  min-width="700"
+                  tile
                 >
                   <v-card-title>Favs</v-card-title>
                   <v-list
@@ -28,22 +28,41 @@
                     <v-list-item-group
                       color="primary"
                     >
-                      <v-list-item
-                        v-for="(item, i) in favs"
-                        :key="i"
-                      >
-                        <v-list-item-content>
-                          <v-list-item-title v-text="item.project"></v-list-item-title>
-                          <a :href="item.url">{{ item.page }}</a>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-list-item-group>
+                    <v-list-item
+                      v-for="(item, i) in favs"
+                      :key="i"
+                    >
+                      <v-list-item-content>
+                        <v-list-item-title v-text="item.project"></v-list-item-title>
+                        <a :href="item.url">{{ item.page }}</a>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list-item-group>
                   </v-list>
                 </v-card>
               </v-col>
               <v-col>
-                <v-card>
+                <v-card
+                  class="mx-auto"
+                  tile
+                >
                   <v-card-title>Projects</v-card-title>
+                  <v-list
+                    dense
+                  >
+                    <v-list-item-group
+                      color="primary"
+                    >
+                    <v-list-item
+                      v-for="(item, i) in projects"
+                      :key="i"
+                    >
+                      <v-list-item-content>
+                        <a :href="baseUrl + item">{{ item }}</a>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list-item-group>
+                  </v-list>
                 </v-card>    
               </v-col>
             </v-row>

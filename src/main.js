@@ -100,6 +100,8 @@ async function loadPage(url, activate=true) {
   if (page && page.id && page.persistent) {
     saveHistory(url, page);
   }
+  const projectPage = sbUrl.takeProjectPage(url);
+  updateProjects(projectPage.project);
 }
 
 function loadFavPage() {
@@ -185,14 +187,23 @@ function handleLinkEvent(view) {
     if (page && page.id && page.persistent) {
       saveHistory(url, page);
     }
-    const project = sbUrl.takeProjectPage(url);
+    const projectPage = sbUrl.takeProjectPage(url);
     if (!loginUser) {
-      const user = await fetchProjectUser(project.project);
+      const user = await fetchProjectUser(projectPage.project);
       if (user) {
         loginUser = user;
       }
     }
+    updateProjects(projectPage.project);
   });
+}
+
+function updateProjects(projectName) {
+  if (projectName) {
+    const projects = new Set(store.get('projects'));
+    projects.add(projectName);
+    store.set('projects', Array.from(projects));
+  }
 }
 
 function openLink(url) {
@@ -587,7 +598,7 @@ ipcMain.handle('active-project', async () => {
 ipcMain.handle('opened-projects', async () => {
   const projects = openedProjects();
   return projects;
-})
+});
 
 function getActiveViews() {
   const views = mainWindow.getBrowserViews().filter(view => view.webContents.isFocused());
@@ -778,6 +789,10 @@ ipcMain.handle('fetch-project-metrics', async (e, projectName, count, skip) => {
   return metrics;
 });
 
+ipcMain.handle('get-projects', async () => {
+  return store.get('projects');
+});
+
 async function notifyUpdate() {
   try {
     const res = await fetch("https://api.github.com/repos/kondoumh/sbe/releases/latest");
@@ -838,8 +853,6 @@ function inFavs(url) {
 function saveHistory(url, page) {
   const author = page.user.id === loginUser.id;
   const found = page.collaborators.find(item => item.id === loginUser.id);
-  console.log(page.collaborators);
-  console.log(found);
   const contributed = found ? true: false;
   const projectPage = sbUrl.takeProjectPage(url);
   const addItem = { 
@@ -850,7 +863,6 @@ function saveHistory(url, page) {
     author: author,
     contributed: contributed
   };
-  console.log(addItem);
   const history = store.get('history');
   const removed = history.filter(item => item.id !== page.id && item.url !== url);
   removed.unshift(addItem);
