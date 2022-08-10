@@ -24,11 +24,11 @@ const app = new Vue({
     },
     timeLineColor(item) {
       if (item.author) {
-        return 'pink'
-      } else if (item.contributed) {
         return 'orange'
+      } else if (item.contributed) {
+        return 'blue'
       }
-      return 'blue'
+      return 'light-blue lighten-4'
     }
   },
   data: () => ({
