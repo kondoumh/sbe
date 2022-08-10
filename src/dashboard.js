@@ -17,6 +17,10 @@ const app = new Vue({
   methods: {
     async onFocus () {
       this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      const user = await window.api.getUser();
+      if (user) {
+        this.user = user;
+      }
       const favs = await window.api.getFavs();
       this.favs = favs;
       const history = await window.api.getHistory();
@@ -34,6 +38,7 @@ const app = new Vue({
   },
   data: () => ({
     selectedItem: 0,
+    user: {},
     favs: [],
     history: [],
     projects: [],

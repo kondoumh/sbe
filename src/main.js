@@ -57,7 +57,7 @@ async function createWindow () {
       })
     });
   });
-  mainWindow.webContents.on('did-finish-load', e => {
+  mainWindow.webContents.on('did-finish-load', () => {
     loadDashboard();
     loadPage('https://scrapbox.io');
   });
@@ -791,6 +791,10 @@ ipcMain.handle('fetch-project-metrics', async (e, projectName, count, skip) => {
 
 ipcMain.handle('get-projects', async () => {
   return store.get('projects');
+});
+
+ipcMain.handle('get-user', async () => {
+  return loginUser;
 });
 
 async function notifyUpdate() {

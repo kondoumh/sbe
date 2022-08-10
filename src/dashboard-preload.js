@@ -14,6 +14,10 @@ contextBridge.exposeInMainWorld(
       const projects = await ipcRenderer.invoke('get-projects');
       return projects;
     },
+    getUser: async () => {
+      const user = await ipcRenderer.invoke('get-user');
+      return user;
+    },
     on: (channel, callback) => ipcRenderer.on(channel, (event, ...args) => callback(event, ...args))
   }
 );

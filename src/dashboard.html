@@ -14,6 +14,11 @@
       <v-app id="inspire">
         <template>
           <v-container>
+            <v-toolbar dense>
+              <v-toolbar-title>Scrapbox in Electron</v-toolbar-title>
+              <v-spacer></v-spacer>
+              {{ user.displayName }}
+            </v-toolbar>
             <v-row>
               <v-col>
                 <v-card
