@@ -22,6 +22,14 @@ const app = new Vue({
       const history = await window.api.getHistory();
       this.history = history.slice(0, 10);
     },
+    timeLineColor(item) {
+      if (item.author) {
+        return 'pink'
+      } else if (item.contributed) {
+        return 'orange'
+      }
+      return 'blue'
+    }
   },
   data: () => ({
     selectedItem: 0,

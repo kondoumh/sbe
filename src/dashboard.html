@@ -44,6 +44,7 @@
               <v-timeline-item
                   v-for="(item, i) in history"
                   :key="i"
+                  :color="timeLineColor(item)"
                   small
                 >
                   <v-row class="pt-1">
