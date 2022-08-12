@@ -60,6 +60,13 @@ sbUrl.takeProjectPage = url => {
     project = path[1];
     page = '';
   }
+  // remove copy action - page?action=copy
+  if (page) {
+    if (page.endsWith('?action=copy')) {
+      const pagepart = page.split(/\?/);
+      page = pagepart[0];
+    }
+  }
   return { project: project, page: page};
 }
 
