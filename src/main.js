@@ -188,6 +188,9 @@ function handleLinkEvent(view) {
       saveHistory(url, page);
     }
     const projectPage = sbUrl.takeProjectPage(url);
+    if (!projectPage.project) {
+      return;
+    }
     if (!loginUser) {
       const user = await fetchProjectUser(projectPage.project);
       if (user) {

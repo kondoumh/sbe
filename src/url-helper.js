@@ -1,8 +1,6 @@
 const sbUrl = {}
 
 sbUrl.BASE_URL = 'https://scrapbox.io/';
-sbUrl.LIST_PAGE = 'page-list.html';
-sbUrl.USER_PAGE = 'user-info.html';
 sbUrl.DEFAULT_ICON_URL = sbUrl.BASE_URL + 'assets/img/favicon/favicon.ico';
 sbUrl.GOOGLE_LOGIN_URL = 'https://accounts.google.com'
 
@@ -22,15 +20,10 @@ sbUrl.isPage = url => {
   return (path.length >= 2 && path[1] !== '');
 }
 
-sbUrl.isPageList = url => {
-  return !sbUrl.inScrapbox(url) && url.endsWith(sbUrl.LIST_PAGE);
-}
-
-sbUrl.isUserPage = url => {
-  return !sbUrl.inScrapbox(url) && url.endsWith(sbUrl.USER_PAGE);
-}
-
 sbUrl.takeProjectPage = url => {
+  if (!sbUrl.inScrapbox(url)) {
+    return { project: '', page: '' }
+  }
   let project, page;
   const path = url.substring(sbUrl.BASE_URL.length).split(/\/|#/);
   project = path[0] ? path[0] : '';
@@ -67,7 +60,7 @@ sbUrl.takeProjectPage = url => {
       page = pagepart[0];
     }
   }
-  return { project: project, page: page};
+  return { project: project, page: page };
 }
 
 sbUrl.convertToPageApi = url => {
