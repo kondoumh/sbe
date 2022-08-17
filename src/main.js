@@ -58,7 +58,7 @@ async function createWindow () {
     });
   });
   mainWindow.webContents.on('did-finish-load', () => {
-    loadDashboard();
+    loadStartPage();
     loadPage('https://scrapbox.io');
   });
   await notifyUpdate();
@@ -146,7 +146,7 @@ function loadHistoryPage() {
   mainWindow.webContents.send('add-page', view.webContents.id, 'History', true, 'mdi-history');
 }
 
-function loadDashboard() {
+function loadStartPage() {
   const view = new BrowserView({
     webPreferences: {
       preload: path.join(__dirname, 'dashboard-preload.js')
@@ -159,7 +159,7 @@ function loadDashboard() {
   prepareContextMenu(view.webContents);
   registerSearchAction(view);
   handleLinkEvent(view);
-  mainWindow.webContents.send('add-page', view.webContents.id, 'Dashboard', true, 'mdi-view-dashboard-variant-outline');
+  mainWindow.webContents.send('add-page', view.webContents.id, 'Start', true, 'mdi-view-dashboard-variant-outline');
 }
 
 function registerSearchAction(view) {
