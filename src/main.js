@@ -149,12 +149,12 @@ function loadHistoryPage() {
 function loadStartPage() {
   const view = new BrowserView({
     webPreferences: {
-      preload: path.join(__dirname, 'dashboard-preload.js')
+      preload: path.join(__dirname, 'start-preload.js')
     }
   });
   mainWindow.addBrowserView(view);
   resizeView(view);
-  view.webContents.loadFile(path.join(__dirname, 'dashboard.html'));
+  view.webContents.loadFile(path.join(__dirname, 'start.html'));
   topViewId = view.webContents.id;
   prepareContextMenu(view.webContents);
   registerSearchAction(view);
