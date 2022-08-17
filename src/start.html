@@ -23,6 +23,33 @@
               <v-col>
                 <v-card
                   class="mx-auto"
+                  tile
+                >
+                  <v-card-title>Projects</v-card-title>
+                  <v-list
+                    dense
+                    max-height="300"
+                    min-height="300"
+                    class="overflow-y-auto"
+                  >
+                    <v-list-item-group
+                      color="primary"
+                    >
+                    <v-list-item
+                      v-for="(item, i) in projects"
+                      :key="i"
+                    >
+                      <v-list-item-content>
+                        <a :href="baseUrl + item">{{ item }}</a>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list-item-group>
+                  </v-list>
+                </v-card>    
+              </v-col>
+              <v-col>
+                <v-card
+                  class="mx-auto"
                   min-width="700"
                   tile
                 >
@@ -48,33 +75,6 @@
                   </v-list-item-group>
                   </v-list>
                 </v-card>
-              </v-col>
-              <v-col>
-                <v-card
-                  class="mx-auto"
-                  tile
-                >
-                  <v-card-title>Projects</v-card-title>
-                  <v-list
-                    dense
-                    max-height="300"
-                    min-height="300"
-                    class="overflow-y-auto"
-                  >
-                    <v-list-item-group
-                      color="primary"
-                    >
-                    <v-list-item
-                      v-for="(item, i) in projects"
-                      :key="i"
-                    >
-                      <v-list-item-content>
-                        <a :href="baseUrl + item">{{ item }}</a>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list-item-group>
-                  </v-list>
-                </v-card>    
               </v-col>
             </v-row>
             <v-row no-gutters>
@@ -112,6 +112,6 @@
         </template>
       </v-app>
     </div>
-    <script src="dashboard.js"></script>
+    <script src="start.js"></script>
   </body>
 </html>
