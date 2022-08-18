@@ -20,9 +20,24 @@ const app = new Vue({
       const favs = await window.favsApi.getFavs();
       this.items = favs;
     },
+    deleteItem (item) {
+      this.favDelete = item
+      this.dialogDelete = true;
+    },
+    async deleteItemConfirm () {
+      const favs = await window.favsApi.deleteFav(this.favDelete);
+      this.items = favs;
+      this.closeDelete();
+    },
+    closeDelete () {
+      console.log("close delete dialog");
+      this.dialogDelete = false;
+    }
   },
   data: () => ({
+    dialogDelete: false,
     selectedItem: 0,
     items: [],
+    favDelete: null,
   })
 })

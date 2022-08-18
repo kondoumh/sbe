@@ -755,6 +755,13 @@ ipcMain.handle('get-favs', async () => {
   return favs;
 });
 
+ipcMain.handle('delete-fav', async (e, fav) => {
+  const favs = store.get('favs');
+  const deleted = favs.filter(item => item.url !== fav.url);
+  store.set('favs', deleted);
+  return deleted;
+});
+
 ipcMain.handle('open-history-page', () => {
   loadHistoryPage();
 });
