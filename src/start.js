@@ -27,13 +27,19 @@ const app = new Vue({
       this.history = history.slice(0, 10);
       this.projects = await window.api.getProjects();
     },
-    timeLineColor(item) {
+    timeLineColor (item) {
       if (item.author) {
         return 'orange'
       } else if (item.contributed) {
         return 'blue'
       }
       return 'light-blue lighten-4'
+    },
+    async openFavsPage () {
+      await window.api.openFavsPage();
+    },
+    async openHistoryPage () {
+      await window.api.openHistoryPage();
     }
   },
   data: () => ({

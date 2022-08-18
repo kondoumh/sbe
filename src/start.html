@@ -53,7 +53,14 @@
                   min-width="700"
                   tile
                 >
-                  <v-card-title>Favs</v-card-title>
+                  <v-card-title>
+                    Favs&nbsp;
+                    <v-icon
+                      @click="openFavsPage"
+                    >
+                      mdi-star-outline
+                    </v-icon>
+                  </v-card-title>
                   <v-list
                     dense
                     min-height="300"
@@ -80,7 +87,14 @@
             <v-row no-gutters>
               <v-col>
                 <v-card>
-                  <v-card-title>History</v-card-title>
+                  <v-card-title>
+                    History&nbsp;
+                    <v-icon
+                      @click="openHistoryPage"
+                    >
+                      mdi-history
+                    </v-icon>
+                  </v-card-title>
                   <v-card
                     max-height="500"
                     min-height="500"

@@ -18,6 +18,12 @@ contextBridge.exposeInMainWorld(
       const user = await ipcRenderer.invoke('get-user');
       return user;
     },
+    openFavsPage: async () => {
+      await ipcRenderer.invoke('open-favs-page');
+    },
+    openHistoryPage: async () => {
+      await ipcRenderer.invoke('open-history-page');
+    },
     on: (channel, callback) => ipcRenderer.on(channel, (event, ...args) => callback(event, ...args))
   }
 );
