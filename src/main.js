@@ -772,6 +772,13 @@ ipcMain.handle('get-history', async () =>{
   return history;
 });
 
+ipcMain.handle('delete-history', async (e, item) => {
+  const history = store.get('history');
+  const deleted = history.filter(hist => hist.url !== item.url);
+  store.set('history', deleted);
+  return deleted;
+});
+
 ipcMain.handle('get-version-info', async () => {
   const packageInfo = require('../package.json');
   let info = {

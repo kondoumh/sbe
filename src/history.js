@@ -20,9 +20,24 @@ const app = new Vue({
       const history = await window.api.getHistory();
       this.items = history;
     },
+    deleteItem (item) {
+      this.historyDelete = item
+      this.dialogDelete = true;
+    },
+    async deleteItemConfirm () {
+      const history = await window.api.deleteHistory(this.historyDelete);
+      this.items = history;
+      this.closeDelete();
+    },
+    closeDelete () {
+      console.log("close delete dialog");
+      this.dialogDelete = false;
+    }
   },
   data: () => ({
+    dialogDelete: false,
     selectedItem: 0,
     items: [],
+    historyDelete: null,
   })
 })
