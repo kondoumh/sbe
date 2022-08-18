@@ -173,6 +173,7 @@ function registerSearchAction(view) {
 
 function handleLinkEvent(view) {
   view.webContents.on('new-window', (e, url) => {
+    // FIXME: The new-window event is deprecated and will be removed. Please use contents.setWindowOpenHandler() instead.
     e.preventDefault();
     openLink(url);
   });
