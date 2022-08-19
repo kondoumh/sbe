@@ -9,11 +9,8 @@ const app = new Vue({
   }),
   el: '#app',
   async mounted () {
-    this.projectName = await window.pagesApi.activeProject()
-    this.projects = await window.pagesApi.openedProjects()
-    this.fetchData()
+    await this.onFocus();
     window.pagesApi.on('browser-window-fucus', this.onFocus)
-    window.pagesApi.on('browser-window-blur', this.onFocus)
     window.pagesApi.on('bring-to-top', this.onFocus)
   },
   methods: {
@@ -31,17 +28,31 @@ const app = new Vue({
     },
     async onFocus () {
       this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-      const projectName = await window.pagesApi.activeProject()
-      const projects = await window.pagesApi.openedProjects()
-      if (projectName) {
-        this.projectName = projectName
+      await this.setProjects();
+      await this.setProjectName();
+      if (this.projectName) {
+        this.fetchData()
       }
+    },
+    async setProjectName () {
+      if (!this.projectName) {
+        const projectName = await window.pagesApi.activeProject()
+        if (projectName) {
+          this.projectName = projectName;
+        } else {
+          if (this.projects.length > 0) {
+            this.projectName = this.projects[0];
+          }
+        }
+      }
+    },
+    async setProjects () {
+      const projects = await window.pagesApi.getProjects();
       if (projects.length > 0) {
         this.projects = projects
       }
-      this.fetchData()
     },
-    encodeTitle(title) {
+    encodeTitle (title) {
       return encodeURIComponent(title)
     }
   },

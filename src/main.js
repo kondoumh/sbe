@@ -599,11 +599,6 @@ ipcMain.handle('active-project', async () => {
   return active;
 });
 
-ipcMain.handle('opened-projects', async () => {
-  const projects = openedProjects();
-  return projects;
-});
-
 function getActiveViews() {
   const views = mainWindow.getBrowserViews().filter(view => view.webContents.isFocused());
   return views;
@@ -668,19 +663,6 @@ function activeProject() {
     }
   });
   return project;
-}
-
-function openedProjects() {
-  const projects = new Set();
-  mainWindow.getBrowserViews().forEach(view => {
-    const url = view.webContents.getURL();
-    if (sbUrl.inScrapbox(url)) {
-      const prj = sbUrl.takeProjectPage(url);
-      projects.add(prj.project);
-    }
-  })
-  const arr = Array.from(projects);
-  return arr;
 }
 
 ipcMain.handle('open-it', (e, url) => {
