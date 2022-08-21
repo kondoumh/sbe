@@ -21,10 +21,9 @@ const app = new Vue({
       if (user) {
         this.user = user;
       }
-      const favs = await window.api.getFavs();
-      this.favs = favs;
-      const history = await window.api.getHistory();
-      this.history = history.slice(0, 10);
+      this.favs = await window.api.getFavs();
+      this.history = await window.api.getHistory();
+      this.edited = await window.api.getEdited();
       this.projects = await window.api.getProjects();
     },
     timeLineColor (item) {
@@ -43,11 +42,11 @@ const app = new Vue({
     }
   },
   data: () => ({
-    selectedItem: 0,
     user: {},
     favs: [],
     history: [],
     projects: [],
+    edited: [],
     baseUrl: 'https://scrapbox.io/'
   })
 })

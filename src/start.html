@@ -121,6 +121,37 @@
                   </v-card>
                 </v-card>
               </v-col>
+              <v-col>
+                <v-card>
+                  <v-card-title>Edited</v-card-title>
+                  <v-card
+                    max-height="500"
+                    min-height="500"
+                    class="overflow-y-auto"
+                  >
+                    <v-list
+                      dense
+                      min-height="300"
+                      max-height="300"
+                      class="overflow-y-auto"
+                    >
+                      <v-list-item-group
+                        color="primary"
+                      >
+                      <v-list-item
+                        v-for="(item, i) in edited"
+                        :key="i"
+                      >
+                        <v-list-item-content>
+                          <v-list-item-title v-text="item.project"></v-list-item-title>
+                          <a :href="item.url">{{ item.page }}</a>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list-item-group>
+                    </v-list>
+                  </v-card>
+                </v-card>
+              </v-col>
             </v-row>
           </v-container>
         </template>

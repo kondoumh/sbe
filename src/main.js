@@ -17,6 +17,7 @@ const store = new Store({
     },
     favs: [],
     history: [],
+    edited: [],
     projects: []
   },
 });
@@ -761,6 +762,11 @@ ipcMain.handle('delete-history', async (e, item) => {
   return deleted;
 });
 
+ipcMain.handle('get-edited', async () =>{
+  const edited = store.get('edited');
+  return edited;
+});
+
 ipcMain.handle('get-version-info', async () => {
   const packageInfo = require('../package.json');
   let info = {
@@ -874,6 +880,15 @@ function saveHistory(url, page) {
     removed.pop();
   }
   store.set('history', removed);
+  if (addItem.author || addItem.contributed) {
+    const edited = store.get('edited');
+    const filtered = edited.filter(item => item.id !== page.id && item.url !== url);
+    filtered.unshift(addItem);
+    if (filtered.length > 100) {
+      filtered.pop();
+    }
+    store.set('edited', filtered);
+  }
 }
 
 function openAboutWindow() {
