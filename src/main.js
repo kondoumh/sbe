@@ -871,7 +871,9 @@ function saveHistory(url, page) {
     url: url,
     id: page.id,
     author: author,
-    contributed: contributed
+    contributed: contributed,
+    created: page.created,
+    updated: page.updated
   };
   const history = store.get('history');
   const removed = history.filter(item => item.id !== page.id && item.url !== url);
