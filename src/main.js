@@ -201,6 +201,9 @@ function handleLinkEvent(view) {
     }
     updateProjects(projectPage.project);
   });
+  view.webContents.on('update-target-url', (e, url) => {
+    showMessage(url);
+  });
 }
 
 function updateProjects(projectName) {
