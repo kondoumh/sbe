@@ -123,6 +123,7 @@ function loadFavPage() {
   prepareContextMenu(view.webContents);
   registerSearchAction(view);
   handleLinkEvent(view);
+  // TODO handle edit history(begin)
   mainWindow.webContents.send('add-page', view.webContents.id, 'Favs', true, 'mdi-star-outline');
 }
 
@@ -184,9 +185,10 @@ function handleLinkEvent(view) {
     }
   });
   view.webContents.on('did-start-navigation', (e, url, isInPlace) => {
-    // TODO handle edit history
+    // TODO handle edit history(end)
   });
   view.webContents.on('did-navigate-in-page', async (e, url) => {
+    // TODO handle edit history(begin)
     const page = await fetchPageData(url);
     if (page && page.id && page.persistent) {
       saveHistory(url, page);
@@ -716,7 +718,7 @@ ipcMain.handle('select-page', (e, contentId) => {
 ipcMain.handle('unload-page', (e, contentId) => {
   const views = mainWindow.getBrowserViews().filter(view => view.webContents.id === contentId);
   if (views.length > 0) {
-    // TODO handle edit history
+    // TODO handle edit history(end)
     mainWindow.removeBrowserView(views[0]);
   }
   const activeViews = mainWindow.getBrowserViews();
