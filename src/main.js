@@ -173,16 +173,18 @@ function registerSearchAction(view) {
 }
 
 function handleLinkEvent(view) {
-  view.webContents.on('new-window', (e, url) => {
-    // FIXME: The new-window event is deprecated and will be removed. Please use contents.setWindowOpenHandler() instead.
-    e.preventDefault();
+  view.webContents.setWindowOpenHandler(({ url }) => {
     openLink(url);
+    return { action: 'deny' };
   });
   view.webContents.on('will-navigate', (e, url) => {
-    if (!sbUrl.isLoginLink(url)) {
+    if (!sbUrl.isLoginLink(url) && !sbUrl.inScrapbox(view.webContents.getURL())) {
       e.preventDefault();
       openLink(url);
     }
+  });
+  view.webContents.on('did-start-navigation', (e, url, isInPlace) => {
+    // TODO handle edit history
   });
   view.webContents.on('did-navigate-in-page', async (e, url) => {
     const page = await fetchPageData(url);
@@ -714,6 +716,7 @@ ipcMain.handle('select-page', (e, contentId) => {
 ipcMain.handle('unload-page', (e, contentId) => {
   const views = mainWindow.getBrowserViews().filter(view => view.webContents.id === contentId);
   if (views.length > 0) {
+    // TODO handle edit history
     mainWindow.removeBrowserView(views[0]);
   }
   const activeViews = mainWindow.getBrowserViews();
