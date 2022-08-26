@@ -7,7 +7,7 @@ const sbUrl = require('./url-helper');
 const { toMarkdown } = require('./markdown');
 const fetch = require('electron-fetch').default;
 const { toHeading, toBodyText } = require('./format');
-const compareVersions = require("compare-versions");
+const { compareVersions } = require("compare-versions");
 
 const store = new Store({
   defaults: {
