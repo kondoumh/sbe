@@ -236,7 +236,7 @@ function openLinkBackground(url) {
 function resizeView(view) {
   const bound = mainWindow.getBounds();
   const height = process.platform !== 'win32' ? 180 : 215
-  view.setBounds({ x: 0, y: 120, width: bound.width, height: bound.height - height });
+  view.setBounds({ x: 0, y: 143, width: bound.width, height: bound.height - height });
 }
 
 function handleNavigation(view) {
