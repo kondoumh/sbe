@@ -100,6 +100,7 @@ async function loadPage(url, activate=true) {
   const page = await fetchPageData(url);
   if (page && page.id && page.persistent) {
     saveHistory(url, page);
+    // TODO handle edit history(begin)
   }
   const projectPage = sbUrl.takeProjectPage(url);
   updateProjects(projectPage.project);
@@ -123,7 +124,6 @@ function loadFavPage() {
   prepareContextMenu(view.webContents);
   registerSearchAction(view);
   handleLinkEvent(view);
-  // TODO handle edit history(begin)
   mainWindow.webContents.send('add-page', view.webContents.id, 'Favs', true, 'mdi-star-outline');
 }
 
@@ -188,10 +188,10 @@ function handleLinkEvent(view) {
     // TODO handle edit history(end)
   });
   view.webContents.on('did-navigate-in-page', async (e, url) => {
-    // TODO handle edit history(begin)
     const page = await fetchPageData(url);
     if (page && page.id && page.persistent) {
       saveHistory(url, page);
+      // TODO handle edit history(begin)
     }
     const projectPage = sbUrl.takeProjectPage(url);
     if (!projectPage.project) {
