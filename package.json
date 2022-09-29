@@ -36,7 +36,7 @@
   "dependencies": {
     "compare-versions": "^5.0.1",
     "electron-context-menu": "^3.5.0",
-    "electron-fetch": "^1.7.4",
+    "electron-fetch": "^1.9.1",
     "electron-store": "^8.1.0"
   }
 }
