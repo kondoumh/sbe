@@ -26,6 +26,7 @@ let mainWindow;
 let topViewId;
 let previousText;
 let loginUser;
+let updateInfo = new Map();
 
 async function createWindow () {
   let {width, height, x, y} = store.get('bounds');
@@ -100,7 +101,7 @@ async function loadPage(url, activate=true) {
   const page = await fetchPageData(url);
   if (page && page.id && page.persistent) {
     saveHistory(url, page);
-    // TODO handle edit history(begin)
+    await beforeUpdate(url, page);
   }
   const projectPage = sbUrl.takeProjectPage(url);
   updateProjects(projectPage.project);
@@ -184,14 +185,17 @@ function handleLinkEvent(view) {
       openLink(url);
     }
   });
-  view.webContents.on('did-start-navigation', (e, url, isInPlace) => {
-    // TODO handle edit history(end)
+  view.webContents.on('did-start-navigation', async (e, url, isInPlace) => {
+    const currentUrl = view.webContents.getURL();
+    if (sbUrl.inScrapbox(currentUrl)) {
+      await afterUpdate(currentUrl, 'did-start-navigation');
+    }
   });
   view.webContents.on('did-navigate-in-page', async (e, url) => {
     const page = await fetchPageData(url);
     if (page && page.id && page.persistent) {
       saveHistory(url, page);
-      // TODO handle edit history(begin)
+      await beforeUpdate(url, page);
     }
     const projectPage = sbUrl.takeProjectPage(url);
     if (!projectPage.project) {
@@ -715,10 +719,11 @@ ipcMain.handle('select-page', (e, contentId) => {
   }
 });
 
-ipcMain.handle('unload-page', (e, contentId) => {
+ipcMain.handle('unload-page', async (e, contentId) => {
   const views = mainWindow.getBrowserViews().filter(view => view.webContents.id === contentId);
   if (views.length > 0) {
-    // TODO handle edit history(end)
+    const currnetUrl = (views[0].webContents.getURL())
+    await afterUpdate(currnetUrl, 'unload-page');
     mainWindow.removeBrowserView(views[0]);
   }
   const activeViews = mainWindow.getBrowserViews();
@@ -873,7 +878,7 @@ function saveHistory(url, page) {
   const found = page.collaborators.find(item => item.id === loginUser.id);
   const contributed = found ? true: false;
   const projectPage = sbUrl.takeProjectPage(url);
-  const addItem = { 
+  const addItem = {
     project: projectPage.project,
     page: decodeURIComponent(projectPage.page),
     url: url,
@@ -890,14 +895,48 @@ function saveHistory(url, page) {
     removed.pop();
   }
   store.set('history', removed);
-  if (addItem.author || addItem.contributed) {
-    const edited = store.get('edited');
-    const filtered = edited.filter(item => item.id !== page.id && item.url !== url);
-    filtered.unshift(addItem);
-    if (filtered.length > 100) {
-      filtered.pop();
+}
+
+async function beforeUpdate(url, page) {
+  if (!loginUser) {
+    const user = await fetchProjectUser(projectPage.project);
+    if (user) {
+      loginUser = user;
     }
-    store.set('edited', filtered);
+  }
+  const author = page.user.id === loginUser.id;
+  const found = page.collaborators.find(item => item.id === loginUser.id);
+  const contributed = found ? true: false;
+  if (author || contributed) {
+    updateInfo.set(url, { id: page.id, title: page.title, updated: page.updated, author: author, contributed: contributed });
+  }
+}
+
+async function afterUpdate(currentURL, event) {
+  if (updateInfo.has(currentURL)) {
+    const before = updateInfo.get(currentURL);
+    const after = await fetchPageData(currentURL);
+    if (after && after.updated > before.updated) {
+      //console.log(before.title, before.updated, after.updated);
+      const projectPage = sbUrl.takeProjectPage(currentURL);
+      const addItem = {
+        project: projectPage.project,
+        page: decodeURIComponent(projectPage.page),
+        url: currentURL,
+        id: after.id,
+        author: before.author,
+        contributed: before.contributed,
+        created: after.created,
+        updated: after.updated
+      };
+      const edited = store.get('edited');
+      const filtered = edited.filter(item => item.id !== after.id && item.url !== currentURL);
+      filtered.unshift(addItem);
+      if (filtered.length > 100) {
+        filtered.pop();
+      }
+      store.set('edited', filtered);
+    }
   }
 }
 
