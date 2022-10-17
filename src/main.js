@@ -919,13 +919,16 @@ async function afterUpdate(currentURL, event) {
     if (after && after.updated > before.updated) {
       //console.log(before.title, before.updated, after.updated);
       const projectPage = sbUrl.takeProjectPage(currentURL);
+      const author = after.user.id === loginUser.id;
+      const found = after.collaborators.find(item => item.id === loginUser.id);
+      const contributed = found ? true: false;
       const addItem = {
         project: projectPage.project,
         page: decodeURIComponent(projectPage.page),
         url: currentURL,
         id: after.id,
-        author: before.author,
-        contributed: before.contributed,
+        author: author,
+        contributed: contributed,
         created: after.created,
         updated: after.updated
       };
