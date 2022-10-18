@@ -23,9 +23,9 @@ An unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 - Open page from browsing history
 - Copy article to clipboard as Markdown format
 ### Start Page (Cross-project dashboard)
-- Project links: List visited Scrapbox projects
+- Projects: List visited Scrapbox projects
 - Favs: List of favorite pages
-- Timeline: Timeline view of edited/viewed pages
+- Timeline: Timeline view of viewed/edited pages
 - Recently edited: List of recently edited pages
 ### Other
 - Dark Mode Toggle (UI other than Scrapbox contents)
