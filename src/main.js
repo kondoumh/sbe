@@ -908,38 +908,37 @@ async function beforeUpdate(url, page) {
   const found = page.collaborators.find(item => item.id === loginUser.id);
   const contributed = found ? true: false;
   if (author || contributed) {
-    updateInfo.set(url, { id: page.id, title: page.title, updated: page.updated, author: author, contributed: contributed });
+    updateInfo.set(page.id, { url: url, title: page.title, updated: page.updated, author: author, contributed: contributed });
   }
 }
 
 async function afterUpdate(currentURL, event) {
-  if (updateInfo.has(currentURL)) {
-    const before = updateInfo.get(currentURL);
-    const after = await fetchPageData(currentURL);
-    if (after && after.updated > before.updated) {
-      //console.log(before.title, before.updated, after.updated);
-      const projectPage = sbUrl.takeProjectPage(currentURL);
-      const author = after.user.id === loginUser.id;
-      const found = after.collaborators.find(item => item.id === loginUser.id);
-      const contributed = found ? true: false;
-      const addItem = {
-        project: projectPage.project,
-        page: decodeURIComponent(projectPage.page),
-        url: currentURL,
-        id: after.id,
-        author: author,
-        contributed: contributed,
-        created: after.created,
-        updated: after.updated
-      };
-      const edited = store.get('edited');
-      const filtered = edited.filter(item => item.id !== after.id && item.url !== currentURL);
-      filtered.unshift(addItem);
-      if (filtered.length > 100) {
-        filtered.pop();
-      }
-      store.set('edited', filtered);
+  const after = await fetchPageData(currentURL);
+  if (!after) return;
+  if (!updateInfo.has(after.id)) return;
+  const before = updateInfo.get(after.id);
+  if (after.updated > before.updated) {
+    const projectPage = sbUrl.takeProjectPage(currentURL);
+    const author = after.user.id === loginUser.id;
+    const found = after.collaborators.find(item => item.id === loginUser.id);
+    const contributed = found ? true: false;
+    const addItem = {
+      project: projectPage.project,
+      page: decodeURIComponent(projectPage.page),
+      url: currentURL,
+      id: after.id,
+      author: author,
+      contributed: contributed,
+      created: after.created,
+      updated: after.updated
+    };
+    const edited = store.get('edited');
+    const filtered = edited.filter(item => item.id !== after.id);
+    filtered.unshift(addItem);
+    if (filtered.length > 100) {
+      filtered.pop();
     }
+    store.set('edited', filtered);
   }
 }
 
