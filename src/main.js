@@ -237,6 +237,19 @@ function openLinkBackground(url) {
   topViewId = current.webContents.id;
 }
 
+function openNewWindow(url) {
+  const newWindow = new BrowserWindow({
+    //parent: mainWindow,
+    show: false,
+    width: 800,
+    height: 600,
+  });
+  prepareContextMenu(newWindow.webContents);
+  newWindow.loadURL(url);
+  newWindow.show();
+  newWindow.focus();
+}
+
 function resizeView(view) {
   const bound = mainWindow.getBounds();
   const height = process.platform !== 'win32' ? 180 : 215
@@ -435,6 +448,11 @@ function prepareContextMenu(content) {
       {
         label: 'Open in background',
         click: () => { openLinkBackground(params.linkURL); },
+        visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && sbUrl.isPage(params.linkURL)
+      },
+      {
+        label: 'Open in new window',
+        click: () => { openNewWindow(params.linkURL); },
         visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && sbUrl.isPage(params.linkURL)
       },
       {
