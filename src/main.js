@@ -264,6 +264,7 @@ async function openNewWindow(url) {
     });
   });
   prepareContextMenu(newWindow.webContents);
+  handleLinkEvent(newWindow);
   newWindow.setBounds({x: x, y: y, width: width, height: height});
   newWindow.loadURL(url);
   newWindow.show();
