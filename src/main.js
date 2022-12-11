@@ -654,10 +654,15 @@ ipcMain.handle('debug-window', e => {
 });
 
 ipcMain.handle('send-title', (e, url, title) => {
-  const views = getActiveViews();
-  if (views.length > 0) {
-    views[0].webContents.insertText('[' + url + ' ' + title + ']');
-    showMessage('paste url : done');
+  const focused = BrowserWindow.getFocusedWindow();
+  if (focused == mainWindow) {
+    const views = getActiveViews();
+    if (views.length > 0) {
+      views[0].webContents.insertText('[' + url + ' ' + title + ']');
+      showMessage('paste url : done');
+    }
+  } else {
+    focused.webContents.insertText('[' + url + ' ' + title + ']');
   }
 });
 
