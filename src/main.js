@@ -15,6 +15,10 @@ const store = new Store({
       width: 1024,
       height: 800,
     },
+    boundsChild: {
+      width: 1024,
+      height: 800,
+    },
     favs: [],
     history: [],
     edited: [],
@@ -237,17 +241,40 @@ function openLinkBackground(url) {
   topViewId = current.webContents.id;
 }
 
-function openNewWindow(url) {
+async function openNewWindow(url) {
+  let {width, height, x, y} = store.get('boundsChild');
+  const displays = electron.screen.getAllDisplays();
+  const activeDisplay = displays.find((display) => {
+    return display.bounds.x <= x && display.bounds.y <= y &&
+      display.bounds.x + display.bounds.width >= x &&
+      display.bounds.y + display.bounds.height >= y;
+  });
+  if (!activeDisplay) {
+    x = 0; y = 0; width = 1024, height = 800;
+  }
   const newWindow = new BrowserWindow({
     //parent: mainWindow,
     show: false,
-    width: 800,
-    height: 600,
+    width: width,
+    height: height
+  });
+  ['resize', 'move'].forEach(e => {
+    newWindow.on(e, () => {
+      store.set('boundsChild', newWindow.getBounds());
+    });
   });
   prepareContextMenu(newWindow.webContents);
+  newWindow.setBounds({x: x, y: y, width: width, height: height});
   newWindow.loadURL(url);
   newWindow.show();
   newWindow.focus();
+  const page = await fetchPageData(url);
+  if (page && page.id && page.persistent) {
+    await beforeUpdate(url, page);
+  }
+  newWindow.on('close', async (e) => {
+    await afterUpdate(url, 'close-window');
+  });
 }
 
 function resizeView(view) {
@@ -591,14 +618,24 @@ app.whenReady().then(() => {
   });
 
   app.on('browser-window-focus', () => {
-    mainWindow.webContents.send('browser-window-fucus');
-    sendMessageToViews('browser-window-fucus');
+    if (!mainWindow.isDestroyed()) {
+      mainWindow.webContents.send('browser-window-fucus');
+      sendMessageToViews('browser-window-fucus');
+    }
   });
 
   app.on('browser-window-blur', () => {
     mainWindow.webContents.send('browser-window-blur');
     sendMessageToViews('browser-window-blur');
   });
+
+  app.on('before-quit', () => {
+    BrowserWindow.getAllWindows().forEach(window => {
+      if (window != mainWindow) {
+        window.close();
+      }
+    });
+  })
 });
 
 app.on('window-all-closed', function () {
