@@ -15,6 +15,10 @@ const store = new Store({
       width: 1024,
       height: 800,
     },
+    boundsChild: {
+      width: 1024,
+      height: 800,
+    },
     favs: [],
     history: [],
     edited: [],
@@ -237,6 +241,43 @@ function openLinkBackground(url) {
   topViewId = current.webContents.id;
 }
 
+async function openNewWindow(url) {
+  let {width, height, x, y} = store.get('boundsChild');
+  const displays = electron.screen.getAllDisplays();
+  const activeDisplay = displays.find((display) => {
+    return display.bounds.x <= x && display.bounds.y <= y &&
+      display.bounds.x + display.bounds.width >= x &&
+      display.bounds.y + display.bounds.height >= y;
+  });
+  if (!activeDisplay) {
+    x = 0; y = 0; width = 1024, height = 800;
+  }
+  const newWindow = new BrowserWindow({
+    //parent: mainWindow,
+    show: false,
+    width: width,
+    height: height
+  });
+  ['resize', 'move'].forEach(e => {
+    newWindow.on(e, () => {
+      store.set('boundsChild', newWindow.getBounds());
+    });
+  });
+  prepareContextMenu(newWindow.webContents);
+  handleLinkEvent(newWindow);
+  newWindow.setBounds({x: x, y: y, width: width, height: height});
+  newWindow.loadURL(url);
+  newWindow.show();
+  newWindow.focus();
+  const page = await fetchPageData(url);
+  if (page && page.id && page.persistent) {
+    await beforeUpdate(url, page);
+  }
+  newWindow.on('close', async (e) => {
+    await afterUpdate(url, 'close-window');
+  });
+}
+
 function resizeView(view) {
   const bound = mainWindow.getBounds();
   const height = process.platform !== 'win32' ? 180 : 215
@@ -438,6 +479,11 @@ function prepareContextMenu(content) {
         visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && sbUrl.isPage(params.linkURL)
       },
       {
+        label: 'Open in new window',
+        click: () => { openNewWindow(params.linkURL); },
+        visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && sbUrl.isPage(params.linkURL)
+      },
+      {
         label: 'Info',
         click: () => {
           openPageInfoWindow(params.linkURL);
@@ -522,16 +568,30 @@ function prepareContextMenu(content) {
 }
 
 function goBack() {
-  const view = getTopView();
-  if (view && view.webContents.canGoBack()) {
-    view.webContents.goBack();
+  const focused = BrowserWindow.getFocusedWindow();
+  if (focused == mainWindow) {
+    const view = getTopView();
+    if (view && view.webContents.canGoBack()) {
+      view.webContents.goBack();
+    }
+  } else {
+    if (focused.webContents.canGoBack()) {
+      focused.webContents.goBack();
+    }
   }
 }
 
 function goForward() {
-  const view = getTopView();
-  if (view && view.webContents.canGoForward()) {
-    view.webContents.goForward();
+  const focused = BrowserWindow.getFocusedWindow();
+  if (focused == mainWindow) {
+    const view = getTopView();
+    if (view && view.webContents.canGoForward()) {
+      view.webContents.goForward();
+    }
+  } else {
+    if (focused.webContents.canGoForward()) {
+      focused.webContents.goForward();
+    }
   }
 }
 
@@ -573,14 +633,24 @@ app.whenReady().then(() => {
   });
 
   app.on('browser-window-focus', () => {
-    mainWindow.webContents.send('browser-window-fucus');
-    sendMessageToViews('browser-window-fucus');
+    if (!mainWindow.isDestroyed()) {
+      mainWindow.webContents.send('browser-window-fucus');
+      sendMessageToViews('browser-window-fucus');
+    }
   });
 
   app.on('browser-window-blur', () => {
     mainWindow.webContents.send('browser-window-blur');
     sendMessageToViews('browser-window-blur');
   });
+
+  app.on('before-quit', () => {
+    BrowserWindow.getAllWindows().forEach(window => {
+      if (window != mainWindow) {
+        window.close();
+      }
+    });
+  })
 });
 
 app.on('window-all-closed', function () {
@@ -599,10 +669,15 @@ ipcMain.handle('debug-window', e => {
 });
 
 ipcMain.handle('send-title', (e, url, title) => {
-  const views = getActiveViews();
-  if (views.length > 0) {
-    views[0].webContents.insertText('[' + url + ' ' + title + ']');
-    showMessage('paste url : done');
+  const focused = BrowserWindow.getFocusedWindow();
+  if (focused == mainWindow) {
+    const views = getActiveViews();
+    if (views.length > 0) {
+      views[0].webContents.insertText('[' + url + ' ' + title + ']');
+      showMessage('paste url : done');
+    }
+  } else {
+    focused.webContents.insertText('[' + url + ' ' + title + ']');
   }
 });
 
