@@ -567,16 +567,30 @@ function prepareContextMenu(content) {
 }
 
 function goBack() {
-  const view = getTopView();
-  if (view && view.webContents.canGoBack()) {
-    view.webContents.goBack();
+  const focused = BrowserWindow.getFocusedWindow();
+  if (focused == mainWindow) {
+    const view = getTopView();
+    if (view && view.webContents.canGoBack()) {
+      view.webContents.goBack();
+    }
+  } else {
+    if (focused.webContents.canGoBack()) {
+      focused.webContents.goBack();
+    }
   }
 }
 
 function goForward() {
-  const view = getTopView();
-  if (view && view.webContents.canGoForward()) {
-    view.webContents.goForward();
+  const focused = BrowserWindow.getFocusedWindow();
+  if (focused == mainWindow) {
+    const view = getTopView();
+    if (view && view.webContents.canGoForward()) {
+      view.webContents.goForward();
+    }
+  } else {
+    if (focused.webContents.canGoForward()) {
+      focused.webContents.goForward();
+    }
   }
 }
 
