@@ -34,7 +34,7 @@
     "rimraf": "^3.0.2"
   },
   "dependencies": {
-    "compare-versions": "^5.0.1",
+    "compare-versions": "^5.0.2",
     "electron-context-menu": "^3.6.1",
     "electron-fetch": "^1.9.1",
     "electron-store": "^8.1.0"
