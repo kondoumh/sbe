@@ -31,7 +31,7 @@
     "electron": "^22.0.2",
     "electron-builder": "^23.6.0",
     "playwright": "^1.29.2",
-    "rimraf": "^4.0.4"
+    "rimraf": "^4.0.7"
   },
   "dependencies": {
     "compare-versions": "^5.0.3",
