@@ -275,6 +275,11 @@ async function openNewWindow(url) {
   }
   newWindow.on('close', async (e) => {
     await afterUpdate(url, 'close-window');
+    // refresh top view
+    const activeViews = mainWindow.getBrowserViews();
+    if (activeViews.length > 0) {
+      activeViews[0].webContents.send('bring-to-top');
+    }
   });
 }
 
