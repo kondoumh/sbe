@@ -28,7 +28,8 @@ An unofficial [Scrapbox](https://scrapbox.io) Desktop App by Electron.
 - Timeline: Timeline view of viewed/edited pages
 - Recently edited: List of recently edited pages
 ### Other
-- Dark Mode Toggle (UI other than Scrapbox contents)
+- Switch between dark and light modes to match your OS settings (UI parts other than Scrapbox contents)
+- Open a page in a child window separate from the main window
 
 ![Screenshot](https://i.gyazo.com/5314e24354451448a0cb2aee1315f986.gif)
 
