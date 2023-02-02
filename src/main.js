@@ -402,6 +402,13 @@ function prepareMenu() {
           click() {
             openProjectInfoWindow();
           }
+        },
+        { type: 'separator' },
+        {
+          label: 'Reset Window Position',
+          click() {
+            resetWindowPosition();
+          }
         }
       ]
     }
@@ -755,6 +762,10 @@ function activeProject() {
     }
   });
   return project;
+}
+
+function resetWindowPosition() {
+  mainWindow.setBounds({x: 0, y: 0, width: 1024, height: 800});
 }
 
 ipcMain.handle('open-it', (e, url) => {
