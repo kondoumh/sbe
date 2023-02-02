@@ -988,9 +988,7 @@ async function beforeUpdate(url, page) {
   const author = page.user.id === loginUser.id;
   const found = page.collaborators.find(item => item.id === loginUser.id);
   const contributed = found ? true: false;
-  if (author || contributed) {
-    updateInfo.set(page.id, { url: url, title: page.title, updated: page.updated, author: author, contributed: contributed });
-  }
+  updateInfo.set(page.id, { url: url, title: page.title, updated: page.updated, author: author, contributed: contributed });
 }
 
 async function afterUpdate(currentURL, event) {
