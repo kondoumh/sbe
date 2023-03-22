@@ -908,6 +908,10 @@ ipcMain.handle('get-user', async () => {
   return loginUser;
 });
 
+ipcMain.handle('copy-to-clipboard', async (e, text) => {
+  clipboard.writeText(text);
+});
+
 async function notifyUpdate() {
   try {
     const res = await fetch("https://api.github.com/repos/kondoumh/sbe/releases/latest");

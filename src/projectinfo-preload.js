@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer, clipboard } = require('electron');
+const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld(
   'api', {
@@ -11,7 +11,7 @@ contextBridge.exposeInMainWorld(
       return metrics;
     },
     copyToClipboard: text => {
-      clipboard.writeText(text);
+      ipcRenderer.invoke('copy-to-clipboard', text);
     },
     activeProject: async () => {
       const active = await ipcRenderer.invoke('active-project');
