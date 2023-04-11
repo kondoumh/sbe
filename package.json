@@ -30,7 +30,7 @@
     "@playwright/test": "^1.32.2",
     "electron": "^24.0.0",
     "electron-builder": "^23.6.0",
-    "playwright": "^1.32.2"
+    "playwright": "^1.32.3"
   },
   "dependencies": {
     "compare-versions": "^5.0.3",
