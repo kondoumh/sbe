@@ -1,9 +1,12 @@
 const { createApp, ref } = Vue;
 const { createVuetify, useTheme } = Vuetify;
 
+let theme;
+
 const app = createApp({
   setup() {
-
+    theme = useTheme();
+    setTheme();
   },
   async mounted () {
     window.api.on('add-page', (e, contentId, title, activate, icon) => {
@@ -26,10 +29,10 @@ const app = createApp({
       this.message = message;
     }),
     window.api.on('browser-window-fucus', () => {
-      this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme();
     }),
     window.api.on('browser-window-blur', () => {
-      this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme();
     }),
     window.api.on('close-current-tab', () => {
       this.closePage();
@@ -82,7 +85,7 @@ const app = createApp({
     },
     closePage() {
       const item = this.items[this.tab];
-      console.log('removing page:', item);
+      //console.log('removing page:', item);
       if (!item) return
       window.api.unloadPage(item.contentId);
       if (this.tab === this.items.length - 1) {
@@ -120,18 +123,16 @@ const app = createApp({
     },
     fucusSearchText() {
       this.$refs.searchText.focus();
-    }
+    },
   }
 });
 
-// const dartTheme = ref(false);
-// const theme = useTheme();
+function setTheme() {
+  const darkTheme = ref(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  theme.global.name.value = darkTheme.value ? 'dark' : 'light';  
+}
 
-const vuetify = new createVuetify({
-  theme: {
-    defaultTheme: 'dark' // theme.global.name.value = dartTheme.value ? 'dark' : 'light'
-  }
-});
+const vuetify = new createVuetify();
 
 app.use(vuetify);
 app.mount('#app');
