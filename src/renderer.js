@@ -1,10 +1,10 @@
-const app = new Vue({
-  el: '#app',
-  vuetify: new Vuetify({
-    theme: {
-      dark: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-    }    
-  }),
+const { createApp, ref } = Vue;
+const { createVuetify, useTheme } = Vuetify;
+
+const app = createApp({
+  setup() {
+
+  },
   async mounted () {
     window.api.on('add-page', (e, contentId, title, activate, icon) => {
       const item = { title: title, contentId: contentId, icon: icon };
@@ -52,13 +52,16 @@ const app = new Vue({
     message: 'ready'
   }),
   methods: {
-    goBack: () => {
+    goBack() {
       window.api.goBack();
     },
-    goForward: () => {
+    goForward() {
       window.api.goForward();
     },
-    searchStart(){
+    reload() {
+      console.log('reload');
+    },
+    searchStart() {
       window.api.searchStart(this.searchText);
     },
     searchStop() {
@@ -66,15 +69,15 @@ const app = new Vue({
       window.api.searchStop();
       this.$refs.searchText.blur();
     },
-    selectPage (idx) {
+    selectPage(idx) {
       if (idx !== undefined) {
         window.api.selectPage(this.items[idx].contentId);
       }
     },
-    debugWindow: () => {
+    debugWindow() {
       window.api.debugWindow();
     },
-    debugView: () => {
+    debugView() {
       window.api.debugView();
     },
     closePage() {
@@ -119,4 +122,16 @@ const app = new Vue({
       this.$refs.searchText.focus();
     }
   }
-})
+});
+
+// const dartTheme = ref(false);
+// const theme = useTheme();
+
+const vuetify = new createVuetify({
+  theme: {
+    defaultTheme: 'dark' // theme.global.name.value = dartTheme.value ? 'dark' : 'light'
+  }
+});
+
+app.use(vuetify);
+app.mount('#app');

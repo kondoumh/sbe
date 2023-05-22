@@ -2,10 +2,10 @@
   <head>
     <meta charset="UTF-8">
     <title>sbe - Scrapbox in Electron</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.3/dist/vuetify.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.6.3/dist/vuetify.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.3.4/dist/vue.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.2.4/dist/vuetify.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.2.4/dist/vuetify.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons">
     <style scoped>
       *{ text-transform: none !important; }
@@ -16,88 +16,71 @@
       <v-app id="inspire">
         <v-app-bar>
           <v-toolbar dense>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  text
-                  v-bind="attrs"
-                  v-on="on"
-                  v-on:click="goBack"
-                >
-                  <v-icon>mdi-arrow-left</v-icon>
-                </v-btn>
-              </template>
-              <span>Go Back</span>
-            </v-tooltip>
+            <v-btn
+              text
+              v-on:click="goBack"
+            >
+              <v-icon>mdi-arrow-left</v-icon>
+              <v-tooltip
+                activator="parent"
+                location="bottom"
+              >Go Back</v-tooltip>
+            </v-btn>
 
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  text
-                  v-bind="attrs"
-                  v-on="on"
-                  v-on:click="goForward"
-                >
-                  <v-icon>mdi-arrow-right</v-icon>
-                </v-btn>
-              </template>
-              <span>Go Forward</span>
-            </v-tooltip>
+            <v-btn
+              text
+              v-on:click="goForward"
+            >
+              <v-icon>mdi-arrow-right</v-icon>
+              <v-tooltip
+                activator="parent"
+                location="bottom"
+              >Go Forward</v-tooltip>
+            </v-btn>
 
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  text
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                 <v-icon>mdi-reload</v-icon>
-                </v-btn>
-              </template>
-              <span>Reload</span>
-            </v-tooltip>
+            <v-btn
+              text
+              v-on:click="reload"
+            >
+              <v-icon>mdi-reload</v-icon>
+              <v-tooltip
+                activator="parent"
+                location="bottom"
+              >Reload</v-tooltip>
+            </v-btn>
 
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  text
-                  v-bind="attrs"
-                  v-on="on"
-                  v-on:click="openPageList"
-                >
-                  <v-icon>mdi-view-list</v-icon>
-                </v-btn>
-              </template>
-              <span>Open Page List</span>
-            </v-tooltip>
+            <v-btn
+              text
+              v-on:click="openPageList"
+            >
+              <v-icon>mdi-view-list</v-icon>
+              <v-tooltip
+                activator="parent"
+                location="bottom"
+              >Open Page List</v-tooltip>
+            </v-btn>
 
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  text
-                  v-bind="attrs"
-                  v-on="on"
-                  v-on:click="openFavsPage"
-                >
-                  <v-icon>mdi-star-outline</v-icon>
-                </v-btn>
-              </template>
-              <span>Favs</span>
-            </v-tooltip>
+            <v-btn
+              text
+              v-on:click="openFavsPage"
+            >
+              <v-icon>mdi-star-outline</v-icon>
+              <v-tooltip
+                activator="parent"
+                location="bottom"
+              >Open Favs Page</v-tooltip>
+            </v-btn>
 
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  text
-                  v-bind="attrs"
-                  v-on="on"
-                  v-on:click="openHistoryPage"
-                >
-                  <v-icon>mdi-history</v-icon>
-                </v-btn>
-              </template>
-              <span>History</span>
-            </v-tooltip>
+            <v-btn
+              text
+              v-on:click="openHistoryPage"
+            >
+              <v-icon>mdi-history</v-icon>
+              <v-tooltip
+                activator="parent"
+                location="bottom"
+              >Open History Page</v-tooltip>
+            </v-btn>
 
             <v-spacer></v-spacer>
 
@@ -120,10 +103,8 @@
               v-model="tab"
               align-with-title
               show-arrows
-              @change="selectPage"
+              @click="selectPage(tab)"
             >
-              <v-tabs-slider color="yellow"></v-tabs-slider>
-
               <v-tab
                 v-for="item in items"
                 :key="item.contentId"
@@ -158,6 +139,9 @@
         </v-bottom-navigation>
       </v-app>
     </div>
-    <script src="renderer.js"></script>
+    <script type="module" src="renderer.js">
+      import { Vue, ref } from 'vue'
+      import { Vuetify, useTheme } from 'vuetify'
+    </script>
   </body>
 </html>
