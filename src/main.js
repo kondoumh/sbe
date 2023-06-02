@@ -819,8 +819,10 @@ ipcMain.handle('unload-page', async (e, contentId) => {
   }
   const activeViews = mainWindow.getBrowserViews();
   if (activeViews.length > 0) {
-    topViewId = activeViews[0].webContents.id;
-    activeViews[0].webContents.send('bring-to-top');
+    const idx = activeViews.length - 1;
+    topViewId = activeViews[idx].webContents.id;
+    mainWindow.webContents.send('bring-to-top', topViewId);
+    activeViews[idx].webContents.send('bring-to-top');
   }
 });
 
