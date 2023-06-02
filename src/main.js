@@ -729,8 +729,8 @@ function openPageInfoWindow(url) {
     }
   );
   child.webContents.loadFile(path.join(__dirname, 'pageinfo.html'));
-  child.webContents.on('did-finish-load', () => {
-    child.webContents.send('showPageInfo', pageApi, url);
+  child.once('ready-to-show', () => {
+    child.webContents.send('get-page-info', pageApi, url);
   })
   child.show();
   //child.webContents.openDevTools({ mode: 'detach' });
