@@ -3,14 +3,11 @@
   <head>
     <meta charset="UTF-8">
     <title>Project Info</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.3/dist/vuetify.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.6.3/dist/vuetify.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.3.4/dist/vue.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.2.4/dist/vuetify.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.2.4/dist/vuetify.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons">
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css">
     <style scoped>
       *{ text-transform: none !important; }
     </style>
@@ -18,36 +15,38 @@
   <body>
     <div id="app">
       <v-app id="inspire">
-        <template>
-          <v-card class="overflow-hidden">
-            <v-app-bar
-              fixed
-            >
-              <v-card-title>{{ projectName }}</v-card-title>
-              <v-spacer></v-spacer>
-              <v-btn
-              v-on:click="close"
-              >Close</v-btn>
-              <v-btn
-                v-on:click="copy"
-              >Copy</v-btn>
-            </v-app-bar>
-            <v-sheet
-              height="80"
-            ></v-sheet>
-            <p>Date: {{ date }}</p>
-            <p>pages: {{ totalCount }}</p>
-            <p>views: {{ views }}, linked: {{ linked }}</p>
-          </v-card>
-          <div style="min-height: 4px;">
-            <v-progress-linear
-             :value="progress"
-            ></v-progress-linear>
-          </div>
-        </template>
+        <v-card class="overflow-hidden">
+          <v-app-bar
+            fixed
+          >
+            <v-card-title>{{ projectName }}</v-card-title>
+            <v-spacer></v-spacer>
+            <v-btn
+            v-on:click="close"
+            >Close</v-btn>
+            <v-btn
+              v-on:click="copy"
+            >Copy</v-btn>
+          </v-app-bar>
+          <v-sheet
+            height="80"
+          ></v-sheet>
+          <p>Date: {{ date }}</p>
+          <p>pages: {{ totalCount }}</p>
+          <p>views: {{ views }}, linked: {{ linked }}</p>
+        </v-card>
+        <div style="min-height: 4px;">
+          <v-progress-linear
+            v-model="progress"
+            color="blue"
+          ></v-progress-linear>
+        </div>
       </v-app>
     </div>
-    <script src="projectinfo.js"></script>
+    <script type="module" src="projectinfo.js">
+      import { Vue, ref } from 'vue'
+      import { Vuetify, useTheme } from 'vuetify'
+    </script>
     <script src="date-helper.js"></script>
   </body>
 </html>

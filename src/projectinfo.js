@@ -1,13 +1,13 @@
-const app = new Vue({
-  vuetify: new Vuetify({
-    icons : {
-      iconfont: 'mdi'
-    },
-    theme: {
-      dark: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-    }
-  }),
-  el: '#app',
+const { createApp, ref } = Vue;
+const { createVuetify, useTheme } = Vuetify;
+
+let theme;
+
+const app = createApp({
+  setup () {
+    theme = useTheme();
+    setTheme();
+  },
   async mounted () {
     window.api.on('browser-window-fucus', this.onFocus);
     window.api.on('browser-window-blur', this.onFocus);
@@ -17,7 +17,7 @@ const app = new Vue({
   },
   methods: {
     onFocus () {
-      this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme();
     },
     close () {
       window.close();
@@ -56,3 +56,13 @@ const app = new Vue({
     progress: 0,
   })
 });
+
+function setTheme () {
+  const darkTheme = ref(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  theme.global.name.value = darkTheme.value ? 'dark' : 'light';
+}
+
+const vuetify = new createVuetify();
+
+app.use(vuetify);
+app.mount('#app');
