@@ -1,13 +1,13 @@
-const app = new Vue({
-  vuetify: new Vuetify({
-    icons : {
-      iconfont: 'mdi'
-    },
-    theme: {
-      dark: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-    }
-  }),
-  el: '#app',
+const { createApp, ref } = Vue;
+const { createVuetify, useTheme } = Vuetify;
+
+let theme;
+
+const app = createApp({
+  setup() {
+    theme = useTheme();
+    setTheme();
+  },
   async mounted () {
     window.api.on('browser-window-fucus', this.onFocus);
     window.api.on('browser-window-blur', this.onFocus);
@@ -16,7 +16,7 @@ const app = new Vue({
   },
   methods: {
     async onFocus () {
-      this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      setTheme();
       const user = await window.api.getUser();
       if (user) {
         this.user = user;
@@ -28,11 +28,11 @@ const app = new Vue({
     },
     timeLineColor (item) {
       if (item.author) {
-        return 'orange'
+        return 'orange';
       } else if (item.contributed) {
-        return 'blue'
+        return 'blue';
       }
-      return 'light-blue lighten-4'
+      return 'grey';
     },
     async openFavsPage () {
       await window.api.openFavsPage();
@@ -49,4 +49,14 @@ const app = new Vue({
     edited: [],
     baseUrl: 'https://scrapbox.io/'
   })
-})
+});
+
+function setTheme() {
+  const darkTheme = ref(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  theme.global.name.value = darkTheme.value ? 'dark' : 'light';  
+}
+
+const vuetify = new createVuetify();
+
+app.use(vuetify);
+app.mount('#app');
