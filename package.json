@@ -33,7 +33,7 @@
     "playwright": "^1.36.2"
   },
   "dependencies": {
-    "compare-versions": "^6.0.0",
+    "compare-versions": "^6.1.0",
     "electron-context-menu": "^3.6.1",
     "electron-fetch": "^1.9.1",
     "electron-store": "^8.1.0"
