@@ -28,7 +28,7 @@
   "license": "MIT",
   "devDependencies": {
     "@playwright/test": "^1.39.0",
-    "electron": "^27.0.1",
+    "electron": "^27.0.2",
     "electron-builder": "^24.6.4",
     "playwright": "^1.39.0"
   },
