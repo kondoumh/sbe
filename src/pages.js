@@ -67,12 +67,12 @@ const app = createApp({
       itemsPerPage: 50,
     },
     headers: [
-      { text: 'pin', value: 'pin', sortable: false, width: '25px' },
-      { text: 'views', value: 'views', width: '50px' },
-      { text: 'linked', value: 'linked', width: '50px' },
-      { text: 'updated', value: 'updated', width: '50px' },
-      { text: 'title', value: 'title', sortable: false, width: '150px'},
-      { text: 'image', value: 'image', sortable: false, width: '350px' }
+      { title: 'pin', key: 'pin', sortable: false, width: '25px' },
+      { title: 'views', key: 'views', width: '50px' },
+      { title: 'linked', key: 'linked', width: '50px' },
+      { title: 'updated', key: 'updated', width: '50px' },
+      { title: 'title', key: 'title', sortable: false, width: '150px'},
+      { title: 'image', key: 'image', sortable: false, width: '350px' }
     ]
   })
 });
