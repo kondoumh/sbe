@@ -1,17 +1,17 @@
-const app = new Vue({
-  vuetify: new Vuetify({
-    icons : {
-      iconfont: 'mdi'
-    },
-    theme: {
-      dark: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-    }
-  }),
-  el: '#app',
+const { createApp, ref } = Vue;
+const { createVuetify, useTheme } = Vuetify;
+
+let theme;
+
+const app = createApp({
+  setup() {
+    theme = useTheme();
+    setTheme();
+  },
   async mounted () {
-    await this.onFocus();
     window.pagesApi.on('browser-window-fucus', this.onFocus)
     window.pagesApi.on('bring-to-top', this.onFocus)
+    await this.onFocus();
   },
   methods: {
     async fetchData () {
@@ -19,7 +19,7 @@ const app = new Vue({
       const skip = (page - 1) * itemsPerPage
       let url = `https://scrapbox.io/api/pages/${this.projectName}?skip=${skip}&limit=${itemsPerPage}&sort=${sortBy}`
       const data = await window.pagesApi.fetchPages(url)
-      this.items = await data.pages
+      this.serverItems = await data.pages
       this.pageCount = data.count
       this.length = Math.ceil(this.pageCount / itemsPerPage)
     },
@@ -56,19 +56,11 @@ const app = new Vue({
       return encodeURIComponent(title)
     }
   },
-  watch: {
-    options: {
-      handler () {
-        this.fetchData()
-      },
-      deep: true
-    }
-  },
   data: () => ({
     page: 1,
     pageCount: 0,
     length: 1,
-    items: [],
+    serverItems: [],
     projectName: '',
     projects: [],
     options: {
@@ -83,4 +75,14 @@ const app = new Vue({
       { text: 'image', value: 'image', sortable: false, width: '350px' }
     ]
   })
-})
+});
+
+function setTheme() {
+  const darkTheme = ref(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  theme.global.name.value = darkTheme.value ? 'dark' : 'light';  
+}
+
+const vuetify = new createVuetify();
+
+app.use(vuetify);
+app.mount('#app');
