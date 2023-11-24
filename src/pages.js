@@ -14,14 +14,13 @@ const app = createApp({
     await this.onFocus();
   },
   methods: {
-    async fetchData () {
-      const { sortBy, sortDesc, page, itemsPerPage } = this.options
+    async fetchData ({ page, itemsPerPage, sortBy }) {
       const skip = (page - 1) * itemsPerPage
-      let url = `https://scrapbox.io/api/pages/${this.projectName}?skip=${skip}&limit=${itemsPerPage}&sort=${sortBy}`
+      let url = `https://scrapbox.io/api/pages/${this.projectName}?skip=${skip}&limit=${itemsPerPage}`
       const data = await window.pagesApi.fetchPages(url)
       this.serverItems = await data.pages
       this.pageCount = data.count
-      this.length = Math.ceil(this.pageCount / itemsPerPage)
+      //this.length = Math.ceil(this.pageCount / itemsPerPage)
     },
     formattedDate (timestamp) {
       return formatDate(timestamp);
@@ -31,7 +30,7 @@ const app = createApp({
       await this.setProjects();
       await this.setProjectName();
       if (this.projectName) {
-        this.fetchData()
+      //  this.fetchData()
       }
     },
     async setProjectName () {
@@ -59,13 +58,13 @@ const app = createApp({
   data: () => ({
     page: 1,
     pageCount: 0,
-    length: 1,
+    //length: 1,
     serverItems: [],
-    projectName: '',
-    projects: [],
-    options: {
-      itemsPerPage: 50,
-    },
+    projectName: 'kondoumh',
+    projects: ['kondoumh'],
+    itemsPerPage: 50,
+    search: '',
+    loading: false,
     headers: [
       { title: 'pin', key: 'pin', sortable: false, width: '25px' },
       { title: 'views', key: 'views', width: '50px' },

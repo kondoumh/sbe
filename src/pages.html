@@ -45,46 +45,29 @@
     <div id="app">
       <v-app id="inspire">
         <div>
-          <v-container>
-            <v-select
-              v-model="projectName"
-              :items="projects"
-              dense
-              @change="fetchData"
-            ></v-select>
-          </v-container>
-          <div class="text-xs-center pt-2">
-            <v-pagination
-              v-model="page"
-              :length="length"
-            ></v-pagination>
-          </div>
           <v-data-table-server
+            v-model:items-per-page="itemsPerPage"
             :headers="headers"
             :items="serverItems"
-            :options.sync="options"
             :items-length="pageCount"
-            :items-per-page="options.itemsPerPage"
-            @update:options="fetchData"
-            :sort-desc="[false, false, false]"
-            :footer-props="{
-              'items-per-page-options': [15, 20, 25, 50, 75]
-            }"
-            class="elevation-1">
-            <template v-slot:item.pin="{item}">
-              {{ item.pin != 0 ? "&#128204;" : "" }}
-            </template>
-            <template v-slot:item.updated="{item}">
-              {{ formattedDate(item.updated) }}
-            </template>
-            <template v-slot:item.title="{item}">
-              <a
-              :href="'https://scrapbox.io/'+ projectName + '/' + encodeTitle(item.title)"
-              target="_blank">{{ item.title }}</a>
-            </template>
-            <template v-slot:item.image="{item}">
-              <img :src="item.image" style="width: auto; height: 25px">
-            </template>
+            :loading="loading"
+            :search="search"
+            item-value="title"
+            @update:options="fetchData">
+              <template v-slot:item.pin="{item}">
+                {{ item.pin != 0 ? "&#128204;" : "" }}
+              </template>
+              <template v-slot:item.updated="{item}">
+                {{ formattedDate(item.updated) }}
+              </template>
+              <template v-slot:item.title="{item}">
+                <a
+                :href="'https://scrapbox.io/'+ projectName + '/' + encodeTitle(item.title)"
+                target="_blank">{{ item.title }}</a>
+              </template>
+              <template v-slot:item.image="{item}">
+                <img :src="item.image" style="width: auto; height: 25px">
+              </template>  
           </v-data-table-server>
           <div class="dummy-area"></div>
         </div>
