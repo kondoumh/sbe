@@ -15,8 +15,12 @@ const app = createApp({
   },
   methods: {
     async fetchData ({ page, itemsPerPage, sortBy }) {
+      let sortKey = 'updated';
+      if (sortBy.length) {
+        sortKey = sortBy[0].key
+      }
       const skip = (page - 1) * itemsPerPage
-      let url = `https://scrapbox.io/api/pages/${this.projectName}?skip=${skip}&limit=${itemsPerPage}`
+      let url = `https://scrapbox.io/api/pages/${this.projectName}?skip=${skip}&limit=${itemsPerPage}&sort=${sortKey}`
       const data = await window.pagesApi.fetchPages(url)
       this.serverItems = await data.pages
       this.pageCount = data.count
