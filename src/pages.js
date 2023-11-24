@@ -15,16 +15,27 @@ const app = createApp({
   },
   methods: {
     async fetchData ({ page, itemsPerPage, sortBy }) {
+      await this.setProjects();
+      await this.setProjectName();
+      let perPage = this.itemsPerPage;
+      if (itemsPerPage) {
+        perPage = itemsPerPage;
+      }
       let sortKey = 'updated';
-      if (sortBy.length) {
+      if (sortBy && sortBy.length) {
         sortKey = sortBy[0].key
       }
-      const skip = (page - 1) * itemsPerPage
-      let url = `https://scrapbox.io/api/pages/${this.projectName}?skip=${skip}&limit=${itemsPerPage}&sort=${sortKey}`
+      let pg = 1;
+      if (page) {
+        pg = page;
+      }
+      const skip = (pg - 1) * perPage
+      console.log(this.projectName, skip, perPage, sortKey);
+      let url = `https://scrapbox.io/api/pages/${this.projectName}?skip=${skip}&limit=${perPage}&sort=${sortKey}`
       const data = await window.pagesApi.fetchPages(url)
       this.serverItems = await data.pages
       this.pageCount = data.count
-      //this.length = Math.ceil(this.pageCount / itemsPerPage)
+      this.length = Math.ceil(this.pageCount / itemsPerPage)
     },
     formattedDate (timestamp) {
       return formatDate(timestamp);
@@ -33,9 +44,6 @@ const app = createApp({
       this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
       await this.setProjects();
       await this.setProjectName();
-      if (this.projectName) {
-      //  this.fetchData()
-      }
     },
     async setProjectName () {
       if (!this.projectName) {
@@ -62,10 +70,10 @@ const app = createApp({
   data: () => ({
     page: 1,
     pageCount: 0,
-    //length: 1,
+    length: 1,
     serverItems: [],
-    projectName: 'kondoumh',
-    projects: ['kondoumh'],
+    projectName: '',
+    projects: [],
     itemsPerPage: 50,
     search: '',
     loading: false,

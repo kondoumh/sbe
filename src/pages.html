@@ -45,8 +45,23 @@
     <div id="app">
       <v-app id="inspire">
         <div>
+          <v-container>
+            <v-select
+              v-model="projectName"
+              :items="projects"
+              dense
+              @update:model-value="fetchData"
+            ></v-select>
+          </v-container>
+          <div class="text-xs-center pt-2">
+            <v-pagination
+              v-model="page"
+              :length="length"
+            ></v-pagination>
+          </div>
           <v-data-table-server
             v-model:items-per-page="itemsPerPage"
+            v-model:page="page"
             :headers="headers"
             :items="serverItems"
             :items-length="pageCount"
