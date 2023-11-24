@@ -53,12 +53,6 @@
               @update:model-value="fetchData"
             ></v-select>
           </v-container>
-          <div class="text-xs-center pt-2">
-            <v-pagination
-              v-model="page"
-              :length="length"
-            ></v-pagination>
-          </div>
           <v-data-table-server
             v-model:items-per-page="itemsPerPage"
             v-model:page="page"
@@ -85,6 +79,12 @@
               </template>  
           </v-data-table-server>
           <div class="dummy-area"></div>
+          <div class="text-xs-center pt-2">
+            <v-pagination
+              v-model="page"
+              :length="length"
+            ></v-pagination>
+          </div>
         </div>
       </v-app>
     </div>
