@@ -1,13 +1,13 @@
-const app = new Vue({
-  vuetify: new Vuetify({
-    icons : {
-      iconfont: 'mdi'
-    },
-    theme: {
-      dark: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-    }
-  }),
-  el: '#app',
+const { createApp, ref, toRaw } = Vue;
+const { createVuetify, useTheme } = Vuetify;
+
+let theme;
+
+const app = createApp({
+  setup() {
+    theme = useTheme();
+    setTheme();
+  },
   async mounted () {
     window.favsApi.on('browser-window-fucus', this.onFocus);
     window.favsApi.on('browser-window-blur', this.onFocus);
@@ -16,21 +16,20 @@ const app = new Vue({
   },
   methods: {
     async onFocus () {
-      this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      setTheme();
       const favs = await window.favsApi.getFavs();
       this.items = favs;
     },
     deleteItem (item) {
-      this.favDelete = item
+      this.favDelete = item;
       this.dialogDelete = true;
     },
     async deleteItemConfirm () {
-      const favs = await window.favsApi.deleteFav(this.favDelete);
+      const favs = await window.favsApi.deleteFav(toRaw(this.favDelete));
       this.items = favs;
       this.closeDelete();
     },
     closeDelete () {
-      console.log("close delete dialog");
       this.dialogDelete = false;
     }
   },
@@ -40,4 +39,14 @@ const app = new Vue({
     items: [],
     favDelete: null,
   })
-})
+});
+
+function setTheme() {
+  const darkTheme = ref(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  theme.global.name.value = darkTheme.value ? 'dark' : 'light';  
+}
+
+const vuetify = new createVuetify();
+
+app.use(vuetify);
+app.mount('#app');

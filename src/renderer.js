@@ -1,10 +1,13 @@
-const app = new Vue({
-  el: '#app',
-  vuetify: new Vuetify({
-    theme: {
-      dark: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-    }    
-  }),
+const { createApp, ref } = Vue;
+const { createVuetify, useTheme } = Vuetify;
+
+let theme;
+
+const app = createApp({
+  setup() {
+    theme = useTheme();
+    setTheme();
+  },
   async mounted () {
     window.api.on('add-page', (e, contentId, title, activate, icon) => {
       const item = { title: title, contentId: contentId, icon: icon };
@@ -26,10 +29,10 @@ const app = new Vue({
       this.message = message;
     }),
     window.api.on('browser-window-fucus', () => {
-      this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme();
     }),
     window.api.on('browser-window-blur', () => {
-      this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme();
     }),
     window.api.on('close-current-tab', () => {
       this.closePage();
@@ -52,13 +55,16 @@ const app = new Vue({
     message: 'ready'
   }),
   methods: {
-    goBack: () => {
+    goBack() {
       window.api.goBack();
     },
-    goForward: () => {
+    goForward() {
       window.api.goForward();
     },
-    searchStart(){
+    reload() {
+      console.log('reload');
+    },
+    searchStart() {
       window.api.searchStart(this.searchText);
     },
     searchStop() {
@@ -66,20 +72,20 @@ const app = new Vue({
       window.api.searchStop();
       this.$refs.searchText.blur();
     },
-    selectPage (idx) {
+    selectPage(idx) {
       if (idx !== undefined) {
         window.api.selectPage(this.items[idx].contentId);
       }
     },
-    debugWindow: () => {
+    debugWindow() {
       window.api.debugWindow();
     },
-    debugView: () => {
+    debugView() {
       window.api.debugView();
     },
     closePage() {
       const item = this.items[this.tab];
-      console.log('removing page:', item);
+      //console.log('removing page:', item);
       if (!item) return
       window.api.unloadPage(item.contentId);
       if (this.tab === this.items.length - 1) {
@@ -117,6 +123,16 @@ const app = new Vue({
     },
     fucusSearchText() {
       this.$refs.searchText.focus();
-    }
+    },
   }
-})
+});
+
+function setTheme() {
+  const darkTheme = ref(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  theme.global.name.value = darkTheme.value ? 'dark' : 'light';  
+}
+
+const vuetify = new createVuetify();
+
+app.use(vuetify);
+app.mount('#app');

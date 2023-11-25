@@ -1,21 +1,21 @@
-const app = new Vue({
-  vuetify: new Vuetify({
-    icons : {
-      iconfont: 'mdi'
-    },
-    theme: {
-      dark: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-    }
-  }),
-  el: '#app',
+const { createApp, ref } = Vue;
+const { createVuetify, useTheme } = Vuetify;
+
+let theme;
+
+const app = createApp({
+  setup () {
+    theme = useTheme();
+    setTheme();
+  },
   async mounted () {
     window.infoApi.on('browser-window-fucus', this.onFocus);
     window.infoApi.on('browser-window-blur', this.onFocus);
-    window.infoApi.on('showPageInfo', async (e, pageApi, url) => this.showInfo(pageApi, url));
+    window.infoApi.on('get-page-info', async (e, pageApi, url) => await this.showInfo(pageApi, url));
   },
   methods: {
     onFocus () {
-      this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme();
     },
     close () {
       window.close();
@@ -67,3 +67,13 @@ const app = new Vue({
     url: '',
   })
 });
+
+function setTheme () {
+  const darkTheme = ref(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  theme.global.name.value = darkTheme.value ? 'dark' : 'light';
+}
+
+const vuetify = new createVuetify();
+
+app.use(vuetify);
+app.mount('#app');

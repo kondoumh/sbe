@@ -3,160 +3,140 @@
   <head>
     <meta charset="UTF-8">
     <title>Start page</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.3/dist/vuetify.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.6.3/dist/vuetify.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.3.8/dist/vue.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.4.3/dist/vuetify.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.4.3/dist/vuetify.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons">
   </head>
   <body>
     <div id="app">
       <v-app id="inspire">
-        <template>
-          <v-container>
-            <v-toolbar dense>
-              <v-toolbar-title>Scrapbox in Electron</v-toolbar-title>
-              <v-spacer></v-spacer>
-              {{ user.displayName }}
-            </v-toolbar>
-            <v-row no-gutters>
-              <v-col>
-                <v-card
-                  class="mx-auto"
-                  tile
+        <v-container>
+          <v-toolbar dense>
+            <v-toolbar-title>Scrapbox in Electron</v-toolbar-title>
+            <v-spacer></v-spacer>
+            {{ user.displayName }}
+          </v-toolbar>
+          <v-row no-gutters>
+            <v-col>
+              <v-card
+                class="mx-auto"
+                tile
+              >
+                <v-card-title>Projects</v-card-title>
+                <v-list
+                  dense
+                  max-height="300"
+                  min-height="300"
+                  class="overflow-y-auto"
                 >
-                  <v-card-title>Projects</v-card-title>
-                  <v-list
-                    dense
-                    max-height="300"
-                    min-height="300"
-                    class="overflow-y-auto"
+                  <v-list-item
+                    v-for="(item, i) in projects"
+                    :key="i"
                   >
-                    <v-list-item-group
-                      color="primary"
-                    >
-                    <v-list-item
-                      v-for="(item, i) in projects"
-                      :key="i"
-                    >
-                      <v-list-item-content>
-                        <a :href="baseUrl + item">{{ item }}</a>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list-item-group>
-                  </v-list>
-                </v-card>    
-              </v-col>
-              <v-col>
-                <v-card
-                  class="mx-auto"
-                  min-width="700"
-                  tile
+                    <a :href="baseUrl + item">{{ item }}</a>
+                  </v-list-item>
+                </v-list>
+              </v-card>    
+            </v-col>
+            <v-col>
+              <v-card
+                class="mx-auto"
+                min-width="700"
+                tile
+              >
+                <v-card-title>
+                  Favs&nbsp;
+                  <v-icon
+                    @click="openFavsPage"
+                  >
+                    mdi-star-outline
+                  </v-icon>
+                </v-card-title>
+                <v-list
+                  dense
+                  min-height="300"
+                  max-height="300"
+                  class="overflow-y-auto"
                 >
-                  <v-card-title>
-                    Favs&nbsp;
-                    <v-icon
-                      @click="openFavsPage"
-                    >
-                      mdi-star-outline
-                    </v-icon>
-                  </v-card-title>
-                  <v-list
-                    dense
-                    min-height="300"
-                    max-height="300"
-                    class="overflow-y-auto"
+                  <v-list-item
+                    v-for="(item, i) in favs"
+                    :key="i"
                   >
-                    <v-list-item-group
-                      color="primary"
-                    >
-                    <v-list-item
-                      v-for="(item, i) in favs"
-                      :key="i"
-                    >
-                      <v-list-item-content>
-                        <v-list-item-title v-text="item.project"></v-list-item-title>
-                        <a :href="item.url">{{ item.page }}</a>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list-item-group>
-                  </v-list>
-                </v-card>
-              </v-col>
-            </v-row>
-            <v-row no-gutters>
-              <v-col>
-                <v-card>
-                  <v-card-title>
-                    Timeline&nbsp;
-                    <v-icon
-                      @click="openHistoryPage"
-                    >
-                      mdi-timeline-text
-                    </v-icon>
-                  </v-card-title>
-                  <v-card
-                    max-height="500"
-                    min-height="500"
-                    class="overflow-y-auto"
+                    <v-list-item-title v-text="item.project"></v-list-item-title>
+                    <a :href="item.url">{{ item.page }}</a>
+                  </v-list-item>
+                </v-list>
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-row no-gutters>
+            <v-col>
+              <v-card>
+                <v-card-title>
+                  Timeline&nbsp;
+                  <v-icon
+                    @click="openHistoryPage"
                   >
-                    <v-timeline
-                      align-top
-                      dense
-                    >
-                      <v-timeline-item
-                          v-for="(item, i) in history"
-                          :key="i"
-                          :color="timeLineColor(item)"
-                          small
-                        >
-                          <v-row class="pt-1">
-                            <v-col>
-                              <div class="text-caption">{{ item.project }}</div>
-                              <a :href="item.url">{{ item.page }}</a>
-                            </v-col>
-                          </v-row>
-                      </v-timeline-item>
-                    </v-timeline>
-                  </v-card>
-                </v-card>
-              </v-col>
-              <v-col>
-                <v-card>
-                  <v-card-title>Recently edited</v-card-title>
-                  <v-card
-                    max-height="500"
-                    min-height="500"
-                    class="overflow-y-auto"
-                  >
-                    <v-list
-                      dense
-                      min-height="500"
-                      max-height="500"
-                      class="overflow-y-auto"
-                    >
-                      <v-list-item-group
-                        color="primary"
-                      >
-                      <v-list-item
-                        v-for="(item, i) in edited"
+                    mdi-timeline-text
+                  </v-icon>
+                </v-card-title>
+                <v-card
+                  max-height="500"
+                  min-height="500"
+                  class="overflow-y-auto"
+                >
+                  <v-timeline side="end" align="start">
+                    <v-timeline-item
+                        v-for="(item, i) in history"
                         :key="i"
+                        :dot-color="timeLineColor(item)"
+                        size="small"
                       >
-                        <v-list-item-content>
-                          <v-list-item-title v-text="item.project"></v-list-item-title>
-                          <a :href="item.url">{{ item.page }}</a>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-list-item-group>
-                    </v-list>
-                  </v-card>
+                        <v-row class="pt-1">
+                          <v-col>
+                            <div class="text-caption">{{ item.project }}</div>
+                            <a :href="item.url">{{ item.page }}</a>
+                          </v-col>
+                        </v-row>
+                    </v-timeline-item>
+                  </v-timeline>
                 </v-card>
-              </v-col>
-            </v-row>
-          </v-container>
-        </template>
+              </v-card>
+            </v-col>
+            <v-col>
+              <v-card>
+                <v-card-title>Recently edited</v-card-title>
+                <v-card
+                  max-height="500"
+                  min-height="500"
+                  class="overflow-y-auto"
+                >
+                  <v-list
+                    dense
+                    min-height="500"
+                    max-height="500"
+                    class="overflow-y-auto"
+                  >
+                    <v-list-item
+                      v-for="(item, i) in edited"
+                      :key="i"
+                    >
+                      <v-list-item-title v-text="item.project"></v-list-item-title>
+                      <a :href="item.url">{{ item.page }}</a>
+                    </v-list-item>
+                  </v-list>
+                </v-card>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
       </v-app>
     </div>
-    <script src="start.js"></script>
+    <script type="module" src="start.js">
+      import { Vue, ref } from 'vue'
+      import { Vuetify, useTheme } from 'vuetify'
+    </script>
   </body>
 </html>

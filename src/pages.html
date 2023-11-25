@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8">
     <title>Scrapbox page list</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.3/dist/vuetify.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.6.3/dist/vuetify.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.3.8/dist/vue.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.4.3/dist/vuetify.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.4.3/dist/vuetify.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons">
     <style>
       .v-data-table tbody td,
@@ -50,47 +50,48 @@
               v-model="projectName"
               :items="projects"
               dense
-              @change="fetchData"
+              @update:model-value="fetchData"
             ></v-select>
           </v-container>
+          <v-data-table-server
+            v-model:items-per-page="itemsPerPage"
+            v-model:page="page"
+            :headers="headers"
+            :items="serverItems"
+            :items-length="pageCount"
+            :loading="loading"
+            :search="search"
+            item-value="title"
+            @update:options="fetchData">
+              <template v-slot:item.pin="{item}">
+                {{ item.pin != 0 ? "&#128204;" : "" }}
+              </template>
+              <template v-slot:item.updated="{item}">
+                {{ formattedDate(item.updated) }}
+              </template>
+              <template v-slot:item.title="{item}">
+                <a
+                :href="'https://scrapbox.io/'+ projectName + '/' + encodeTitle(item.title)"
+                target="_blank">{{ item.title }}</a>
+              </template>
+              <template v-slot:item.image="{item}">
+                <img :src="item.image" style="width: auto; height: 25px">
+              </template>  
+          </v-data-table-server>
+          <div class="dummy-area"></div>
           <div class="text-xs-center pt-2">
             <v-pagination
               v-model="page"
               :length="length"
             ></v-pagination>
           </div>
-          <v-data-table
-            :headers="headers"
-            :items="items"
-            :options.sync="options"
-            :server-items-length="pageCount"
-            :page.sync="page"
-            :items-per-page="options.itemsPerPage"
-            :sort-desc="[false, false, false]"
-            :footer-props="{
-              'items-per-page-options': [15, 20, 25, 50, 75]
-            }"
-            class="elevation-1">
-            <template v-slot:item.pin="{item}">
-              {{ item.pin != 0 ? "&#128204;" : "" }}
-            </template>
-            <template v-slot:item.updated="{item}">
-              {{ formattedDate(item.updated) }}
-            </template>
-            <template v-slot:item.title="{item}">
-              <a
-              :href="'https://scrapbox.io/'+ projectName + '/' + encodeTitle(item.title)"
-              target="_blank">{{ item.title }}</a>
-            </template>
-            <template v-slot:item.image="{item}">
-              <img :src="item.image" style="width: auto; height: 25px">
-            </template>
-          </v-data-table>
-          <div class="dummy-area"></div>
         </div>
       </v-app>
     </div>
-    <script src="pages.js"></script>
+    <script type="module" src="pages.js">
+      import { Vue, ref } from 'vue'
+      import { Vuetify, useTheme } from 'vuetify'
+    </script>
     <script src="./date-helper.js"></script>
   </body>
 </html>
