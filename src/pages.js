@@ -9,8 +9,9 @@ const app = createApp({
     setTheme();
   },
   async mounted () {
-    window.pagesApi.on('browser-window-fucus', this.onFocus)
-    window.pagesApi.on('bring-to-top', this.onFocus)
+    window.pagesApi.on('browser-window-fucus', this.onFocus);
+    window.pagesApi.on('browser-window-blur', this.onFocus);
+    window.pagesApi.on('bring-to-top', this.onFocus);
     await this.onFocus();
   },
   methods: {
@@ -30,24 +31,24 @@ const app = createApp({
         pg = page;
       }
       const skip = (pg - 1) * perPage
-      console.log(this.projectName, skip, perPage, sortKey);
-      let url = `https://scrapbox.io/api/pages/${this.projectName}?skip=${skip}&limit=${perPage}&sort=${sortKey}`
-      const data = await window.pagesApi.fetchPages(url)
-      this.serverItems = await data.pages
-      this.pageCount = data.count
-      this.length = Math.ceil(this.pageCount / itemsPerPage)
+      let url = `https://scrapbox.io/api/pages/${this.projectName}?skip=${skip}&limit=${perPage}&sort=${sortKey}`;
+      const data = await window.pagesApi.fetchPages(url);
+      this.serverItems = await data.pages;
+      this.pageCount = data.count;
+      this.length = Math.ceil(this.pageCount / itemsPerPage);
     },
     formattedDate (timestamp) {
       return formatDate(timestamp);
     },
     async onFocus () {
-      this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      setTheme();
       await this.setProjects();
       await this.setProjectName();
+      await this.fetchData({});
     },
     async setProjectName () {
       if (!this.projectName) {
-        const projectName = await window.pagesApi.activeProject()
+        const projectName = await window.pagesApi.activeProject();
         if (projectName) {
           this.projectName = projectName;
         } else {
@@ -60,11 +61,11 @@ const app = createApp({
     async setProjects () {
       const projects = await window.pagesApi.getProjects();
       if (projects.length > 0) {
-        this.projects = projects
+        this.projects = projects;
       }
     },
     encodeTitle (title) {
-      return encodeURIComponent(title)
+      return encodeURIComponent(title);
     }
   },
   data: () => ({
