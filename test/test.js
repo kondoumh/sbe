@@ -17,24 +17,17 @@ test.afterEach(async ({ page }, testInfo) => {
 
 test('launch app', async () => {
   const title = await mainWindow.title();
-  expect(title).toBe('sbe');
+  expect(title).toBe('sbe - Scrapbox in Electron');
   await mainWindow.screenshot({ path: './screenshot/main.png' });
 
   const packaged = await isPackaged();
   expect(packaged).toBe(false);
 
   const windows = await electronApp.windows();
-  expect(windows.length).toBe(2);
-  console.log(await windows[1].title());
-  await windows[1].screenshot({ path: './screenshot/child.png' });
-});
-
-test('open fav page', async() => {
-  await mainWindow.click('#inspire > div.v-application--wrap > header > div.v-toolbar__content > header > div > button:nth-child(11)');
-  await mainWindow.waitForTimeout(2000);
-  const windows = await electronApp.windows();
   expect(windows.length).toBe(3);
-  await windows[2].screenshot({ path: './screenshot/favs.png' });
+  expect(await windows[1].title()).toBe('Start page');
+  await windows[1].screenshot({ path: './screenshot/child1.png' });
+  await windows[2].screenshot({ path: './screenshot/child2.png' });
 });
 
 async function isPackaged () {
