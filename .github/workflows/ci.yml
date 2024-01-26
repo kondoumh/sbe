@@ -20,6 +20,8 @@ jobs:
         node-version: '16'
     - name: Install dependencies
       run: npm install
+    - name: Install Playwright
+      run: npx playwright install
     - name: Run Test
       run: npm test
     - name: Upload screenshots
