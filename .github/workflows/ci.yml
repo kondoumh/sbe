@@ -1,6 +1,6 @@
 name: OS Matrix
 
-on: [workflow_dispatch]
+on: [workflow_dispatch, pull_request]
 
 jobs:
   build:
@@ -23,7 +23,7 @@ jobs:
     - name: Run Test
       run: npm test
     - name: Upload screenshots
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: screenshots_${{ matrix.os }}
         path: screenshot
