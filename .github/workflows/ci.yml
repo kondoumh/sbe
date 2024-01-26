@@ -10,14 +10,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        os: [windows-latest, macos-latest] # ubuntu-latest fails with playwright electron.launch
 
     steps:
     - uses: actions/checkout@v3
     - name: Setup nodejs
       uses: actions/setup-node@v3
       with:
-        node-version: '16'
+        node-version: '20'
     - name: Install dependencies
       run: npm install
     - name: Install Playwright
