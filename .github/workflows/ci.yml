@@ -1,6 +1,14 @@
 name: OS Matrix
 
-on: [workflow_dispatch, pull_request]
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      beta:
+        description: 'Build with Electron beta'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   build:
@@ -20,6 +28,9 @@ jobs:
         node-version: '20'
     - name: Install dependencies
       run: npm install
+    - name: Install Electron beta
+      if: github.inputs.beta == 'true'
+      run: npm install electron@beta
     - name: Install Playwright
       run: npx playwright install
     - name: Run Test
