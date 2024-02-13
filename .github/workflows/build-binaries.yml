@@ -28,7 +28,7 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: Install Electron beta
-      if: ${{ inputs.beta == 'true' }}
+      if: ${{ inputs.beta }}
       run: npm install electron@beta
     - name: Package
       run: npm run pack
