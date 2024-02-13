@@ -7,8 +7,7 @@ on:
       beta:
         description: 'Build with Electron beta'
         required: false
-        type: boolean
-        default: false
+        default: 'false'
 
 jobs:
   build:
@@ -29,7 +28,7 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: Install Electron beta
-      if: github.inputs.beta == 'true'
+      if: ${{ inputs.beta == 'true' }}
       run: npm install electron@beta
     - name: Install Playwright
       run: npx playwright install
