@@ -29,8 +29,7 @@
   "devDependencies": {
     "@playwright/test": "^1.43.0",
     "electron": "^29.2.0",
-    "electron-builder": "^24.13.3",
-    "playwright": "^1.42.1"
+    "electron-builder": "^24.13.3"
   },
   "dependencies": {
     "compare-versions": "^6.1.0",
