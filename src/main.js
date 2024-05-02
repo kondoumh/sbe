@@ -2,7 +2,6 @@ const electron = require('electron');
 const { app, BrowserWindow, BrowserView, ipcMain, session, Menu, clipboard, shell, Notification } = require('electron');
 const path = require('path');
 const Store = require('electron-store');
-const contextMenu = require('electron-context-menu');
 const sbUrl = require('./url-helper');
 const { toMarkdown } = require('./markdown');
 const fetch = require('electron-fetch').default;
@@ -63,14 +62,14 @@ async function createWindow () {
       })
     });
   });
-  mainWindow.webContents.on('did-finish-load', () => {
-    loadStartPage();
-    loadPage('https://scrapbox.io');
+  mainWindow.webContents.on('did-finish-load', async () => {
+    await loadStartPage();
+    await loadPage('https://scrapbox.io');
   });
   await notifyUpdate();
 }
 
-function loadPageList() {
+async function loadPageList() {
   const opened = openedPageList();
   if (opened > 0) {
     bringToTop(opened);
@@ -85,7 +84,7 @@ function loadPageList() {
   resizeView(view);
   view.webContents.loadFile(path.join(__dirname, 'pages.html'));
   topViewId = view.webContents.id;
-  prepareContextMenu(view.webContents);
+  await prepareContextMenu(view.webContents);
   registerSearchAction(view);
   handleLinkEvent(view);
   mainWindow.webContents.send('add-page', view.webContents.id, 'Pages', true, 'mdi-view-list');
@@ -97,7 +96,7 @@ async function loadPage(url, activate=true) {
   resizeView(view);
   view.webContents.loadURL(url);
   topViewId = view.webContents.id;
-  prepareContextMenu(view.webContents);
+  await prepareContextMenu(view.webContents);
   registerSearchAction(view);
   handleLinkEvent(view);
   handleNavigation(view);
@@ -111,7 +110,7 @@ async function loadPage(url, activate=true) {
   updateProjects(projectPage.project);
 }
 
-function loadFavPage() {
+async function loadFavPage() {
   const opened = openedFavPage();
   if (opened > 0) {
     bringToTop(opened);
@@ -126,13 +125,13 @@ function loadFavPage() {
   resizeView(view);
   view.webContents.loadFile(path.join(__dirname, 'favs.html'));
   topViewId = view.webContents.id;
-  prepareContextMenu(view.webContents);
+  await prepareContextMenu(view.webContents);
   registerSearchAction(view);
   handleLinkEvent(view);
   mainWindow.webContents.send('add-page', view.webContents.id, 'Favs', true, 'mdi-star-outline');
 }
 
-function loadHistoryPage() {
+async function loadHistoryPage() {
   const opened = openedHistoryPage();
   if (opened > 0) {
     bringToTop(opened);
@@ -147,13 +146,13 @@ function loadHistoryPage() {
   resizeView(view);
   view.webContents.loadFile(path.join(__dirname, 'history.html'));
   topViewId = view.webContents.id;
-  prepareContextMenu(view.webContents);
+  await prepareContextMenu(view.webContents);
   registerSearchAction(view);
   handleLinkEvent(view);
   mainWindow.webContents.send('add-page', view.webContents.id, 'History', true, 'mdi-history');
 }
 
-function loadStartPage() {
+async function loadStartPage() {
   const view = new BrowserView({
     webPreferences: {
       preload: path.join(__dirname, 'start-preload.js')
@@ -163,7 +162,7 @@ function loadStartPage() {
   resizeView(view);
   view.webContents.loadFile(path.join(__dirname, 'start.html'));
   topViewId = view.webContents.id;
-  prepareContextMenu(view.webContents);
+  await prepareContextMenu(view.webContents);
   registerSearchAction(view);
   handleLinkEvent(view);
   mainWindow.webContents.send('add-page', view.webContents.id, 'Start', true, 'mdi-view-dashboard-variant-outline');
@@ -226,17 +225,17 @@ function updateProjects(projectName) {
   }
 }
 
-function openLink(url) {
+async function openLink(url) {
   if (sbUrl.inScrapbox(url)) {
-    loadPage(url);
+    await loadPage(url);
   } else {
     shell.openExternal(url);
   }
 }
 
-function openLinkBackground(url) {
+async function openLinkBackground(url) {
   const current = getTopView();
-  loadPage(url, false);
+  await loadPage(url, false);
   mainWindow.setTopBrowserView(current);
   topViewId = current.webContents.id;
 }
@@ -263,7 +262,7 @@ async function openNewWindow(url) {
       store.set('boundsChild', newWindow.getBounds());
     });
   });
-  prepareContextMenu(newWindow.webContents);
+  await prepareContextMenu(newWindow.webContents);
   handleLinkEvent(newWindow);
   newWindow.setBounds({x: x, y: y, width: width, height: height});
   newWindow.loadURL(url);
@@ -378,14 +377,14 @@ function prepareMenu() {
         },
         {
           label: 'Favs',
-          click() {
-            loadFavPage();
+          async click() {
+            await loadFavPage();
           }
         },
         {
           label: 'History',
-          click() {
-            loadHistoryPage();
+          async click() {
+            await loadHistoryPage();
           }
         },
         { type: 'separator' },
@@ -475,8 +474,9 @@ function prepareMenu() {
   Menu.setApplicationMenu(menu);
 }
 
-function prepareContextMenu(content) {
-  contextMenu({
+async function prepareContextMenu(content) {
+  const contextMenu = await import('electron-context-menu');
+  contextMenu.default({
     window: content,
     showSearchWithGoogle: false,
     prepend: (defaultActions, params) => [
@@ -768,8 +768,8 @@ function resetWindowPosition() {
   mainWindow.setBounds({x: 0, y: 0, width: 1024, height: 800});
 }
 
-ipcMain.handle('open-it', (e, url) => {
-  loadPage(url);
+ipcMain.handle('open-it', async (e, url) => {
+  await loadPage(url);
 });
 
 ipcMain.handle('go-back', e => {
@@ -831,13 +831,13 @@ ipcMain.handle('open-pagelist', () => {
   mainWindow.webContents.send('query-title', title);
 });
 
-ipcMain.handle('open-favs-page', () => {
-  loadFavPage();
+ipcMain.handle('open-favs-page', async () => {
+  await loadFavPage();
 });
 
-ipcMain.handle('id-by-title', (e, contentId) => {
+ipcMain.handle('id-by-title', async (e, contentId) => {
   if (contentId < 0) {
-    loadPageList();
+    await loadPageList();
   }
 });
 
@@ -853,8 +853,8 @@ ipcMain.handle('delete-fav', async (e, fav) => {
   return deleted;
 });
 
-ipcMain.handle('open-history-page', () => {
-  loadHistoryPage();
+ipcMain.handle('open-history-page', async () => {
+  await loadHistoryPage();
 });
 
 ipcMain.handle('get-history', async () =>{
@@ -919,7 +919,7 @@ async function notifyUpdate() {
     const res = await fetch("https://api.github.com/repos/kondoumh/sbe/releases/latest");
     if (res.status === 200) {
       const data = await res.json();
-      const latest = data.name.substring(1, data.name.length);
+      const latest = data.name;
       if (compareVersions(latest, app.getVersion()) === 1) {
         new Notification({ title: 'sbe', body: 'New version avilable!' }).on('click', () =>{
           shell.openExternal('https://github.com/kondoumh/sbe/releases/latest');
@@ -927,7 +927,7 @@ async function notifyUpdate() {
       }
     }
   } catch (err) {
-    console.error("request failed: " + err.message);
+    console.error("Version check failed: " + err.message);
   }
 }
 
