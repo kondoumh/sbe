@@ -1,12 +1,11 @@
-const { _electron: electron } = require('playwright');
-const { test, expect } = require('@playwright/test');
+import { _electron, test, expect } from '@playwright/test';
 
 let electronApp;
 let mainWindow;
 
 test.beforeEach(async ({ page }, testInfo) => {
   console.log(`Running ${testInfo.title}`);
-  electronApp = await electron.launch({ args: ['src/main.js'] });
+  electronApp = await _electron.launch({ args: ['src/main.mjs'] });
   mainWindow = await electronApp.firstWindow();
   await mainWindow.waitForTimeout(2000);
 });
