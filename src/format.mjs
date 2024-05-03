@@ -21,7 +21,4 @@ function toBodyText(text) {
   return result;
 }
 
-module.exports = {
-  toHeading,
-  toBodyText
-}
+export { toHeading, toBodyText };
