@@ -1,37 +1,21 @@
 const electron = require('electron');
 const { app, BrowserWindow, BrowserView, ipcMain, session, Menu, clipboard, shell, Notification } = require('electron');
 const path = require('path');
-const Store = require('electron-store');
 const sbUrl = require('./url-helper');
 const { toMarkdown } = require('./markdown');
 const fetch = require('electron-fetch').default;
 const { toHeading, toBodyText } = require('./format');
 const { compareVersions } = require("compare-versions");
 
-const store = new Store({
-  defaults: {
-    bounds: {
-      width: 1024,
-      height: 800,
-    },
-    boundsChild: {
-      width: 1024,
-      height: 800,
-    },
-    favs: [],
-    history: [],
-    edited: [],
-    projects: []
-  },
-});
-
 let mainWindow;
 let topViewId;
 let previousText;
 let loginUser;
 let updateInfo = new Map();
+let store;
 
 async function createWindow () {
+  await initializeStore();
   let {width, height, x, y} = store.get('bounds');
   const displays = electron.screen.getAllDisplays();
   const activeDisplay = displays.find((display) => {
@@ -67,6 +51,26 @@ async function createWindow () {
     await loadPage('https://scrapbox.io');
   });
   await notifyUpdate();
+}
+
+async function initializeStore() {
+  const { default: Store } = await import('electron-store');
+  store =new Store({
+    defaults: {
+      bounds: {
+        width: 1024,
+        height: 800,
+      },
+      boundsChild: {
+        width: 1024,
+        height: 800,
+      },
+      favs: [],
+      history: [],
+      edited: [],
+      projects: []
+    },
+  });  
 }
 
 async function loadPageList() {
