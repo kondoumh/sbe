@@ -1,11 +1,15 @@
-const electron = require('electron');
-const { app, BrowserWindow, BrowserView, ipcMain, session, Menu, clipboard, shell, Notification } = require('electron');
-const path = require('path');
-const sbUrl = require('./url-helper');
-const { toMarkdown } = require('./markdown');
-const fetch = require('electron-fetch').default;
-const { toHeading, toBodyText } = require('./format');
-const { compareVersions } = require("compare-versions");
+import { app, screen, BrowserWindow, BrowserView, ipcMain, session, Menu, clipboard, shell, Notification } from 'electron';
+import { fileURLToPath } from 'node:url';
+import { compareVersions } from 'compare-versions';
+import Store from 'electron-store';
+import contextMenu from 'electron-context-menu';
+
+import path from 'node:path';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+import sbUrl from './url-helper.mjs';
+import toMarkdown from './markdown.mjs';
+import { toHeading, toBodyText } from './format.mjs';
 
 let mainWindow;
 let topViewId;
@@ -15,9 +19,9 @@ let updateInfo = new Map();
 let store;
 
 async function createWindow () {
-  await initializeStore();
+  initializeStore();
   let {width, height, x, y} = store.get('bounds');
-  const displays = electron.screen.getAllDisplays();
+  const displays = screen.getAllDisplays();
   const activeDisplay = displays.find((display) => {
     return display.bounds.x <= x && display.bounds.y <= y &&
       display.bounds.x + display.bounds.width >= x &&
@@ -53,8 +57,7 @@ async function createWindow () {
   await notifyUpdate();
 }
 
-async function initializeStore() {
-  const { default: Store } = await import('electron-store');
+function initializeStore() {
   store =new Store({
     defaults: {
       bounds: {
@@ -88,7 +91,7 @@ async function loadPageList() {
   resizeView(view);
   view.webContents.loadFile(path.join(__dirname, 'pages.html'));
   topViewId = view.webContents.id;
-  await prepareContextMenu(view.webContents);
+  prepareContextMenu(view.webContents);
   registerSearchAction(view);
   handleLinkEvent(view);
   mainWindow.webContents.send('add-page', view.webContents.id, 'Pages', true, 'mdi-view-list');
@@ -100,7 +103,7 @@ async function loadPage(url, activate=true) {
   resizeView(view);
   view.webContents.loadURL(url);
   topViewId = view.webContents.id;
-  await prepareContextMenu(view.webContents);
+  prepareContextMenu(view.webContents);
   registerSearchAction(view);
   handleLinkEvent(view);
   handleNavigation(view);
@@ -129,7 +132,7 @@ async function loadFavPage() {
   resizeView(view);
   view.webContents.loadFile(path.join(__dirname, 'favs.html'));
   topViewId = view.webContents.id;
-  await prepareContextMenu(view.webContents);
+  prepareContextMenu(view.webContents);
   registerSearchAction(view);
   handleLinkEvent(view);
   mainWindow.webContents.send('add-page', view.webContents.id, 'Favs', true, 'mdi-star-outline');
@@ -150,7 +153,7 @@ async function loadHistoryPage() {
   resizeView(view);
   view.webContents.loadFile(path.join(__dirname, 'history.html'));
   topViewId = view.webContents.id;
-  await prepareContextMenu(view.webContents);
+  prepareContextMenu(view.webContents);
   registerSearchAction(view);
   handleLinkEvent(view);
   mainWindow.webContents.send('add-page', view.webContents.id, 'History', true, 'mdi-history');
@@ -166,7 +169,7 @@ async function loadStartPage() {
   resizeView(view);
   view.webContents.loadFile(path.join(__dirname, 'start.html'));
   topViewId = view.webContents.id;
-  await prepareContextMenu(view.webContents);
+  prepareContextMenu(view.webContents);
   registerSearchAction(view);
   handleLinkEvent(view);
   mainWindow.webContents.send('add-page', view.webContents.id, 'Start', true, 'mdi-view-dashboard-variant-outline');
@@ -246,7 +249,7 @@ async function openLinkBackground(url) {
 
 async function openNewWindow(url) {
   let {width, height, x, y} = store.get('boundsChild');
-  const displays = electron.screen.getAllDisplays();
+  const displays = screen.getAllDisplays();
   const activeDisplay = displays.find((display) => {
     return display.bounds.x <= x && display.bounds.y <= y &&
       display.bounds.x + display.bounds.width >= x &&
@@ -266,7 +269,7 @@ async function openNewWindow(url) {
       store.set('boundsChild', newWindow.getBounds());
     });
   });
-  await prepareContextMenu(newWindow.webContents);
+  prepareContextMenu(newWindow.webContents);
   handleLinkEvent(newWindow);
   newWindow.setBounds({x: x, y: y, width: width, height: height});
   newWindow.loadURL(url);
@@ -478,9 +481,8 @@ function prepareMenu() {
   Menu.setApplicationMenu(menu);
 }
 
-async function prepareContextMenu(content) {
-  const contextMenu = await import('electron-context-menu');
-  contextMenu.default({
+function prepareContextMenu(content) {
+  contextMenu({
     window: content,
     showSearchWithGoogle: false,
     prepend: (defaultActions, params) => [
@@ -879,9 +881,8 @@ ipcMain.handle('get-edited', async () =>{
 });
 
 ipcMain.handle('get-version-info', async () => {
-  const packageInfo = require('../package.json');
   let info = {
-    version: packageInfo.version,
+    version: process.env.npm_package_version,
     copyright: 'Copyright (c) 2019 kondoumh',
     electronVersion: process.versions.electron,
     chromeVersion: process.versions.chrome,

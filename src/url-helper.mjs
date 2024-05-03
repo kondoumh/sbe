@@ -105,4 +105,4 @@ sbUrl.isLoginLink = (url) => {
   return url.startsWith(sbUrl.BASE_URL + 'login') || url.startsWith(sbUrl.GOOGLE_LOGIN_URL);
 }
 
-module.exports = sbUrl;
+export default sbUrl;

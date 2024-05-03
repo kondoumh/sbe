@@ -115,6 +115,4 @@ function replaceGazoImage(str) {
   return result;
 }
 
-module.exports = {
-  toMarkdown,
-}
+export default toMarkdown;
