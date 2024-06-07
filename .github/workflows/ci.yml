@@ -35,9 +35,9 @@ jobs:
       run: npx playwright install
     - name: Run Test
       run: npm test
-    - name: Upload screenshots
+    - name: Upload test results
       uses: actions/upload-artifact@v4
       if: ${{ always() }}
       with:
-        name: screenshots_${{ matrix.os }}
-        path: screenshot
+        name: test-results_${{ matrix.os }}
+        path: test-results
