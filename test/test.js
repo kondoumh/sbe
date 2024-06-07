@@ -7,7 +7,7 @@ test.beforeEach(async ({ page }, testInfo) => {
   console.log(`Running ${testInfo.title}`);
   electronApp = await _electron.launch({ args: ['src/main.mjs'] });
   mainWindow = await electronApp.firstWindow();
-  await mainWindow.waitForTimeout(2000);
+  await mainWindow.waitForTimeout(5000);
 });
 
 test.afterEach(async ({ page }, testInfo) => {
@@ -17,7 +17,7 @@ test.afterEach(async ({ page }, testInfo) => {
 test('launch app', async () => {
   const title = await mainWindow.title();
   expect(title).toBe('sbe - Scrapbox in Electron');
-  await mainWindow.screenshot({ path: './screenshot/main.png' });
+  await mainWindow.screenshot({ path: './test-results/main.png' });
 
   const packaged = await isPackaged();
   expect(packaged).toBe(false);
@@ -25,8 +25,8 @@ test('launch app', async () => {
   const windows = await electronApp.windows();
   expect(windows.length).toBe(3);
   expect(await windows[1].title()).toBe('Start page');
-  await windows[1].screenshot({ path: './screenshot/child1.png' });
-  await windows[2].screenshot({ path: './screenshot/child2.png' });
+  await windows[1].screenshot({ path: './test-results/child1.png' });
+  await windows[2].screenshot({ path: './test-results/child2.png' });
 });
 
 async function isPackaged () {
