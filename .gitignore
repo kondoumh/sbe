@@ -72,4 +72,4 @@ sbe-*
 dist
 
 # Directories for test
-screenshot
+test-results
