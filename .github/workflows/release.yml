@@ -36,7 +36,7 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Publish
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: |
           dist/**/*.exe
@@ -44,5 +44,3 @@ jobs:
           dist/**/*.AppImage
           dist/**/*.dmg
         prerelease: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
