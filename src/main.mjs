@@ -882,7 +882,7 @@ ipcMain.handle('get-edited', async () =>{
 
 ipcMain.handle('get-version-info', async () => {
   let info = {
-    version: process.env.npm_package_version,
+    version: app.getVersion(),
     copyright: 'Copyright (c) 2019 kondoumh',
     electronVersion: process.versions.electron,
     chromeVersion: process.versions.chrome,
