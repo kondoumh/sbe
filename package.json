@@ -12,6 +12,10 @@
     },
     "win": {
       "icon": "icons/win/sbe.ico"
+    },
+    "linux": {
+      "icon": "icons/png/256x256.png",
+      "target": ["AppImage"]
     }
   },
   "scripts": {
