@@ -39,6 +39,6 @@
   "dependencies": {
     "compare-versions": "^6.1.0",
     "electron-context-menu": "^4.0.0",
-    "electron-store": "^9.0.0"
+    "electron-store": "^10.0.0"
   }
 }
