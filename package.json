@@ -37,7 +37,7 @@
     "electron-builder": "^24.13.3"
   },
   "dependencies": {
-    "compare-versions": "^6.1.0",
+    "compare-versions": "^6.1.1",
     "electron-context-menu": "^4.0.1",
     "electron-store": "^10.0.0"
   }
