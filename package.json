@@ -34,7 +34,7 @@
   "devDependencies": {
     "@playwright/test": "^1.46.1",
     "electron": "^32.0.1",
-    "electron-builder": "^24.13.3"
+    "electron-builder": "^25.0.5"
   },
   "dependencies": {
     "compare-versions": "^6.1.1",
