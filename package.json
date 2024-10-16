@@ -32,7 +32,7 @@
   "author": "kondoumh",
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.48.0",
+    "@playwright/test": "^1.48.1",
     "electron": "^33.0.0",
     "electron-builder": "^25.1.8"
   },
