@@ -23,6 +23,8 @@ test('launch app', async () => {
   expect(packaged).toBe(false);
 
   const windows = await electronApp.windows();
+  await mainWindow.waitForTimeout(5000);
+
   expect(windows.length).toBe(3);
   expect(await windows[1].title()).toBe('Start page');
   await windows[1].screenshot({ path: './test-results/child1.png' });
