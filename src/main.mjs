@@ -52,8 +52,11 @@ async function createWindow () {
   });
   mainWindow.webContents.on('did-finish-load', async () => {
     await loadStartPage();
-    // await loadPage('https://scrapbox.io');
-    await loadFavPage();
+    if (process.env.RUN_MODE === 'test') {
+      await loadFavPage();
+    } else {
+      await loadPage('https://scrapbox.io');
+    }
   });
   await notifyUpdate();
 }

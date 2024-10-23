@@ -1,3 +1,5 @@
+// this test requires the following environment variables
+// - RUN_MODE: test
 import { _electron, test, expect } from '@playwright/test';
 
 let electronApp;
@@ -7,7 +9,7 @@ test.beforeEach(async ({ page }, testInfo) => {
   console.log(`Running ${testInfo.title}`);
   electronApp = await _electron.launch({ args: ['src/main.mjs'] });
   mainWindow = await electronApp.firstWindow();
-  await mainWindow.waitForTimeout(5000);
+  await mainWindow.waitForTimeout(1000);
 });
 
 test.afterEach(async ({ page }, testInfo) => {
@@ -24,7 +26,11 @@ test('launch app', async () => {
 
   const windows = await electronApp.windows();
   expect(windows.length).toBe(3);
-  //expect(await windows[1].title()).toBe('Start page');
+
+  const titles = await Promise.all(windows.map(async (window) => await window.title()));
+  expect(titles).toContain('Start page');
+  expect(titles).toContain('Fav list');
+
   await windows[1].screenshot({ path: './test-results/child1.png' });
   await windows[2].screenshot({ path: './test-results/child2.png' });
 });
