@@ -9,7 +9,7 @@ test.beforeEach(async ({ page }, testInfo) => {
   console.log(`Running ${testInfo.title}`);
   electronApp = await _electron.launch({ args: ['src/main.mjs'] });
   mainWindow = await electronApp.firstWindow();
-  await mainWindow.waitForTimeout(1000);
+  await mainWindow.waitForTimeout(3000);
 });
 
 test.afterEach(async ({ page }, testInfo) => {
