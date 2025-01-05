@@ -516,7 +516,6 @@ function buildContextMenu(params, content) {
       },
       visible: params.linkURL && sbUrl.isPage(params.linkURL)
     },
-    { type: 'separator' },
     {
       label: 'Add to favs',
       click: () => {
@@ -559,11 +558,17 @@ function buildContextMenu(params, content) {
       },
       visible: !params.linkURL && sbUrl.isPage(content.getURL())
     },
+    { type: 'separator' },
     {
-      label: 'Search Google for “{selection}”',
-      click: () => { shell.openExternal('https://www.google.com/search?q=' + params.selectionText.trim()); },
+      label: `Search Google for '${params.selectionText.trim()}'`,
+      click: () => {
+        const url = new URL('https://www.google.com/search');
+        url.searchParams.set('q', params.selectionText.trim());
+        shell.openExternal(url.toString());
+      },
       visible: params.selectionText.trim().length > 0
     },
+    { type: 'separator' },
     {
       label: 'Heading1',
       click: () => { content.insertText(toHeading(params.selectionText, 1)); },
@@ -590,7 +595,7 @@ function buildContextMenu(params, content) {
       visible: params.selectionText && !params.linkURL
     }
   ];
-  return menuTemplete.filter(item => item.visible !== false || item.type === 'separator');
+  return menuTemplete;
 }
 
 function goBack() {
