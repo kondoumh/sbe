@@ -570,6 +570,16 @@ function buildContextMenu(params, content) {
     },
     { type: 'separator' },
     {
+      label: 'Copy Image',
+      click: () => { content.copyImageAt(params.x, params.y); },
+      visible: params.mediaType === 'image'
+    },
+    {
+      label: 'Copy Image URL',
+      click: () => { clipboard.writeText(params.srcURL); },
+      visible: params.mediaType === 'image'
+    },
+    {
       label: 'Heading1',
       click: () => { content.insertText(toHeading(params.selectionText, 1)); },
       visible: params.selectionText && !params.linkURL
