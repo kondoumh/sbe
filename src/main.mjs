@@ -2,7 +2,6 @@ import { app, screen, BrowserWindow, BrowserView, ipcMain, session, Menu, clipbo
 import { fileURLToPath } from 'node:url';
 import { compareVersions } from 'compare-versions';
 import Store from 'electron-store';
-import contextMenu from 'electron-context-menu';
 
 import path from 'node:path';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -486,107 +485,127 @@ function prepareMenu() {
 }
 
 function prepareContextMenu(content) {
-  contextMenu({
-    window: content,
-    showSearchWithGoogle: false,
-    prepend: (defaultActions, params) => [
-      {
-        label: 'Open',
-        click: () => { openLink(params.linkURL); },
-        visible: params.linkURL && (params.mediaType === 'none' || params.mediaType === 'image')
-      },
-      {
-        label: 'Open in background',
-        click: () => { openLinkBackground(params.linkURL); },
-        visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && sbUrl.isPage(params.linkURL)
-      },
-      {
-        label: 'Open in new window',
-        click: () => { openNewWindow(params.linkURL); },
-        visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && sbUrl.isPage(params.linkURL)
-      },
-      {
-        label: 'Info',
-        click: () => {
-          openPageInfoWindow(params.linkURL);
-        },
-        visible: params.linkURL && sbUrl.isPage(params.linkURL)
-      },
-      { type: 'separator' },
-      {
-        label: 'Add to favs',
-        click: () => {
-          const favs = store.get('favs');
-          const page = sbUrl.takeProjectPage(content.getURL());
-          const fav = { project: page.project, page: decodeURIComponent(page.page), url: content.getURL() }
-          favs.push(fav);
-          store.set('favs', favs);
-          showMessage(`Added to favs : ${fav.project} - ${fav.page}`);
-        },
-        visible: !params.linkURL && sbUrl.isPage(content.getURL()) && !inFavs(content.getURL())
-      },
-      {
-        label: 'Remove from favs',
-        click: () => {
-          const favs = store.get('favs');
-          const removed = favs.filter(fav => fav.url !== content.getURL());
-          store.set('favs', removed);
-          showMessage('Removed from favs');
-        },
-        visible: !params.linkURL && sbUrl.isPage(content.getURL()) && inFavs(content.getURL())
-      },
-      {
-        label: 'Copy as Markdown to clipboard',
-        click: async () => {
-          const result = await copyAsMarkdown(content.getURL());
-          if (result) {
-            showMessage('Copied as Markdown');
-          }
-        },
-        visible: !params.linkURL && sbUrl.isPage(content.getURL())
-      },
-      {
-        label: 'Copy as Markdown (Hatena blog notation) to clipboard',
-        click: async () => {
-          const result = await copyAsMarkdown(content.getURL(), true);
-          if (result) {
-            showMessage('Copiedas Markdown');
-          }
-        },
-        visible: !params.linkURL && sbUrl.isPage(content.getURL())
-      },
-      {
-        label: 'Search Google for “{selection}”',
-        click: () => { shell.openExternal('https://www.google.com/search?q=' + params.selectionText.trim()); },
-        visible: params.selectionText.trim().length > 0
-      },
-      {
-        label: 'Heading1',
-        click: () => { content.insertText(toHeading(params.selectionText, 1)); },
-        visible: params.selectionText && !params.linkURL
-      },
-      {
-        label: 'Heading2',
-        click: () => { content.insertText(toHeading(params.selectionText, 2)); },
-        visible: params.selectionText && !params.linkURL
-      },
-      {
-        label: 'Heading3',
-        click: () => { content.insertText(toHeading(params.selectionText, 3)); },
-        visible: params.selectionText && !params.linkURL
-      },
-      {
-        label: 'Heading4',
-        click: () => { content.insertText(toHeading(params.selectionText, 4)); },
-        visible: params.selectionText && !params.linkURL
-      },
-      {
-        label: 'body',
-        click: () => { content.insertText(toBodyText(params.selectionText)); },
-        visible: params.selectionText && !params.linkURL
-      }
-    ]
+  content.on('context-menu', (e, params) => {
+    const menuTemplate = buildContextMenu(params, content);
+    const contextMenu = Menu.buildFromTemplate(menuTemplate);
+    contextMenu.popup({ window: content });
   });
+}
+
+function buildContextMenu(params, content) {
+  const menuTemplete = [
+    {
+      label: 'Open',
+      click: () => { openLink(params.linkURL); },
+      visible: params.linkURL && (params.mediaType === 'none' || params.mediaType === 'image')
+    },
+    {
+      label: 'Open in background',
+      click: () => { openLinkBackground(params.linkURL); },
+      visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && sbUrl.isPage(params.linkURL)
+    },
+    {
+      label: 'Open in new window',
+      click: () => { openNewWindow(params.linkURL); },
+      visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && sbUrl.isPage(params.linkURL)
+    },
+    {
+      label: 'Info',
+      click: () => {
+        openPageInfoWindow(params.linkURL);
+      },
+      visible: params.linkURL && sbUrl.isPage(params.linkURL)
+    },
+    {
+      label: 'Add to favs',
+      click: () => {
+        const favs = store.get('favs');
+        const page = sbUrl.takeProjectPage(content.getURL());
+        const fav = { project: page.project, page: decodeURIComponent(page.page), url: content.getURL() }
+        favs.push(fav);
+        store.set('favs', favs);
+        showMessage(`Added to favs : ${fav.project} - ${fav.page}`);
+      },
+      visible: !params.linkURL && sbUrl.isPage(content.getURL()) && !inFavs(content.getURL())
+    },
+    {
+      label: 'Remove from favs',
+      click: () => {
+        const favs = store.get('favs');
+        const removed = favs.filter(fav => fav.url !== content.getURL());
+        store.set('favs', removed);
+        showMessage('Removed from favs');
+      },
+      visible: !params.linkURL && sbUrl.isPage(content.getURL()) && inFavs(content.getURL())
+    },
+    {
+      label: 'Copy as Markdown to clipboard',
+      click: async () => {
+        const result = await copyAsMarkdown(content.getURL());
+        if (result) {
+          showMessage('Copied as Markdown');
+        }
+      },
+      visible: !params.linkURL && sbUrl.isPage(content.getURL())
+    },
+    {
+      label: 'Copy as Markdown (Hatena blog notation) to clipboard',
+      click: async () => {
+        const result = await copyAsMarkdown(content.getURL(), true);
+        if (result) {
+          showMessage('Copiedas Markdown');
+        }
+      },
+      visible: !params.linkURL && sbUrl.isPage(content.getURL())
+    },
+    { type: 'separator' },
+    {
+      label: `Search Google for '${params.selectionText.trim()}'`,
+      click: () => {
+        const url = new URL('https://www.google.com/search');
+        url.searchParams.set('q', params.selectionText.trim());
+        shell.openExternal(url.toString());
+      },
+      visible: params.selectionText.trim().length > 0
+    },
+    { type: 'separator' },
+    {
+      label: 'Copy Image',
+      click: () => { content.copyImageAt(params.x, params.y); },
+      visible: params.mediaType === 'image'
+    },
+    {
+      label: 'Copy Image URL',
+      click: () => { clipboard.writeText(params.srcURL); },
+      visible: params.mediaType === 'image'
+    },
+    {
+      label: 'Heading1',
+      click: () => { content.insertText(toHeading(params.selectionText, 1)); },
+      visible: params.selectionText && !params.linkURL
+    },
+    {
+      label: 'Heading2',
+      click: () => { content.insertText(toHeading(params.selectionText, 2)); },
+      visible: params.selectionText && !params.linkURL
+    },
+    {
+      label: 'Heading3',
+      click: () => { content.insertText(toHeading(params.selectionText, 3)); },
+      visible: params.selectionText && !params.linkURL
+    },
+    {
+      label: 'Heading4',
+      click: () => { content.insertText(toHeading(params.selectionText, 4)); },
+      visible: params.selectionText && !params.linkURL
+    },
+    {
+      label: 'body',
+      click: () => { content.insertText(toBodyText(params.selectionText)); },
+      visible: params.selectionText && !params.linkURL
+    }
+  ];
+  return menuTemplete;
 }
 
 function goBack() {

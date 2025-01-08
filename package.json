@@ -15,7 +15,9 @@
     },
     "linux": {
       "icon": "icons/png/256x256.png",
-      "target": ["AppImage"]
+      "target": [
+        "AppImage"
+      ]
     }
   },
   "scripts": {
@@ -38,7 +40,6 @@
   },
   "dependencies": {
     "compare-versions": "^6.1.1",
-    "electron-context-menu": "^4.0.4",
     "electron-store": "^10.0.0"
   }
 }
