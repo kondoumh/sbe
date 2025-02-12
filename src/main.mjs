@@ -510,6 +510,11 @@ function buildContextMenu(params, content) {
       visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && sbUrl.isPage(params.linkURL)
     },
     {
+      label: 'Copy Link',
+      click: () => { clipboard.writeText(params.linkURL); },
+      visible: params.linkURL
+    },
+    {
       label: 'Info',
       click: () => {
         openPageInfoWindow(params.linkURL);
