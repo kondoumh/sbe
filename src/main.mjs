@@ -407,6 +407,39 @@ function prepareMenu() {
         },
         { type: 'separator' },
         {
+          label: 'Zoom in (+)',
+          accelerator: 'CmdOrCtrl+Plus',
+          click() {
+            const view = getTopView();
+            if (view) {
+              const level = view.webContents.getZoomLevel();
+              view.webContents.setZoomLevel(level + 1);
+            }
+          }
+        },
+        {
+          label: 'Zoom out (-)',
+          accelerator: 'CmdOrCtrl+-',
+          click() {
+            const view = getTopView();
+            if (view) {
+              const level = view.webContents.getZoomLevel();
+              view.webContents.setZoomLevel(level - 1);
+            }
+          }
+        },
+        {
+          label: 'Reset zoom',
+          accelerator: 'CmdOrCtrl+0',
+          click() {
+            const view = getTopView();
+            if (view) {
+              view.webContents.setZoomLevel(0);
+            }
+          }
+        },
+        { type: 'separator' },
+        {
           label: 'Show project activties',
           click() {
             openProjectInfoWindow();
