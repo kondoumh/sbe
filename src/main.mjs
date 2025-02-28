@@ -17,6 +17,15 @@ let loginUser;
 let updateInfo = new Map();
 let store;
 
+/**
+ * @enum {string}
+ */
+const Zoom = {
+  IN: "in",
+  OUT: "out",
+  RESET: "reset"
+}
+
 async function createWindow () {
   initializeStore();
   let {width, height, x, y} = store.get('bounds');
@@ -407,6 +416,28 @@ function prepareMenu() {
         },
         { type: 'separator' },
         {
+          label: 'Zoom in (+)',
+          accelerator: 'CmdOrCtrl+Plus',
+          click() {
+            adjustContentZoom(Zoom.IN);
+          }
+        },
+        {
+          label: 'Zoom out (-)',
+          accelerator: 'CmdOrCtrl+-',
+          click() {
+            adjustContentZoom(Zoom.OUT);
+          }
+        },
+        {
+          label: 'Reset zoom',
+          accelerator: 'CmdOrCtrl+0',
+          click() {
+            adjustContentZoom(Zoom.RESET);
+          }
+        },
+        { type: 'separator' },
+        {
           label: 'Show project activties',
           click() {
             openProjectInfoWindow();
@@ -617,12 +648,12 @@ function goBack() {
   const focused = BrowserWindow.getFocusedWindow();
   if (focused == mainWindow) {
     const view = getTopView();
-    if (view && view.webContents.canGoBack()) {
-      view.webContents.goBack();
+    if (view && view.webContents.navigationHistory.canGoBack()) {
+      view.webContents.navigationHistory.goBack();
     }
   } else {
-    if (focused.webContents.canGoBack()) {
-      focused.webContents.goBack();
+    if (focused.webContents.navigationHistory.canGoBack()) {
+      focused.webContents.navigationHistory.goBack();
     }
   }
 }
@@ -631,12 +662,12 @@ function goForward() {
   const focused = BrowserWindow.getFocusedWindow();
   if (focused == mainWindow) {
     const view = getTopView();
-    if (view && view.webContents.canGoForward()) {
-      view.webContents.goForward();
+    if (view && view.webContents.navigationHistory.canGoForward()) {
+      view.webContents.navigationHistory.goForward();
     }
   } else {
-    if (focused.webContents.canGoForward()) {
-      focused.webContents.goForward();
+    if (focused.webContents.navigationHistory.canGoForward()) {
+      focused.webContents.navigationHistory.goForward();
     }
   }
 }
@@ -668,6 +699,29 @@ async function pasteUrl() {
     mainWindow.webContents.send('parse-html', url, body);
   } else {
     showMessage("cannot extract response body.");
+  }
+}
+
+/**
+ * @param {string} zoom 
+ */
+function adjustContentZoom(zoom) {
+  const focused = BrowserWindow.getFocusedWindow();
+  let window;
+  if (focused == mainWindow) {
+    window = getTopView();
+  } else {
+    window = focused;
+  }
+  if (window) {
+    const level = window.webContents.getZoomLevel();
+    if (zoom === Zoom.IN) {
+      window.webContents.setZoomLevel(level + 0.5);
+    } else if (zoom === Zoom.OUT) {
+      window.webContents.setZoomLevel(level - 0.5);
+    } else if (zoom === Zoom.RESET) {
+      window.webContents.setZoomLevel(0);
+    }
   }
 }
 
