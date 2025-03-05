@@ -7,6 +7,7 @@
   "build": {
     "productName": "sbe",
     "appId": "sbe",
+    "asar": false,
     "mac": {
       "icon": "icons/mac/sbe.icns"
     },
