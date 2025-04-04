@@ -245,7 +245,7 @@ function updateProjects(projectName) {
 }
 
 async function openLink(url) {
-  if (sbUrl.inScrapbox(url)) {
+  if (sbUrl.isPage(url)) {
     await loadPage(url);
   } else {
     shell.openExternal(url);
@@ -517,6 +517,7 @@ function prepareMenu() {
 
 function prepareContextMenu(content) {
   content.on('context-menu', (e, params) => {
+    // console.log(params);
     const menuTemplate = buildContextMenu(params, content);
     const visibleItems = menuTemplate.filter(item => item.visible);
     const contextMenu = Menu.buildFromTemplate(visibleItems);
@@ -529,17 +530,17 @@ function buildContextMenu(params, content) {
     {
       label: 'Open',
       click: () => { openLink(params.linkURL); },
-      visible: params.linkURL && (params.mediaType === 'none' || params.mediaType === 'image')
+      visible: params.linkURL && sbUrl.isPage(params.linkURL)
     },
     {
       label: 'Open in background',
       click: () => { openLinkBackground(params.linkURL); },
-      visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && sbUrl.isPage(params.linkURL)
+      visible: params.linkURL && sbUrl.isPage(params.linkURL)
     },
     {
       label: 'Open in new window',
       click: () => { openNewWindow(params.linkURL); },
-      visible: params.linkURL && sbUrl.inScrapbox(params.linkURL) && sbUrl.isPage(params.linkURL)
+      visible: params.linkURL && sbUrl.isPage(params.linkURL)
     },
     {
       label: 'Copy Link',
@@ -615,6 +616,11 @@ function buildContextMenu(params, content) {
       label: 'Copy Image URL',
       click: () => { clipboard.writeText(params.srcURL); },
       visible: params.mediaType === 'image'
+    },
+    {
+      label: 'Download',
+      click: () => { content.downloadURL(params.linkURL); },
+      visible: params.mediaType === 'image' || sbUrl.isScrapboxFile(params.linkURL)
     },
     {
       label: 'Heading1',

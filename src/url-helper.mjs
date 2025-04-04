@@ -17,7 +17,24 @@ sbUrl.isPage = url => {
     return false;
   }
   const path = url.substring(sbUrl.BASE_URL.length).split(/\/|#/);
+  if (path.length < 2) {
+    return false;
+  }
+  if (['projects', 'files', 'settings', 'stream', 'api'].includes(path[0])) {
+    return false;
+  }
   return (path.length >= 2 && path[1] !== '');
+}
+
+sbUrl.isScrapboxFile = url => {
+  const path = url.substring(sbUrl.BASE_URL.length).split(/\/|#/);
+  if (path.length < 2) {
+    return false;
+  }
+  if (path[0] !== 'files') {
+    return false;
+  }
+  return (path[1] !== '');
 }
 
 sbUrl.takeProjectPage = url => {
@@ -31,11 +48,6 @@ sbUrl.takeProjectPage = url => {
 
   // If the user creates a page titled 'new', it will be'new_'
   if (path[1] === 'new') {
-    page = '';
-  }
-  // /product - about scrapbox
-  if (path[0] === 'product') {
-    project = '';
     page = '';
   }
   // /settings/profile etc
