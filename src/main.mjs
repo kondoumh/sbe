@@ -518,7 +518,8 @@ function prepareMenu() {
 function prepareContextMenu(content) {
   content.on('context-menu', (e, params) => {
     const menuTemplate = buildContextMenu(params, content);
-    const contextMenu = Menu.buildFromTemplate(menuTemplate);
+    const visibleItems = menuTemplate.filter(item => item.visible);
+    const contextMenu = Menu.buildFromTemplate(visibleItems);
     contextMenu.popup({ window: content });
   });
 }
