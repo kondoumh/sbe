@@ -198,13 +198,13 @@ function registerSearchAction(view) {
 
 function handleLinkEvent(view) {
   view.webContents.setWindowOpenHandler(({ url }) => {
-    openLink(url);
+    openLink(url, view.webContents);
     return { action: 'deny' };
   });
   view.webContents.on('will-navigate', (e, url) => {
     if (!sbUrl.isLoginLink(url) && !sbUrl.inScrapbox(view.webContents.getURL())) {
       e.preventDefault();
-      openLink(url);
+      openLink(url, view.webContents);
     }
   });
   view.webContents.on('did-start-navigation', async (e, url, isInPlace) => {
@@ -244,9 +244,13 @@ function updateProjects(projectName) {
   }
 }
 
-async function openLink(url) {
-  if (sbUrl.isPage(url)) {
+async function openLink(url, content) {
+  if (sbUrl.isPage(url) || sbUrl.isProjectTop(url)) {
     await loadPage(url);
+  } else if (sbUrl.isScrapboxFile(url)) {
+    if (content) {
+      content.downloadURL(url);
+    }
   } else {
     shell.openExternal(url);
   }
@@ -619,7 +623,13 @@ function buildContextMenu(params, content) {
     },
     {
       label: 'Download',
-      click: () => { content.downloadURL(params.linkURL); },
+      click: () => {
+        if (params.mediaType === 'image') {
+          content.downloadURL(params.srcURL);
+        } else if (params.mediaType === 'none' && sbUrl.isScrapboxFile(params.linkURL)) {
+          content.downloadURL(params.linkURL);
+        }
+      },
       visible: params.mediaType === 'image' || sbUrl.isScrapboxFile(params.linkURL)
     },
     {

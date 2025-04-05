@@ -26,6 +26,20 @@ sbUrl.isPage = url => {
   return (path.length >= 2 && path[1] !== '');
 }
 
+sbUrl.isProjectTop = url => {
+  if(!url.startsWith(sbUrl.BASE_URL)) {
+    return false;
+  };
+  const path = url.substring(sbUrl.BASE_URL.length).split(/\/|#/);
+  if (path.length < 1) {
+    return false;
+  }
+  if (['projects', 'files', 'settings', 'stream', 'api'].includes(path[0])) {
+    return false;
+  }
+  return path.length === 1;
+};
+
 sbUrl.isScrapboxFile = url => {
   const path = url.substring(sbUrl.BASE_URL.length).split(/\/|#/);
   if (path.length < 2) {
