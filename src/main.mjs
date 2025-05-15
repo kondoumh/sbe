@@ -17,15 +17,6 @@ let loginUser;
 let updateInfo = new Map();
 let store;
 
-/**
- * @enum {string}
- */
-const Zoom = {
-  IN: "in",
-  OUT: "out",
-  RESET: "reset"
-}
-
 async function createWindow () {
   initializeStore();
   let {width, height, x, y} = store.get('bounds');
@@ -422,23 +413,17 @@ function prepareMenu() {
         {
           label: 'Zoom in (+)',
           accelerator: 'CmdOrCtrl+Plus',
-          click() {
-            adjustContentZoom(Zoom.IN);
-          }
+          role: 'zoomIn',
         },
         {
           label: 'Zoom out (-)',
           accelerator: 'CmdOrCtrl+-',
-          click() {
-            adjustContentZoom(Zoom.OUT);
-          }
+          role: 'zoomOut',
         },
         {
           label: 'Reset zoom',
           accelerator: 'CmdOrCtrl+0',
-          click() {
-            adjustContentZoom(Zoom.RESET);
-          }
+          role: 'resetZoom',
         },
         { type: 'separator' },
         {
@@ -525,7 +510,11 @@ function prepareContextMenu(content) {
     const menuTemplate = buildContextMenu(params, content);
     const visibleItems = menuTemplate.filter(item => item.visible);
     const contextMenu = Menu.buildFromTemplate(visibleItems);
-    contextMenu.popup({ window: content });
+    if (content.focusedFrame) {
+      contextMenu.popup({ window: content, frame: content.focusedFrame });
+    } else {
+      contextMenu.popup({ window: content });
+    }
   });
 }
 
@@ -602,7 +591,7 @@ function buildContextMenu(params, content) {
     },
     { type: 'separator' },
     {
-      label: `Search Google for '${params.selectionText.trim()}'`,
+      label: `Search Google for '${shortenString(params.selectionText.trim(), 20)}'`,
       click: () => {
         const url = new URL('https://www.google.com/search');
         url.searchParams.set('q', params.selectionText.trim());
@@ -720,26 +709,17 @@ async function pasteUrl() {
 }
 
 /**
- * @param {string} zoom 
+ * Shorten string to specified length
+ * 
+ * @param {string} str target string
+ * @param {number} len length
+ * @returns {string} Shortened string
  */
-function adjustContentZoom(zoom) {
-  const focused = BrowserWindow.getFocusedWindow();
-  let window;
-  if (focused == mainWindow) {
-    window = getTopView();
-  } else {
-    window = focused;
+function shortenString(str, len) {
+  if (str.length > len) {
+    return str.substring(0, len) + '...';
   }
-  if (window) {
-    const level = window.webContents.getZoomLevel();
-    if (zoom === Zoom.IN) {
-      window.webContents.setZoomLevel(level + 0.5);
-    } else if (zoom === Zoom.OUT) {
-      window.webContents.setZoomLevel(level - 0.5);
-    } else if (zoom === Zoom.RESET) {
-      window.webContents.setZoomLevel(0);
-    }
-  }
+  return str;
 }
 
 app.whenReady().then(() => {
