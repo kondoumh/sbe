@@ -510,7 +510,11 @@ function prepareContextMenu(content) {
     const menuTemplate = buildContextMenu(params, content);
     const visibleItems = menuTemplate.filter(item => item.visible);
     const contextMenu = Menu.buildFromTemplate(visibleItems);
-    contextMenu.popup({ window: content, frame: content.focusedFrame });
+    if (content.focusedFrame) {
+      contextMenu.popup({ window: content, frame: content.focusedFrame });
+    } else {
+      contentMenu.popup({ window: content });
+    }
   });
 }
 
