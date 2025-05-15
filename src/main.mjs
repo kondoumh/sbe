@@ -525,7 +525,7 @@ function prepareContextMenu(content) {
     const menuTemplate = buildContextMenu(params, content);
     const visibleItems = menuTemplate.filter(item => item.visible);
     const contextMenu = Menu.buildFromTemplate(visibleItems);
-    contextMenu.popup({ window: content });
+    contextMenu.popup({ window: content, frame: content.focusedFrame });
   });
 }
 
@@ -602,7 +602,7 @@ function buildContextMenu(params, content) {
     },
     { type: 'separator' },
     {
-      label: `Search Google for '${params.selectionText.trim()}'`,
+      label: `Search Google for '${shortenString(params.selectionText.trim(), 20)}'`,
       click: () => {
         const url = new URL('https://www.google.com/search');
         url.searchParams.set('q', params.selectionText.trim());
@@ -740,6 +740,13 @@ function adjustContentZoom(zoom) {
       window.webContents.setZoomLevel(0);
     }
   }
+}
+
+function shortenString(str, len) {
+  if (str.length > len) {
+    return str.substring(0, len) + '...';
+  }
+  return str;
 }
 
 app.whenReady().then(() => {
