@@ -742,6 +742,13 @@ function adjustContentZoom(zoom) {
   }
 }
 
+/**
+ * Shorten string to specified length
+ * 
+ * @param {string} str target string
+ * @param {number} len length
+ * @returns Shortened string
+ */
 function shortenString(str, len) {
   if (str.length > len) {
     return str.substring(0, len) + '...';
