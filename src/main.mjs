@@ -713,7 +713,7 @@ async function pasteUrl() {
  * 
  * @param {string} str target string
  * @param {number} len length
- * @returns Shortened string
+ * @returns {string} Shortened string
  */
 function shortenString(str, len) {
   if (str.length > len) {
