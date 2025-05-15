@@ -513,7 +513,7 @@ function prepareContextMenu(content) {
     if (content.focusedFrame) {
       contextMenu.popup({ window: content, frame: content.focusedFrame });
     } else {
-      contentMenu.popup({ window: content });
+      contextMenu.popup({ window: content });
     }
   });
 }
