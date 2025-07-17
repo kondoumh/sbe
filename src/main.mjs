@@ -17,6 +17,15 @@ let loginUser;
 let updateInfo = new Map();
 let store;
 
+/**
+ * @enum {string}
+ */
+const Zoom = {
+  IN: "in",
+  OUT: "out",
+  RESET: "reset"
+}
+
 async function createWindow () {
   initializeStore();
   let {width, height, x, y} = store.get('bounds');
@@ -413,17 +422,23 @@ function prepareMenu() {
         {
           label: 'Zoom in (+)',
           accelerator: 'CmdOrCtrl+Plus',
-          role: 'zoomIn',
+          click() {
+            adjustContentZoom(Zoom.IN);
+          }
         },
         {
           label: 'Zoom out (-)',
           accelerator: 'CmdOrCtrl+-',
-          role: 'zoomOut',
+          click() {
+            adjustContentZoom(Zoom.OUT);
+          }
         },
         {
           label: 'Reset zoom',
           accelerator: 'CmdOrCtrl+0',
-          role: 'resetZoom',
+          click() {
+            adjustContentZoom(Zoom.RESET);
+          }
         },
         { type: 'separator' },
         {
@@ -705,6 +720,29 @@ async function pasteUrl() {
     mainWindow.webContents.send('parse-html', url, body);
   } else {
     showMessage("cannot extract response body.");
+  }
+}
+
+/**
+ * @param {string} zoom 
+ */
+function adjustContentZoom(zoom) {
+  const focused = BrowserWindow.getFocusedWindow();
+  let window;
+  if (focused == mainWindow) {
+    window = getTopView();
+  } else {
+    window = focused;
+  }
+  if (window) {
+    const level = window.webContents.getZoomLevel();
+    if (zoom === Zoom.IN) {
+      window.webContents.setZoomLevel(level + 0.5);
+    } else if (zoom === Zoom.OUT) {
+      window.webContents.setZoomLevel(level - 0.5);
+    } else if (zoom === Zoom.RESET) {
+      window.webContents.setZoomLevel(0);
+    }
   }
 }
 
