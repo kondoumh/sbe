@@ -9,7 +9,7 @@ const app = createApp({
     setTheme();
   },
   async mounted () {
-    window.api.on('browser-window-fucus', this.onFocus);
+    window.api.on('browser-window-focus', this.onFocus);
     window.api.on('browser-window-blur', this.onFocus);
     const info = await window.api.getVersionInfo();
     this.title = 'Scrapbox in Electron';

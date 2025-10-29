@@ -769,8 +769,8 @@ app.whenReady().then(() => {
 
   app.on('browser-window-focus', () => {
     if (!mainWindow.isDestroyed()) {
-      mainWindow.webContents.send('browser-window-fucus');
-      sendMessageToViews('browser-window-fucus');
+      mainWindow.webContents.send('browser-window-focus');
+      sendMessageToViews('browser-window-focus');
     }
   });
 

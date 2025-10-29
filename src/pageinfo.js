@@ -9,7 +9,7 @@ const app = createApp({
     setTheme();
   },
   async mounted () {
-    window.infoApi.on('browser-window-fucus', this.onFocus);
+    window.infoApi.on('browser-window-focus', this.onFocus);
     window.infoApi.on('browser-window-blur', this.onFocus);
     window.infoApi.on('get-page-info', async (e, pageApi, url) => await this.showInfo(pageApi, url));
   },
