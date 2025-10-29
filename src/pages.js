@@ -9,7 +9,7 @@ const app = createApp({
     setTheme();
   },
   async mounted () {
-    window.pagesApi.on('browser-window-fucus', this.onFocus);
+    window.pagesApi.on('browser-window-focus', this.onFocus);
     window.pagesApi.on('browser-window-blur', this.onFocus);
     window.pagesApi.on('bring-to-top', this.onFocus);
     await this.onFocus();

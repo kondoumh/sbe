@@ -28,7 +28,7 @@ const app = createApp({
     window.api.on('show-message', (e, message) => {
       this.message = message;
     }),
-    window.api.on('browser-window-fucus', () => {
+    window.api.on('browser-window-focus', () => {
       setTheme();
     }),
     window.api.on('browser-window-blur', () => {

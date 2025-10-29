@@ -9,7 +9,7 @@ const app = createApp({
     setTheme();
   },
   async mounted () {
-    window.api.on('browser-window-fucus', this.onFocus);
+    window.api.on('browser-window-focus', this.onFocus);
     window.api.on('browser-window-blur', this.onFocus);
     this.projectName = await window.api.activeProject();
     await this.showProjectInfo();
