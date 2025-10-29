@@ -21,6 +21,10 @@ const app = createApp({
     this.platform = info.platform;
     this.arch = info.arch;
   },
+  beforeUnmount () {
+    window.api.off('browser-window-focus', this.onFocus);
+    window.api.off('browser-window-blur', this.onFocus);
+  },
   methods: {
     onFocus () {
       setTheme();

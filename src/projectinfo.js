@@ -15,6 +15,10 @@ const app = createApp({
     await this.showProjectInfo();
     this.date = formatDate();
   },
+  beforeUnmount () {
+    window.api.off('browser-window-focus', this.onFocus);
+    window.api.off('browser-window-blur', this.onFocus);
+  },
   methods: {
     onFocus () {
       setTheme();

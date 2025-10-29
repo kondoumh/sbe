@@ -14,6 +14,11 @@ const app = createApp({
     window.api.on('bring-to-top', this.onFocus);
     await this.onFocus();
   },
+  beforeUnmount () {
+    window.api.off('browser-window-focus', this.onFocus);
+    window.api.off('browser-window-blur', this.onFocus);
+    window.api.off('bring-to-top', this.onFocus);
+  },
   methods: {
     async onFocus () {
       this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches

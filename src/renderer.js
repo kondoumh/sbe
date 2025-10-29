@@ -9,44 +9,67 @@ const app = createApp({
     setTheme();
   },
   async mounted () {
-    window.api.on('add-page', (e, contentId, title, activate, icon) => {
+    this.addPageHandler = (e, contentId, title, activate, icon) => {
       const item = { title: title, contentId: contentId, icon: icon };
       this.items.push(item);
       if (activate) {
         this.tab = this.items.length - 1;
       }
-    }),
-    window.api.on('navigation-finished', (e, title, contentId) => {
+    };
+    this.navigationFinishedHandler = (e, title, contentId) => {
       const item = this.items.find(item => item.contentId === contentId);
       item.title = title;
-    }),
-    window.api.on('parse-html', (e, url, body) => {
+    };
+    this.parseHtmlHandler = (e, url, body) => {
       const doc = new DOMParser().parseFromString(body, 'text/html');
       const title = doc.title ? doc.title : 'no title'
       window.api.sendTitle(url, title);
-    }),
-    window.api.on('show-message', (e, message) => {
+    };
+    this.showMessageHandler = (e, message) => {
       this.message = message;
-    }),
-    window.api.on('browser-window-focus', () => {
+    };
+    this.browserWindowFocusHandler = () => {
       setTheme();
-    }),
-    window.api.on('browser-window-blur', () => {
+    };
+    this.browserWindowBlurHandler = () => {
       setTheme();
-    }),
-    window.api.on('close-current-tab', () => {
+    };
+    this.closeCurrentTabHandler = () => {
       this.closePage();
-    }),
-    window.api.on('bring-to-top', (e, contentId) => {
+    };
+    this.bringToTopHandler = (e, contentId) => {
       const idx = this.items.findIndex(item => item.contentId === contentId);
       this.tab = idx;
-    }),
-    window.api.on('query-title', (e, title) => {
+    };
+    this.queryTitleHandler = (e, title) => {
       this.selectByTitle(title);
-    }),
-    window.api.on('focus-search-text', () => {
+    };
+    this.focusSearchTextHandler = () => {
       this.fucusSearchText();
-    })
+    };
+
+    window.api.on('add-page', this.addPageHandler);
+    window.api.on('navigation-finished', this.navigationFinishedHandler);
+    window.api.on('parse-html', this.parseHtmlHandler);
+    window.api.on('show-message', this.showMessageHandler);
+    window.api.on('browser-window-focus', this.browserWindowFocusHandler);
+    window.api.on('browser-window-blur', this.browserWindowBlurHandler);
+    window.api.on('close-current-tab', this.closeCurrentTabHandler);
+    window.api.on('bring-to-top', this.bringToTopHandler);
+    window.api.on('query-title', this.queryTitleHandler);
+    window.api.on('focus-search-text', this.focusSearchTextHandler);
+  },
+  beforeUnmount () {
+    window.api.off('add-page', this.addPageHandler);
+    window.api.off('navigation-finished', this.navigationFinishedHandler);
+    window.api.off('parse-html', this.parseHtmlHandler);
+    window.api.off('show-message', this.showMessageHandler);
+    window.api.off('browser-window-focus', this.browserWindowFocusHandler);
+    window.api.off('browser-window-blur', this.browserWindowBlurHandler);
+    window.api.off('close-current-tab', this.closeCurrentTabHandler);
+    window.api.off('bring-to-top', this.bringToTopHandler);
+    window.api.off('query-title', this.queryTitleHandler);
+    window.api.off('focus-search-text', this.focusSearchTextHandler);
   },
   data: () => ({
     searchText: '',
