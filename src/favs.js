@@ -9,14 +9,17 @@ const app = createApp({
     setTheme();
   },
   async mounted () {
+    window.favsApi.on('theme-updated', this.onUpdateTheme);
     window.favsApi.on('browser-window-focus', this.onFocus);
     window.favsApi.on('browser-window-blur', this.onFocus);
     window.favsApi.on('bring-to-top', this.onFocus);
     await this.onFocus();
   },
   methods: {
-    async onFocus () {
+    onUpdateTheme () {
       setTheme();
+    },
+    async onFocus () {
       const favs = await window.favsApi.getFavs();
       this.items = favs;
     },

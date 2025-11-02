@@ -1,4 +1,4 @@
-import { app, screen, BrowserWindow, BrowserView, ipcMain, session, Menu, clipboard, shell, Notification } from 'electron';
+import { app, screen, BrowserWindow, BrowserView, ipcMain, session, Menu, clipboard, shell, Notification, nativeTheme } from 'electron';
 import { fileURLToPath } from 'node:url';
 import { compareVersions } from 'compare-versions';
 import Store from 'electron-store';
@@ -46,6 +46,10 @@ async function createWindow () {
     width: width, height: height, x: x, y: y
   });
   mainWindow.setBounds({x: x, y: y, width: width, height: height});
+
+  nativeTheme.themeSource = 'system';
+  nativeTheme.on('updated', sendTheme);
+  mainWindow.on('ready-to-show', () => sendTheme());
 
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
   prepareMenu();
@@ -663,6 +667,11 @@ function buildContextMenu(params, content) {
     }
   ];
   return menuTemplete;
+}
+
+function sendTheme() {
+  mainWindow.webContents.send('theme-updated');
+  sendMessageToViews('theme-updated');
 }
 
 function goBack() {

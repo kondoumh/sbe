@@ -9,14 +9,17 @@ const app = createApp({
     setTheme();
   },
   async mounted () {
+    window.api.on('theme-updated', this.onUpdateTheme);
     window.api.on('browser-window-focus', this.onFocus);
     window.api.on('browser-window-blur', this.onFocus);
     window.api.on('bring-to-top', this.onFocus);
     await this.onFocus();
   },
   methods: {
+    onUpdateTheme () {
+      setTheme();
+    },
     async onFocus () {
-      this.$vuetify.theme.dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
       const history = await window.api.getHistory();
       this.items = history;
     },

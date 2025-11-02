@@ -9,8 +9,7 @@ const app = createApp({
     setTheme();
   },
   async mounted () {
-    window.api.on('browser-window-focus', this.onFocus);
-    window.api.on('browser-window-blur', this.onFocus);
+    window.api.on('theme-updated', this.onUpdateTheme);
     const info = await window.api.getVersionInfo();
     this.title = 'Scrapbox in Electron';
     this.image = '../icons/png/256x256.png';
@@ -22,7 +21,7 @@ const app = createApp({
     this.arch = info.arch;
   },
   methods: {
-    onFocus () {
+    onUpdateTheme () {
       setTheme();
     },
     close () {

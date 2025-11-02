@@ -9,14 +9,13 @@ const app = createApp({
     setTheme();
   },
   async mounted () {
-    window.api.on('browser-window-focus', this.onFocus);
-    window.api.on('browser-window-blur', this.onFocus);
+    window.api.on('theme-updated', this.onFocus);
     this.projectName = await window.api.activeProject();
     await this.showProjectInfo();
     this.date = formatDate();
   },
   methods: {
-    onFocus () {
+    onUpdateTheme () {
       setTheme();
     },
     close () {
