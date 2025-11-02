@@ -9,6 +9,7 @@ const app = createApp({
     setTheme();
   },
   async mounted () {
+    window.pagesApi.on('theme-updated', this.onUpdateTheme);
     window.pagesApi.on('browser-window-focus', this.onFocus);
     window.pagesApi.on('browser-window-blur', this.onFocus);
     window.pagesApi.on('bring-to-top', this.onFocus);
@@ -40,8 +41,10 @@ const app = createApp({
     formattedDate (timestamp) {
       return formatDate(timestamp);
     },
-    async onFocus () {
+    onUpdateTheme () {
       setTheme();
+    },
+    async onFocus () {
       await this.setProjects();
       await this.setProjectName();
       await this.fetchData({});

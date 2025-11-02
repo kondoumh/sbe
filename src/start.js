@@ -9,14 +9,17 @@ const app = createApp({
     setTheme();
   },
   async mounted () {
+    window.api.on('theme-updated', this.onUpdateTheme);
     window.api.on('browser-window-focus', this.onFocus);
     window.api.on('browser-window-blur', this.onFocus);
     window.api.on('bring-to-top', this.onFocus);
     await this.onFocus();
   },
   methods: {
-    async onFocus () {
+    onUpdateTheme () {
       setTheme();
+    },
+    async onFocus () {
       const user = await window.api.getUser();
       if (user) {
         this.user = user;
