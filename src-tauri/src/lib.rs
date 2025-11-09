@@ -10,6 +10,7 @@ struct FavItem {
 // IPC Command: Get favorites (PoC example)
 #[tauri::command]
 fn get_favs() -> Vec<FavItem> {
+    println!("get_favs called");
     // In real implementation, this would read from storage
     // For PoC, return mock data
     vec![
@@ -29,6 +30,7 @@ fn get_favs() -> Vec<FavItem> {
 // IPC Command: Open new window with URL
 #[tauri::command]
 async fn open_new_window(app: tauri::AppHandle, url: String, title: String) -> Result<(), String> {
+    println!("open_new_window called with url: {}, title: {}", url, title);
     use tauri::WebviewWindowBuilder;
     
     let window_label = format!("window_{}", chrono::Utc::now().timestamp_millis());

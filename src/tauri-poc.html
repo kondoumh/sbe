@@ -72,8 +72,20 @@
     .status.show {
       display: block;
     }
+    .status.error {
+      background: #ffebee;
+      color: #c62828;
+    }
     .section {
       margin-bottom: 30px;
+    }
+    .debug {
+      margin-top: 20px;
+      padding: 10px;
+      background: #f5f5f5;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
     }
   </style>
 </head>
@@ -96,77 +108,130 @@
     </div>
 
     <div class="status" id="status"></div>
+    <div class="debug" id="debug">Initializing...</div>
   </div>
 
   <script type="module">
-    import { invoke } from '@tauri-apps/api/core';
-
+    const debugEl = document.getElementById('debug');
     const statusEl = document.getElementById('status');
-
-    function showStatus(message) {
-      statusEl.textContent = message;
-      statusEl.classList.add('show');
-      setTimeout(() => statusEl.classList.remove('show'), 3000);
+    
+    function debug(message) {
+      console.log(message);
+      debugEl.textContent = message;
     }
 
-    // Multi-window: Open Scrapbox
-    document.getElementById('openScrapbox').addEventListener('click', async () => {
-      try {
-        await invoke('open_new_window', {
-          url: 'https://scrapbox.io',
-          title: 'Scrapbox'
-        });
-        showStatus('✓ Opened Scrapbox in new window');
-      } catch (error) {
-        showStatus('✗ Error: ' + error);
+    function showStatus(message, isError = false) {
+      console.log('Status:', message);
+      statusEl.textContent = message;
+      statusEl.classList.add('show');
+      if (isError) {
+        statusEl.classList.add('error');
+      } else {
+        statusEl.classList.remove('error');
       }
-    });
+      setTimeout(() => {
+        statusEl.classList.remove('show');
+      }, 3000);
+    }
 
-    // Multi-window: Open Help-JP
-    document.getElementById('openHelpJp').addEventListener('click', async () => {
+    debug('Checking Tauri environment...');
+
+    // Check if running in Tauri
+    if (!window.__TAURI__) {
+      debug('ERROR: Not running in Tauri! window.__TAURI__ is undefined');
+      showStatus('❌ Not running in Tauri environment', true);
+    } else {
+      debug('✓ Tauri environment detected');
+    }
+
+    try {
+      const { invoke } = await import('https://cdn.jsdelivr.net/npm/@tauri-apps/api@2/core');
+      debug('✓ Tauri API loaded from CDN');
+
+      // Test invoke immediately
       try {
-        await invoke('open_new_window', {
-          url: 'https://scrapbox.io/help-jp',
-          title: 'Scrapbox Help'
-        });
-        showStatus('✓ Opened Help-JP in new window');
-      } catch (error) {
-        showStatus('✗ Error: ' + error);
+        debug('Testing get_favs command...');
+        const testFavs = await invoke('get_favs');
+        debug(`✓ get_favs works! Got ${testFavs.length} items`);
+        showStatus('✓ Tauri IPC is working!');
+      } catch (err) {
+        debug('✗ get_favs failed: ' + err);
+        showStatus('❌ IPC test failed: ' + err, true);
       }
-    });
 
-    // IPC Command: Load favorites
-    document.getElementById('loadFavs').addEventListener('click', async () => {
-      try {
-        const favs = await invoke('get_favs');
-        const favsListEl = document.getElementById('favsList');
-        
-        favsListEl.innerHTML = favs.map(fav => `
-          <div class="fav-item" data-url="${fav.url}">
-            <div class="project">${fav.project}</div>
-            <div class="page">${fav.page}</div>
-          </div>
-        `).join('');
-
-        // Add click handlers to open in new window
-        document.querySelectorAll('.fav-item').forEach(item => {
-          item.addEventListener('click', async () => {
-            const url = item.dataset.url;
-            const title = item.querySelector('.page').textContent;
-            try {
-              await invoke('open_new_window', { url, title });
-              showStatus(`✓ Opened "${title}" in new window`);
-            } catch (error) {
-              showStatus('✗ Error: ' + error);
-            }
+      // Multi-window: Open Scrapbox
+      document.getElementById('openScrapbox').addEventListener('click', async () => {
+        debug('Opening Scrapbox...');
+        try {
+          await invoke('open_new_window', {
+            url: 'https://scrapbox.io',
+            title: 'Scrapbox'
           });
-        });
+          showStatus('✓ Opened Scrapbox in new window');
+        } catch (error) {
+          debug('Error: ' + error);
+          showStatus('✗ Error: ' + error, true);
+        }
+      });
 
-        showStatus(`✓ Loaded ${favs.length} favorites`);
-      } catch (error) {
-        showStatus('✗ Error: ' + error);
-      }
-    });
+      // Multi-window: Open Help-JP
+      document.getElementById('openHelpJp').addEventListener('click', async () => {
+        debug('Opening Help-JP...');
+        try {
+          await invoke('open_new_window', {
+            url: 'https://scrapbox.io/help-jp',
+            title: 'Scrapbox Help'
+          });
+          showStatus('✓ Opened Help-JP in new window');
+        } catch (error) {
+          debug('Error: ' + error);
+          showStatus('✗ Error: ' + error, true);
+        }
+      });
+
+      // IPC Command: Load favorites
+      document.getElementById('loadFavs').addEventListener('click', async () => {
+        debug('Loading favorites...');
+        try {
+          const favs = await invoke('get_favs');
+          debug(`Received ${favs.length} favorites`);
+          const favsListEl = document.getElementById('favsList');
+          
+          favsListEl.innerHTML = favs.map(fav => `
+            <div class="fav-item" data-url="${fav.url}">
+              <div class="project">${fav.project}</div>
+              <div class="page">${fav.page}</div>
+            </div>
+          `).join('');
+
+          // Add click handlers to open in new window
+          document.querySelectorAll('.fav-item').forEach(item => {
+            item.addEventListener('click', async () => {
+              const url = item.dataset.url;
+              const title = item.querySelector('.page').textContent;
+              debug(`Opening favorite: ${title}`);
+              try {
+                await invoke('open_new_window', { url, title });
+                showStatus(`✓ Opened "${title}" in new window`);
+              } catch (error) {
+                debug('Error: ' + error);
+                showStatus('✗ Error: ' + error, true);
+              }
+            });
+          });
+
+          showStatus(`✓ Loaded ${favs.length} favorites`);
+        } catch (error) {
+          debug('Error loading favs: ' + error);
+          showStatus('✗ Error: ' + error, true);
+        }
+      });
+
+      debug('✓ All ready - click buttons to test');
+    } catch (error) {
+      debug('Failed to load Tauri API: ' + error);
+      showStatus('❌ Failed to load Tauri API: ' + error, true);
+    }
   </script>
 </body>
 </html>
