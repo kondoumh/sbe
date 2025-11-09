@@ -142,22 +142,21 @@
       showStatus('❌ Not running in Tauri environment', true);
     } else {
       debug('✓ Tauri environment detected');
-    }
-
-    try {
-      const { invoke } = await import('https://cdn.jsdelivr.net/npm/@tauri-apps/api@2/core');
-      debug('✓ Tauri API loaded from CDN');
+      
+      // Use the global __TAURI__ API directly
+      const invoke = window.__TAURI__.core.invoke;
+      debug('✓ Using global Tauri API');
 
       // Test invoke immediately
-      try {
-        debug('Testing get_favs command...');
-        const testFavs = await invoke('get_favs');
-        debug(`✓ get_favs works! Got ${testFavs.length} items`);
-        showStatus('✓ Tauri IPC is working!');
-      } catch (err) {
-        debug('✗ get_favs failed: ' + err);
-        showStatus('❌ IPC test failed: ' + err, true);
-      }
+      invoke('get_favs')
+        .then(testFavs => {
+          debug(`✓ get_favs works! Got ${testFavs.length} items`);
+          showStatus('✓ Tauri IPC is working!');
+        })
+        .catch(err => {
+          debug('✗ get_favs failed: ' + err);
+          showStatus('❌ IPC test failed: ' + err, true);
+        });
 
       // Multi-window: Open Scrapbox
       document.getElementById('openScrapbox').addEventListener('click', async () => {
@@ -228,9 +227,6 @@
       });
 
       debug('✓ All ready - click buttons to test');
-    } catch (error) {
-      debug('Failed to load Tauri API: ' + error);
-      showStatus('❌ Failed to load Tauri API: ' + error, true);
     }
   </script>
 </body>
