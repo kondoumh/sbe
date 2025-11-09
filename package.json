@@ -24,7 +24,10 @@
     "start": "electron .",
     "test": "playwright test",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "tauri": "cargo tauri",
+    "tauri:dev": "cargo tauri dev",
+    "tauri:build": "cargo tauri build"
   },
   "repository": "https://github.com/kondoumh/sbe",
   "keywords": [
@@ -35,10 +38,12 @@
   "license": "MIT",
   "devDependencies": {
     "@playwright/test": "^1.56.1",
+    "@tauri-apps/cli": "^2.9.3",
     "electron": "^39.1.1",
     "electron-builder": "^26.0.12"
   },
   "dependencies": {
+    "@tauri-apps/api": "^2.9.0",
     "compare-versions": "^6.1.1",
     "electron-store": "^11.0.2"
   }
