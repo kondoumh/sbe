@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tauri Tab UI Demo</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    .app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      background: #f5f5f5;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .nav-button {
+      padding: 6px 12px;
+      border: 1px solid #ccc;
+      background: white;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .nav-button:hover {
+      background: #e8e8e8;
+    }
+
+    .nav-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .search-box {
+      flex: 1;
+      padding: 6px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .tab-bar {
+      display: flex;
+      background: #e8e8e8;
+      border-bottom: 1px solid #ccc;
+      padding: 4px 4px 0 4px;
+      gap: 2px;
+      overflow-x: auto;
+    }
+
+    .tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #d0d0d0;
+      border: 1px solid #bbb;
+      border-bottom: none;
+      border-radius: 6px 6px 0 0;
+      cursor: pointer;
+      min-width: 120px;
+      max-width: 200px;
+      position: relative;
+      transition: background 0.2s;
+    }
+
+    .tab:hover {
+      background: #c0c0c0;
+    }
+
+    .tab.active {
+      background: white;
+      border-color: #ccc;
+    }
+
+    .tab-icon {
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .tab-title {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 13px;
+    }
+
+    .tab-close {
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 0 4px;
+      color: #666;
+      flex-shrink: 0;
+    }
+
+    .tab-close:hover {
+      color: #000;
+      background: rgba(0,0,0,0.1);
+      border-radius: 3px;
+    }
+
+    .new-tab {
+      padding: 8px 16px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      color: #666;
+    }
+
+    .new-tab:hover {
+      background: rgba(0,0,0,0.1);
+      border-radius: 4px;
+    }
+
+    .content-area {
+      flex: 1;
+      position: relative;
+      background: white;
+    }
+
+    .tab-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #666;
+    }
+
+    .favorites-panel {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .fav-item {
+      padding: 12px;
+      margin: 8px 0;
+      background: #f9f9f9;
+      border-left: 3px solid #0066cc;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .fav-item:hover {
+      background: #e8f0fe;
+    }
+
+    .fav-item .project {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+
+    .fav-item .page {
+      font-size: 16px;
+      color: #333;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="app">
+      <!-- ツールバー -->
+      <div class="toolbar">
+        <button class="nav-button" @click="goBack" :disabled="!canGoBack">←</button>
+        <button class="nav-button" @click="goForward" :disabled="!canGoForward">→</button>
+        <button class="nav-button" @click="reload">⟳</button>
+        <input 
+          type="text" 
+          class="search-box" 
+          placeholder="Search or enter URL..."
+          v-model="searchText"
+          @keyup.enter="navigateToUrl"
+        />
+        <button class="nav-button" @click="showFavorites">⭐</button>
+      </div>
+
+      <!-- タブバー -->
+      <div class="tab-bar">
+        <div 
+          v-for="tab in tabs" 
+          :key="tab.id"
+          :class="['tab', { active: tab.id === activeTabId }]"
+          @click="selectTab(tab.id)"
+        >
+          <span class="tab-icon">{{ tab.icon }}</span>
+          <span class="tab-title">{{ tab.title }}</span>
+          <button 
+            v-if="tabs.length > 1"
+            @click.stop="closeTab(tab.id)" 
+            class="tab-close"
+          >×</button>
+        </div>
+        <button @click="addNewTab" class="new-tab">+</button>
+      </div>
+
+      <!-- コンテンツエリア -->
+      <div class="content-area">
+        <!-- お気に入りパネル -->
+        <div v-if="showingFavorites" class="favorites-panel">
+          <h2>⭐ Favorites</h2>
+          <div 
+            v-for="fav in favorites" 
+            :key="fav.url"
+            class="fav-item"
+            @click="openFavorite(fav)"
+          >
+            <div class="project">{{ fav.project }}</div>
+            <div class="page">{{ fav.page }}</div>
+          </div>
+        </div>
+
+        <!-- iframeタブ -->
+        <iframe 
+          v-for="tab in tabs"
+          v-show="tab.id === activeTabId && !showingFavorites"
+          :key="tab.id"
+          :src="tab.url"
+          class="tab-content"
+          @load="onTabLoad(tab)"
+        />
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    const { createApp } = Vue;
+    
+    createApp({
+      data() {
+        return {
+          tabs: [
+            { 
+              id: 1, 
+              title: 'Scrapbox', 
+              url: 'https://scrapbox.io',
+              icon: '📋',
+              canGoBack: false,
+              canGoForward: false
+            }
+          ],
+          activeTabId: 1,
+          nextTabId: 2,
+          searchText: '',
+          showingFavorites: false,
+          favorites: [
+            {
+              project: 'help-jp',
+              page: 'Scrapboxへようこそ',
+              url: 'https://scrapbox.io/help-jp/Scrapboxへようこそ'
+            },
+            {
+              project: 'help-jp',
+              page: '便利な記法',
+              url: 'https://scrapbox.io/help-jp/便利な記法'
+            },
+            {
+              project: 'help-jp',
+              page: 'ページ編集',
+              url: 'https://scrapbox.io/help-jp/ページ編集'
+            }
+          ]
+        };
+      },
+      computed: {
+        activeTab() {
+          return this.tabs.find(t => t.id === this.activeTabId);
+        },
+        canGoBack() {
+          return this.activeTab?.canGoBack || false;
+        },
+        canGoForward() {
+          return this.activeTab?.canGoForward || false;
+        }
+      },
+      methods: {
+        selectTab(id) {
+          this.activeTabId = id;
+          this.showingFavorites = false;
+          const tab = this.tabs.find(t => t.id === id);
+          if (tab) {
+            this.searchText = tab.url;
+          }
+        },
+        closeTab(id) {
+          const index = this.tabs.findIndex(t => t.id === id);
+          this.tabs.splice(index, 1);
+          
+          if (this.activeTabId === id && this.tabs.length > 0) {
+            this.activeTabId = this.tabs[Math.max(0, index - 1)].id;
+          }
+        },
+        addNewTab() {
+          const newTab = {
+            id: this.nextTabId++,
+            title: 'New Tab',
+            url: 'https://scrapbox.io',
+            icon: '📄',
+            canGoBack: false,
+            canGoForward: false
+          };
+          this.tabs.push(newTab);
+          this.activeTabId = newTab.id;
+          this.showingFavorites = false;
+        },
+        navigateToUrl() {
+          let url = this.searchText;
+          
+          // 簡易的なURL補完
+          if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            url = 'https://' + url;
+          }
+          
+          if (this.activeTab) {
+            this.activeTab.url = url;
+            this.activeTab.title = 'Loading...';
+          }
+          this.showingFavorites = false;
+        },
+        onTabLoad(tab) {
+          // iframe のタイトルを取得できれば更新
+          // (CORS制限により実際には難しい)
+          setTimeout(() => {
+            if (tab.title === 'Loading...') {
+              tab.title = new URL(tab.url).hostname;
+            }
+          }, 500);
+        },
+        goBack() {
+          // 実際の実装では iframe の history.back() を呼ぶ
+          console.log('Go back');
+        },
+        goForward() {
+          // 実際の実装では iframe の history.forward() を呼ぶ
+          console.log('Go forward');
+        },
+        reload() {
+          if (this.activeTab) {
+            // URLを再設定してリロード
+            const currentUrl = this.activeTab.url;
+            this.activeTab.url = '';
+            this.$nextTick(() => {
+              this.activeTab.url = currentUrl;
+            });
+          }
+        },
+        showFavorites() {
+          this.showingFavorites = !this.showingFavorites;
+        },
+        openFavorite(fav) {
+          const existingTab = this.tabs.find(t => t.url === fav.url);
+          if (existingTab) {
+            this.selectTab(existingTab.id);
+          } else {
+            const newTab = {
+              id: this.nextTabId++,
+              title: fav.page,
+              url: fav.url,
+              icon: '📄',
+              canGoBack: false,
+              canGoForward: false
+            };
+            this.tabs.push(newTab);
+            this.activeTabId = newTab.id;
+          }
+          this.showingFavorites = false;
+        }
+      },
+      mounted() {
+        if (this.activeTab) {
+          this.searchText = this.activeTab.url;
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

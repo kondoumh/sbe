@@ -10,7 +10,7 @@
     "windows": [
       {
         "title": "Scrapbox in Electron - Tauri PoC",
-        "url": "tauri-poc.html",
+        "url": "tauri-tab-demo.html",
         "width": 1024,
         "height": 800,
         "resizable": true,
