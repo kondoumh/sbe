@@ -1212,15 +1212,60 @@ async function fetchPageInfo(url) {
 }
 
 async function fetchProjectUser(projectName) {
-  const sid = await getSid();
-  const url = sbUrl.getUserUrl(projectName);
-  const res = await fetch(url, { headers: { cookie: sid} }).catch(error => {
-    console.error(error);
-  });
-  let data;
-  if (res.status === 200) {
-    data = await res.json();
-    return { id : data.user.id, name: data.user.name, displayName: data.user.displayName };
+  const defaultUser = { id: '', name: '', displayName: '' };
+  
+  try {
+    const sid = await getSid();
+    if (!sid) {
+      console.error('Failed to get session ID');
+      return defaultUser;
+    }
+
+    // Fetch user information
+    const userUrl = sbUrl.getUserUrl(projectName);
+    const userRes = await fetch(userUrl, { headers: { cookie: sid } });
+    
+    if (userRes.status !== 200) {
+      console.error(`Failed to fetch user info: ${userRes.status}`);
+      return defaultUser;
+    }
+
+    const userData = await userRes.json();
+    if (!userData?.user?.id) {
+      console.error('Invalid user data structure');
+      return defaultUser;
+    }
+
+    // Fetch project information
+    const projectUrl = sbUrl.getProjectUrl(projectName);
+    const projectRes = await fetch(projectUrl, { headers: { cookie: sid } });
+    
+    if (projectRes.status !== 200) {
+      console.error(`Failed to fetch project info: ${projectRes.status}`);
+      return defaultUser;
+    }
+
+    const projectData = await projectRes.json();
+    if (!projectData?.users || !Array.isArray(projectData.users)) {
+      console.error('Invalid project data structure');
+      return defaultUser;
+    }
+
+    // Find the user in project members
+    const matchedUser = projectData.users.find(user => user.id === userData.user.id);
+    if (!matchedUser) {
+      console.error(`User ${userData.user.id} not found in project members`);
+      return defaultUser;
+    }
+
+    return {
+      id: matchedUser.id || '',
+      name: matchedUser.name || '',
+      displayName: matchedUser.displayName || ''
+    };
+  } catch (error) {
+    console.error('Error in fetchProjectUser:', error);
+    return defaultUser;
   }
 }
 
