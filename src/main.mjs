@@ -1104,8 +1104,8 @@ function inFavs(url) {
 
 function saveHistory(url, page) {
   const author = page.user.id === loginUser.id;
-  const found = page.collaborators.find(item => item.id === loginUser.id);
-  const contributed = found ? true: false;
+  const found = page.users.find(item => item.id === loginUser.id);
+  const contributed = found ? true: false; // Are 'users' a rename of 'collaborators' ?
   const projectPage = sbUrl.takeProjectPage(url);
   const addItem = {
     project: projectPage.project,
@@ -1134,7 +1134,7 @@ async function beforeUpdate(url, page) {
     }
   }
   const author = page.user.id === loginUser.id;
-  const found = page.collaborators.find(item => item.id === loginUser.id);
+  const found = page.users.find(item => item.id === loginUser.id);
   const contributed = found ? true: false;
   updateInfo.set(page.id, { url: url, title: page.title, updated: page.updated, author: author, contributed: contributed });
 }
@@ -1147,7 +1147,7 @@ async function afterUpdate(currentURL, event) {
   if (after.updated > before.updated) {
     const projectPage = sbUrl.takeProjectPage(currentURL);
     const author = after.user.id === loginUser.id;
-    const found = after.collaborators.find(item => item.id === loginUser.id);
+    const found = after.users.find(item => item.id === loginUser.id);
     const contributed = found ? true: false;
     const addItem = {
       project: projectPage.project,
