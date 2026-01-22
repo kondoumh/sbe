@@ -123,6 +123,10 @@ sbUrl.getUserUrl = projectName => {
   return sbUrl.BASE_URL + 'api/pages/' + projectName + '/user';
 }
 
+sbUrl.getProjectUrl = projectName => {
+  return sbUrl.BASE_URL + 'api/projects/' + projectName;
+}
+
 sbUrl.getIconUrl = (projectName, pageTitle) => {
   return sbUrl.BASE_URL + 'api/pages/' + projectName + '/' + pageTitle + '/icon';
 }
