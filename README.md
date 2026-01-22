@@ -44,9 +44,6 @@ Download installer for each platform from [Releases](https://github.com/kondoumh
 - Linux: sbe-`version`.AppImage
 
 ## How to run with Electron
-### requirement
-Node.js v16
-
 ### run
 git clone or download zip.
 
