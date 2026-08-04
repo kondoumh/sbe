@@ -1051,6 +1051,7 @@ async function notifyUpdate() {
     if (res.status === 200) {
       const data = await res.json();
       const latest = data.name;
+      if (!latest || !/^\d+\.\d+\.\d+/.test(latest)) return;
       if (compareVersions(latest, app.getVersion()) === 1) {
         new Notification({ title: 'sbe', body: 'New version avilable!' }).on('click', () =>{
           shell.openExternal('https://github.com/kondoumh/sbe/releases/latest');
