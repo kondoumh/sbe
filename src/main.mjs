@@ -1050,7 +1050,10 @@ async function notifyUpdate() {
     const res = await fetch("https://api.github.com/repos/kondoumh/sbe/releases/latest");
     if (res.status === 200) {
       const data = await res.json();
-      const latest = data.name;
+      const latest = (data.tag_name || data.name || '').replace(/^v/i, '');
+      if (!/^\d+\.\d+\.\d+([-.+].+)?$/.test(latest)) {
+        return;
+      }
       if (compareVersions(latest, app.getVersion()) === 1) {
         new Notification({ title: 'sbe', body: 'New version avilable!' }).on('click', () =>{
           shell.openExternal('https://github.com/kondoumh/sbe/releases/latest');
