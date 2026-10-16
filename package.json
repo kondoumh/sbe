@@ -40,6 +40,6 @@
   },
   "dependencies": {
     "compare-versions": "^6.1.1",
-    "electron-store": "^11.0.2"
+    "electron-store": "^12.0.0"
   }
 }
