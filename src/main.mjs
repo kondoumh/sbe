@@ -1208,6 +1208,10 @@ async function fetchPageData(url) {
 }
 
 async function fetchPageInfo(url) {
+  if (!sbUrl.inScrapbox(url)) {
+    console.error('Blocked non-Scrapbox URL in fetchPageInfo: ' + url);
+    return;
+  }
   const sid = await getSid();
   const res = await fetch(url, { headers: { cookie: sid } }).catch(error => {
     console.error(error);
