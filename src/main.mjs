@@ -9,6 +9,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 import sbUrl from './url-helper.mjs';
 import toMarkdown from './markdown.mjs';
 import { toHeading, toBodyText } from './format.mjs';
+import { safeFetch } from './safe-fetch.mjs';
 
 let mainWindow;
 let topViewId;
@@ -714,19 +715,23 @@ function copyUrl() {
 }
 
 async function pasteUrl() {
-  const url = clipboard.readText('selection');
+  const url = clipboard.selection
+    ? await clipboard.selection.readText()
+    : await clipboard.readText();
   if (!url.match(/^http(s)?:\/\/.+/)) {
     showMessage('Invalid URL. : ' + url);
     return;
   }
   mainWindow.webContents.send('show-message', '')
-  const res = await fetch(url).catch(err => {
+  const res = await safeFetch(url).catch(err => {
     showMessage('error has occured. - ' + err);
     return;
   });
+  if (!res) {
+    return;
+  }
   if (res.status === 200) {
-    const body = await res.text();
-    mainWindow.webContents.send('parse-html', url, body);
+    mainWindow.webContents.send('parse-html', url, res.body);
   } else {
     showMessage("cannot extract response body.");
   }
