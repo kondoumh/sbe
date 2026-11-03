@@ -715,7 +715,7 @@ function copyUrl() {
 
 async function pasteUrl() {
   const url = clipboard.readText('selection');
-  if (!url.match(/^http(s)?:\/\/.+/)) {
+  if (!url.match(/^http(s)?:\/\/.+/) || !sbUrl.inScrapbox(url)) {
     showMessage('Invalid URL. : ' + url);
     return;
   }
