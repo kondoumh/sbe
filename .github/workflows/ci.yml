@@ -21,9 +21,9 @@ jobs:
         os: [windows-latest, macos-latest] # ubuntu-latest fails with playwright electron.launch
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - name: Setup nodejs
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
         node-version: '20'
     - name: Install dependencies
@@ -38,7 +38,7 @@ jobs:
       env:
         RUN_MODE: test
     - name: Upload test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       if: ${{ always() }}
       with:
         name: test-results_${{ matrix.os }}
