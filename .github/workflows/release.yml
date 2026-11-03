@@ -68,3 +68,4 @@ jobs:
           dist/*.dmg
           dist/*.zip
         prerelease: true
+        draft: true
