@@ -27,20 +27,44 @@ jobs:
       run: npm install
     - name: Package (Windows / Linux)
       if: matrix.os != 'macos-latest'
-      run: npm run dist
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: npm run dist -- --publish never
     - name: Package (macOS)
       if: matrix.os == 'macos-latest'
-      run: npx electron-builder --mac --universal
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: npx electron-builder --mac --universal --publish never
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dist-${{ matrix.os }}
+        path: |
+          dist/**/*.exe
+          dist/**/*.exe.blockmap
+          dist/**/*.deb
+          dist/**/*.AppImage
+          dist/**/*.dmg
+          dist/**/*.dmg.blockmap
+          dist/**/*.zip
+          dist/**/*.zip.blockmap
+          dist/latest*.yml
+        if-no-files-found: ignore
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: dist
+        pattern: dist-*
+        merge-multiple: true
     - name: Publish
       uses: softprops/action-gh-release@v2
       with:
         files: |
-          dist/**/*.exe
-          dist/**/*.deb
-          dist/**/*.AppImage
-          dist/**/*.dmg
+          dist/*.exe
+          dist/*.deb
+          dist/*.AppImage
+          dist/*.dmg
+          dist/*.zip
         prerelease: true
