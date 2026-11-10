@@ -28,7 +28,7 @@ const app = createApp({
       const data = await window.infoApi.fetchPageInfo(pageApi);
       if (!data) return;
       let info = data.title + ' : by ' + data.user.displayName;
-      data.collaborators.forEach(collaborator => {
+      data.users.forEach(collaborator => {
         info += ', ' + collaborator.displayName;
       });
       this.title = info;

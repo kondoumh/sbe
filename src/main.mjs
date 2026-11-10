@@ -1219,8 +1219,33 @@ async function fetchPageInfo(url) {
   let data;
   if (res.status === 200) {
     data = await res.json();
+    // Page API no longer embeds displayName on user/users; resolve it from the project member list.
+    const projectName = url.split('api/pages/')[1]?.split('/')[0];
+    if (projectName) {
+      const members = await fetchProjectMembers(projectName, sid);
+      const displayNameOf = id => members.find(member => member.id === id)?.displayName || '';
+      if (data.user) {
+        data.user.displayName = displayNameOf(data.user.id);
+      }
+      if (Array.isArray(data.users)) {
+        data.users.forEach(member => { member.displayName = displayNameOf(member.id); });
+      }
+    }
   }
   return data;
+}
+
+async function fetchProjectMembers(projectName, sid) {
+  const projectUrl = sbUrl.getProjectUrl(projectName);
+  const res = await fetch(projectUrl, { headers: { cookie: sid } }).catch(error => {
+    console.error(error);
+  });
+  if (res?.status !== 200) {
+    console.error(`Failed to fetch project info: ${res?.status}`);
+    return [];
+  }
+  const data = await res.json();
+  return Array.isArray(data?.users) ? data.users : [];
 }
 
 async function fetchProjectUser(projectName) {
